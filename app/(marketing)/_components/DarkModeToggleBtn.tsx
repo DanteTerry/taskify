@@ -10,6 +10,7 @@ function DarkModeToggleBtn() {
   return (
     <Button
       variant={"ghost"}
+      className="hover:bg-transparent"
       size={"sm"}
       onClick={() => setDarkMode((prev) => !prev)}
     >

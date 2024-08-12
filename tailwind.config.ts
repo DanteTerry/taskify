@@ -21,6 +21,8 @@ const config = {
     fontFamily: {
       space: ["var(--space-grotesk)"],
       inter: ["var(--inter)"],
+      dancing: ["var(--dancing-script)"],
+      caveat: ["var(--caveat)"],
     },
 
     extend: {

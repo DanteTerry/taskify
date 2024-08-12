@@ -14,7 +14,7 @@ import DarkModeToggleBtn from "./DarkModeToggleBtn";
 
 function NavBar() {
   return (
-    <div className="flex bg-[#0D0D10] fixed w-full items-center justify-between px-5 sm:px-8  md:px-10 lg:px-20 py-3 md:py-4">
+    <div className="flex   w-full items-center justify-between px-5 sm:px-8  md:px-10 lg:px-20 py-3 md:py-4">
       <Link href="/">
         <div className="flex items-center gap-x-2 md:gap-x-4">
           <div className="dark:bg-white/10 bg-black  px-3 py-2 rounded-md ">
@@ -30,7 +30,7 @@ function NavBar() {
         </div>
       </Link>
 
-      <div className="hidden px-2 md:flex   items-center md:gap-x-4 lg:gap-x-8 ">
+      <div className="hidden px-2 md:flex font-semibold   items-center md:gap-x-4 lg:gap-x-8 ">
         <Link href={"/"}>Home</Link>
 
         <Link href={"/"}>Features</Link>
@@ -46,13 +46,13 @@ function NavBar() {
         <DarkModeToggleBtn />
 
         <Link
-          className="border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+          className="border-2 font-semibold border-[#f8f8f8]/5 bg-black text-white  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
           href={"/signup"}
         >
           Get Started
         </Link>
         <Link
-          className="border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+          className="border-2 font-semibold border-[#f8f8f8]/5 bg-black text-white  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
           href={"/signup"}
         >
           Log In
@@ -62,7 +62,7 @@ function NavBar() {
         <DarkModeToggleBtn />
 
         <Link
-          className="border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+          className="border-2 font-semibold border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
           href={"/signup"}
         >
           Log In
