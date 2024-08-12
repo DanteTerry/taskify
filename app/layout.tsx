@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const spaceSpace_Grotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--space-grotesk",
+  display: "swap",
+});
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--inter",
+});
 
 export const metadata: Metadata = {
   title: "Taskify - AI powered task management tool",
@@ -17,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark dark:bg-[#0D0D10]">
-      <body className={` dark:bg-[#0D0D10] ${inter.className}`}>
+      <body
+        className={` dark:bg-[#0D0D10] ${spaceSpace_Grotesk.variable} ${inter.variable} `}
+      >
         {children}
       </body>
     </html>

@@ -18,6 +18,11 @@ const config = {
       },
     },
     darkMode: "class",
+    fontFamily: {
+      space: ["var(--space-grotesk)"],
+      inter: ["var(--inter)"],
+    },
+
     extend: {
       colors: {
         border: "hsl(var(--border))",
