@@ -62,7 +62,7 @@ function NavBar() {
         <DarkModeToggleBtn />
 
         <Link
-          className="border-2 font-semibold border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+          className="border-2 font-semibold border-[#f8f8f8]/5  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
           href={"/signup"}
         >
           Log In

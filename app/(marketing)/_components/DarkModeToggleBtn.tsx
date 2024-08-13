@@ -8,14 +8,12 @@ function DarkModeToggleBtn() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <Button
-      variant={"ghost"}
+    <button
       className="hover:bg-transparent"
-      size={"sm"}
       onClick={() => setDarkMode((prev) => !prev)}
     >
       {darkMode ? <SunMoon size={25} /> : <Sun size={25} />}
-    </Button>
+    </button>
   );
 }
 

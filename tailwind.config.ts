@@ -24,6 +24,9 @@ const config = {
       dancing: ["var(--dancing-script)"],
       caveat: ["var(--caveat)"],
     },
+    backgroundImage: {
+      authRegister: "url('/appImages/auth_register.svg')",
+    },
 
     extend: {
       colors: {
