@@ -75,21 +75,31 @@ function NavBar() {
           >
             <Menu size={20} />
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="absolute text-4xl right-0 top-1">
+          <DropdownMenuContent className="absolute  right-0 top-1">
             <DropdownMenuItem>
-              <Link href="/">Home</Link>
+              <Link className=" font-semibold" href="/">
+                Home
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/">Features</Link>
+              <Link className=" font-semibold" href="/">
+                Features
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/">Reviews</Link>
+              <Link className=" font-semibold" href="/">
+                Reviews
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/">Pricing</Link>
+              <Link className=" font-semibold" href="/">
+                Pricing
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/">About</Link>
+              <Link className=" font-semibold" href="/">
+                About
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
