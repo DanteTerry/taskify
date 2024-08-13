@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, Caveat, Dancing_Script } from "next/font/google";
 import "./globals.css";
-import MarketingWrapper from "./(marketing)/_components/MarketingWrapper";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
