@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import Features from "./_components/Features";
 import HeroSec from "./_components/HeroSec";
 import NavBar from "./_components/NavBar";

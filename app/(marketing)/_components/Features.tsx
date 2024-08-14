@@ -1,8 +1,6 @@
-import { Circle } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import FeaturesCard from "./FeaturesCard";
-import { ClipboardCheck } from "lucide-react";
 
 function Features() {
   return (

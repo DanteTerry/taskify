@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, Caveat, Dancing_Script } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+import AuthProvider from "@/components/provider/AuthProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -42,7 +44,10 @@ export default function RootLayout({
       <body
         className={`${caveat.variable} ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${inter.variable} `}
       >
-        {children}
+        <AuthProvider>
+          {children}
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
