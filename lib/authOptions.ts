@@ -66,7 +66,7 @@ export const authOptions: AuthOptions = {
     }: {
       user: User | AdapterUser;
       account: Account | null;
-      profile?: Profile | undefined;
+      profile?: (Profile & { picture?: string }) | undefined;
       email?: { verificationRequest?: boolean } | undefined;
       credentials?: Record<string, unknown> | undefined;
     }): Promise<any | boolean> {
