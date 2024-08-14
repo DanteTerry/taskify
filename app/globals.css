@@ -8,6 +8,11 @@ body,
   height: 100%;
 }
 
+.bg-authRegister {
+  background: url("/appImages/auth_register.jpg");
+  background-size: contain;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

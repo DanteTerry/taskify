@@ -7,9 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Sun, SunMoon } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
 import DarkModeToggleBtn from "./DarkModeToggleBtn";
 
 function NavBar() {
@@ -53,7 +51,7 @@ function NavBar() {
         </Link>
         <Link
           className="border-2 font-semibold border-[#f8f8f8]/5 bg-black text-white  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
-          href={"/signup"}
+          href={"/signin"}
         >
           Log In
         </Link>
@@ -63,7 +61,7 @@ function NavBar() {
 
         <Link
           className="border-2 font-semibold border-[#f8f8f8]/5  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
-          href={"/signup"}
+          href={"/signin"}
         >
           Log In
         </Link>

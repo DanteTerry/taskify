@@ -25,7 +25,7 @@ const config = {
       caveat: ["var(--caveat)"],
     },
     backgroundImage: {
-      authRegister: "url('/appImages/auth_register.svg')",
+      authRegister: "url('/appImages/auth_register.jpg')",
     },
 
     extend: {

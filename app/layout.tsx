@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className=" dark dark:bg-[#0D0D10]">
+    <html lang="en" className="dark  dark:bg-[#0D0D10]">
       <body
         className={`${caveat.variable} ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${inter.variable} `}
       >

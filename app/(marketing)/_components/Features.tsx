@@ -25,7 +25,7 @@ function Features() {
           Collaboration.
         </h2>
 
-        <div className="flex flex-wrap  gap-10 justify-center items-center mx-auto w-3/4  mt-5  ">
+        <div className="flex flex-wrap gap-5 lg:gap-10 justify-center items-center mx-auto w-3/4  mt-5  ">
           <FeaturesCard
             title={"Task Progress"}
             description={" Track Task Progress and Stay on Target."}
