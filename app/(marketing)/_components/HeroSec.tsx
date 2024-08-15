@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import HeroStartButton from "./HeroStartButton";
 
 export default function HeroSec() {
   return (
@@ -43,14 +44,7 @@ export default function HeroSec() {
           </p>
         </div>
 
-        <Link href={"/signup"}>
-          <Button
-            variant={"secondary"}
-            className="bg-green-500  mt-4 text-base sm:text-lg hover:bg-green-600 font-spaces md:text-xl text-white rounded-full sm:px-8 sm:py-6"
-          >
-            Get Started
-          </Button>
-        </Link>
+        <HeroStartButton />
       </div>
 
       <div className="w-full md:w-3/4 rounded-xl  mt-14 md:mt-10">

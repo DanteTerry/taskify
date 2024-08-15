@@ -13,8 +13,6 @@ function SignUp() {
 
   if (session) {
     router.push("/dashboard");
-  } else {
-    router.push("/signin");
   }
   return (
     <AuthComponent className="bg-authRegister">

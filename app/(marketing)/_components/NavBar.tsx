@@ -12,7 +12,7 @@ async function NavBar() {
             <Image
               src={"/logo/logo.svg"}
               alt="Taskify"
-              className=" w-auto"
+              className="w-auto h-auto"
               width={150}
               height={150}
             />
