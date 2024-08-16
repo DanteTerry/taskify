@@ -50,7 +50,7 @@ function NavBarLinks() {
 
         <DropdownMenu>
           <DropdownMenuTrigger
-            className="outline-none border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-3 rounded-lg
+            className="outline-none border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-2 rounded-lg
          relative"
           >
             <Menu size={20} />

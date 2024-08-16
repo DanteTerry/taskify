@@ -20,9 +20,9 @@ const config = {
     darkMode: "class",
     fontFamily: {
       space: ["var(--space-grotesk)"],
-      inter: ["var(--inter)"],
       dancing: ["var(--dancing-script)"],
       caveat: ["var(--caveat)"],
+      poppins: ["var(--poppins)"],
     },
     backgroundImage: {
       authRegister: "url('/appImages/auth_register.jpg')",

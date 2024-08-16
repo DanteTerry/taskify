@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, Caveat, Dancing_Script } from "next/font/google";
+import {
+  Space_Grotesk,
+  Caveat,
+  Dancing_Script,
+  Poppins,
+} from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import AuthProvider from "@/components/provider/AuthProvider";
@@ -10,10 +15,11 @@ const spaceSpace_Grotesk = Space_Grotesk({
   variable: "--space-grotesk",
   display: "swap",
 });
-const inter = Inter({
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--poppins",
   display: "swap",
-  variable: "--inter",
 });
 
 const caveat = Caveat({
@@ -42,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark  dark:bg-[#0D0D10]">
       <body
-        className={`${caveat.variable} ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${inter.variable} `}
+        className={`${caveat.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
       >
         <AuthProvider>
           {children}
