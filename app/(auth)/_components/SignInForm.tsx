@@ -57,15 +57,15 @@ function SignInForm() {
 
   return (
     <>
-      <div className="flex self-start dark:text-slate-300 flex-col">
-        <h2 className="text-2xl font-semibold font-space">
+      <div className="flex flex-col self-start dark:text-slate-300">
+        <h2 className="font-space text-2xl font-semibold">
           Log in into your account
         </h2>
       </div>
 
       <form
         onSubmit={handleSubmit(onLogin)}
-        className="w-full flex flex-col gap-3"
+        className="flex w-full flex-col gap-3"
       >
         <div>
           <label htmlFor="email" className="sr-only">
@@ -80,7 +80,7 @@ function SignInForm() {
           />
         </div>
         {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email.message}</p>
+          <p className="text-sm text-red-500">{errors.email.message}</p>
         )}
         <div>
           <label htmlFor="password" className="sr-only">
@@ -96,11 +96,11 @@ function SignInForm() {
         </div>
 
         {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password.message}</p>
+          <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
 
         <Button
-          className="text-lg font-space dark:bg-[#D2F159] mt-2"
+          className="mt-2 font-space text-lg dark:bg-[#D2F159]"
           size={"lg"}
           disabled={isSubmitting}
         >
@@ -116,11 +116,10 @@ function SignInForm() {
         onClick={async () => {
           const res = await signIn("google");
           if (res) {
-            
             router.push("/dashboard");
           }
         }}
-        className="w-full flex items-center gap-3 text-lg font-space "
+        className="flex w-full items-center gap-3 font-space text-lg"
       >
         <FcGoogle /> Sign in with google
       </Button>

@@ -9,7 +9,7 @@ function TopNavigation({
   isOpen: boolean;
 }) {
   return (
-    <div className="w-full px-4 h-12 bg-[#ffffff] dark:bg-[#161616] flex items-center">
+    <div className="flex h-12 w-full items-center bg-[#ffffff] px-4 dark:bg-[#161616]">
       {!isOpen && (
         <Button
           size={"icon"}

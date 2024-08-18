@@ -16,19 +16,19 @@ function NavBarLinks() {
   const { data: session } = useSession();
   return (
     <>
-      <div className="md:flex hidden  items-center gap-x-3">
+      <div className="hidden items-center gap-x-3 md:flex">
         <DarkModeToggleBtn />
 
         {!session?.user && (
           <>
             <Link
-              className="border-2 font-semibold border-[#f8f8f8]/5 bg-black text-white  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+              className="rounded-lg border-2 border-[#f8f8f8]/5 bg-black p-2 px-3 text-sm font-semibold text-white dark:bg-[#f8f8f8]/5"
               href={"/signup"}
             >
               Get Started
             </Link>
             <Link
-              className="border-2 font-semibold border-[#f8f8f8]/5 bg-black text-white  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+              className="rounded-lg border-2 border-[#f8f8f8]/5 bg-black p-2 px-3 text-sm font-semibold text-white dark:bg-[#f8f8f8]/5"
               href={"/signin"}
             >
               Log In
@@ -36,12 +36,12 @@ function NavBarLinks() {
           </>
         )}
       </div>
-      <div className="flex md:hidden  items-center gap-x-2">
+      <div className="flex items-center gap-x-2 md:hidden">
         <DarkModeToggleBtn />
 
         {!session?.user && (
           <Link
-            className="border-2 font-semibold border-[#f8f8f8]/5  dark:bg-[#f8f8f8]/5 p-2 px-3 rounded-lg text-sm"
+            className="rounded-lg border-2 border-[#f8f8f8]/5 p-2 px-3 text-sm font-semibold dark:bg-[#f8f8f8]/5"
             href={"/signin"}
           >
             Log In
@@ -49,40 +49,37 @@ function NavBarLinks() {
         )}
 
         <DropdownMenu>
-          <DropdownMenuTrigger
-            className="outline-none border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-2 rounded-lg
-         relative"
-          >
+          <DropdownMenuTrigger className="relative rounded-lg border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-2 outline-none">
             <Menu size={20} />
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="absolute  right-0 top-1">
+          <DropdownMenuContent className="absolute right-0 top-1">
             <DropdownMenuItem>
-              <Link className=" font-semibold" href="/">
+              <Link className="font-semibold" href="/">
                 Home
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link className=" font-semibold" href="/">
+              <Link className="font-semibold" href="/">
                 Features
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link className=" font-semibold" href="/">
+              <Link className="font-semibold" href="/">
                 Reviews
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link className=" font-semibold" href="/">
+              <Link className="font-semibold" href="/">
                 Pricing
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link className=" font-semibold" href="/">
+              <Link className="font-semibold" href="/">
                 About
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button className=" font-semibold" onClick={() => signOut()}>
+              <Button className="font-semibold" onClick={() => signOut()}>
                 Log Out
               </Button>
             </DropdownMenuItem>

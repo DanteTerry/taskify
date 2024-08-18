@@ -23,6 +23,7 @@ const config = {
       dancing: ["var(--dancing-script)"],
       caveat: ["var(--caveat)"],
       poppins: ["var(--poppins)"],
+      inter: ["var(--inter)"],
     },
     backgroundImage: {
       authRegister: "url('/appImages/auth_register.jpg')",

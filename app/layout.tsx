@@ -4,6 +4,7 @@ import {
   Caveat,
   Dancing_Script,
   Poppins,
+  Inter,
 } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -15,6 +16,14 @@ const spaceSpace_Grotesk = Space_Grotesk({
   variable: "--space-grotesk",
   display: "swap",
 });
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--inter",
+  display: "swap",
+});
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -35,7 +44,7 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Taskify - AI powered task management tool",
+  title: "Taskify ",
   description:
     " Taskify is a task management tool that uses AI to help you manage your tasks.",
 };
@@ -46,9 +55,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark  dark:bg-[#0D0D10]">
+    <html lang="en" className="dark dark:bg-[#0D0D10]">
       <body
-        className={`${caveat.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
+        className={`${caveat.variable} ${inter.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
       >
         <AuthProvider>
           {children}
