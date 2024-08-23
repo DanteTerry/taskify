@@ -60,6 +60,7 @@ export default function RootLayout({
     <html lang="en" className="dark dark:bg-[#0D0D10]">
       <body
         className={`${caveat.variable} ${inter.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
+        suppressHydrationWarning={true}
       >
         <ClerkProvider>
           {children}

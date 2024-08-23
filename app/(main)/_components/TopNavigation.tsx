@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { PanelsTopLeft } from "lucide-react";
 
 function TopNavigation({
@@ -9,7 +10,7 @@ function TopNavigation({
   isOpen: boolean;
 }) {
   return (
-    <div className="flex h-12 w-full items-center bg-[#ffffff] px-4 dark:bg-[#161616]">
+    <div className="flex h-14 w-full items-center justify-between bg-[#ffffff] px-4 dark:bg-[#161616]">
       {!isOpen && (
         <Button
           size={"icon"}
@@ -19,6 +20,12 @@ function TopNavigation({
           <PanelsTopLeft size={20} className="text-[#f1f1f1]" />
         </Button>
       )}
+      <OrganizationSwitcher
+        afterCreateOrganizationUrl={"/dashboards"}
+        afterLeaveOrganizationUrl={"/dashboards"}
+      />
+
+      <UserButton />
     </div>
   );
 }

@@ -8,6 +8,28 @@ body,
   height: 100%;
 }
 
+.cl-userButtonPopoverFooter,
+.cl-internal-df7v37,
+.cl-organizationSwitcherPopoverFooter,
+.cl-footer {
+  visibility: hidden;
+}
+
+.cl-organizationSwitcherPopoverCard {
+  width: 250px;
+}
+.cl-organizationSwitcherTrigger:hover {
+  background: transparent;
+  color: white;
+}
+.cl-organizationSwitcherTrigger {
+  color: white;
+}
+
+.cl-userButtonPopoverCard {
+  width: 250px;
+}
+
 .bg-authRegister {
   background: url("/appImages/auth_register.jpg");
   background-size: contain;

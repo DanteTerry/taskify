@@ -12,7 +12,7 @@ function SideNavigation({
   return (
     <>
       {isOpen && (
-        <aside className="absolute z-50 h-full w-full bg-slate-200 px-6 py-6 dark:bg-[#121212] md:relative md:w-64">
+        <aside className="absolute z-50 h-full w-full bg-slate-200 px-6 py-2 dark:bg-[#121212] md:relative md:w-64">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-2">
               <div className="rounded-lg bg-black px-2 py-2 dark:block dark:bg-[#1f1f1f]">
