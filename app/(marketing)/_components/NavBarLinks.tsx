@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   DropdownMenu,
@@ -8,45 +7,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu } from "lucide-react";
 import DarkModeToggleBtn from "./DarkModeToggleBtn";
-import { Button } from "@/components/ui/button";
-import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { SignedOut } from "@clerk/nextjs";
 
 function NavBarLinks() {
-  const { data: session } = useSession();
   return (
     <>
       <div className="hidden items-center gap-x-3 md:flex">
-        <DarkModeToggleBtn />
-
-        {!session?.user && (
-          <>
-            <Link
-              className="rounded-lg border-2 border-[#f8f8f8]/5 bg-black p-2 px-3 text-sm font-semibold text-white dark:bg-[#f8f8f8]/5"
-              href={"/signup"}
-            >
-              Get Started
-            </Link>
-            <Link
-              className="rounded-lg border-2 border-[#f8f8f8]/5 bg-black p-2 px-3 text-sm font-semibold text-white dark:bg-[#f8f8f8]/5"
-              href={"/signin"}
-            >
-              Log In
-            </Link>
-          </>
-        )}
-      </div>
-      <div className="flex items-center gap-x-2 md:hidden">
-        <DarkModeToggleBtn />
-
-        {!session?.user && (
+        <SignedOut>
+          <DarkModeToggleBtn />
           <Link
-            className="rounded-lg border-2 border-[#f8f8f8]/5 p-2 px-3 text-sm font-semibold dark:bg-[#f8f8f8]/5"
-            href={"/signin"}
+            className="rounded-lg border-2 border-[#f8f8f8]/5 bg-black p-2 px-3 text-sm font-semibold text-white dark:bg-[#f8f8f8]/5"
+            href={"/sign-in"}
           >
             Log In
           </Link>
-        )}
+        </SignedOut>
+      </div>
+      <div className="flex items-center gap-x-2 md:hidden">
+        <DarkModeToggleBtn />
+        <SignedOut>
+          <Link
+            className="rounded-lg border-2 border-[#f8f8f8]/5 p-2 px-3 text-sm font-semibold dark:bg-[#f8f8f8]/5"
+            href={"/sign-in"}
+          >
+            Log In
+          </Link>
+        </SignedOut>
 
         <DropdownMenu>
           <DropdownMenuTrigger className="relative rounded-lg border-2 border-[#f8f8f8]/5 bg-[#f8f8f8]/5 p-2 px-2 outline-none">
@@ -77,11 +64,6 @@ function NavBarLinks() {
               <Link className="font-semibold" href="/">
                 About
               </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button className="font-semibold" onClick={() => signOut()}>
-                Log Out
-              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

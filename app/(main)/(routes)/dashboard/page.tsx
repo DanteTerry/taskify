@@ -2,7 +2,6 @@ import Image from "next/image";
 import { FileText, Footprints, Sprout } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import TemplateCard from "@/components/ui/TemplateCard";
-import ProjectCard from "../../_components/ProjectCard";
 
 function Dashboard() {
   return (
@@ -47,7 +46,6 @@ function Dashboard() {
             </TemplateCard>
 
             {/* sprint */}
-
             <TemplateCard className="hover:bg-[#FDEBEC] dark:hover:bg-[#362422] md:w-2/4">
               <Footprints
                 size={30}

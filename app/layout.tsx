@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
+
 import {
   Space_Grotesk,
   Caveat,
@@ -6,9 +8,9 @@ import {
   Poppins,
   Inter,
 } from "next/font/google";
+
 import "./globals.css";
 import { Toaster } from "sonner";
-import AuthProvider from "@/components/provider/AuthProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -59,10 +61,10 @@ export default function RootLayout({
       <body
         className={`${caveat.variable} ${inter.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
       >
-        <AuthProvider>
+        <ClerkProvider>
           {children}
           <Toaster />
-        </AuthProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
