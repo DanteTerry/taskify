@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import { AlignLeft, LayoutGrid, Plus } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 function WorkSpaceList() {
@@ -51,10 +52,12 @@ function WorkSpaceList() {
             alt="empty"
           />
           <h2 className="font-space text-xl">Create a new workspace</h2>
-          <Button variant={"outline"} size={"lg"} className="mt-3 flex gap-2">
-            <Plus size={20} />
-            New Workspace
-          </Button>
+          <Link href="/create-workspace">
+            <Button variant={"outline"} size={"lg"} className="mt-3 flex gap-2">
+              <Plus size={20} />
+              New Workspace
+            </Button>
+          </Link>
         </div>
       ) : (
         <p>p</p>
