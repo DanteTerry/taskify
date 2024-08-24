@@ -10,6 +10,9 @@ import CoverPicker from "../_components/CoverPicker";
 function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCover, setSelectedCover] = useState(
+    "https://img.freepik.com/free-photo/view-beautiful-rainbow-nature-landscape_23-2151597609.jpg?t=st=1724448844~exp=1724452444~hmac=a558745a946f2641dd34ef29a5e5574f8b53714865798bece18339a698ea3879&w=1380",
+  );
 
   return (
     <section className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-black md:px-2 lg:px-0">
@@ -20,20 +23,20 @@ function CreateWorkSpace() {
               onClick={() => {
                 setIsDialogOpen(true);
               }}
-              className="absolute hidden h-full w-full items-center rounded-bl-none rounded-br-none border-0 border-none border-transparent bg-transparent p-0 text-lg font-semibold transition-all duration-300 group-hover:flex group-hover:bg-white/70"
+              className="absolute hidden h-full w-full items-center rounded-bl-none rounded-br-none border-0 border-none border-transparent bg-transparent p-0 text-lg font-semibold text-white transition-all duration-300 group-hover:flex group-hover:bg-white/20"
             >
               Change cover
             </Button>
             <Image
-              src={"/appImages/auth_register.jpg"}
+              src={selectedCover}
               width={400}
               height={400}
               alt="empty"
-              className="h-[150px] w-full object-cover"
+              className="h-[160px] w-full object-cover object-center"
             />
           </div>
           {/* input section */}
-          <div className="mb-4 flex flex-col gap-2 px-3">
+          <div className="mb-4 mt-6 flex flex-col gap-2 px-3">
             <h2 className="text-xl">Create a new workspace</h2>
             <h3 className="text-sm text-[#7a7a7a]">
               This is a shared workspace for team collaboration. You can adjust
@@ -61,6 +64,8 @@ function CreateWorkSpace() {
       <CoverPicker
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
+        selectedCover={selectedCover}
+        setSelectedCover={setSelectedCover}
       />
     </section>
   );
