@@ -1,11 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { SmilePlus } from "lucide-react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import CoverPicker from "../_components/CoverPicker";
+import EmojiPickerComponent from "@/components/UIComponents/EmojiPickerComponent";
+import { SmilePlus } from "lucide-react";
+import { Emoji } from "emoji-picker-react";
 
 function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");
@@ -13,11 +15,12 @@ function CreateWorkSpace() {
   const [selectedCover, setSelectedCover] = useState(
     "/coverImages/lakeMountain.jpg",
   );
+  const [emojiIcon, setEmojiIcon] = useState("");
 
   return (
     <section className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-black md:px-2 lg:px-0">
       <div className="mx-auto flex h-full w-full items-center justify-center px-3 py-6 dark:dark:bg-black md:w-full lg:w-3/4 lg:px-0">
-        <div className="flex w-[600px] flex-col gap-2 rounded-lg bg-[#1f1f1f]">
+        <div className="flex h-[400px] w-[600px] flex-col gap-2 rounded-lg bg-[#1f1f1f]">
           <div className="group relative flex items-center justify-center overflow-hidden rounded-tl-lg rounded-tr-lg">
             <Button
               onClick={() => {
@@ -43,9 +46,13 @@ function CreateWorkSpace() {
               the workspace settings at any time.
             </h3>
             <div className="mt-2 flex items-center gap-3">
-              <Button className="" size={"icon"} variant={"ghost"}>
-                <SmilePlus />
-              </Button>
+              <EmojiPickerComponent setEmojiIcon={setEmojiIcon}>
+                {emojiIcon ? (
+                  <Emoji unified={emojiIcon} size={25} />
+                ) : (
+                  <SmilePlus size={25} />
+                )}
+              </EmojiPickerComponent>
               <Input
                 placeholder="Workspace Name"
                 className="border-2"
