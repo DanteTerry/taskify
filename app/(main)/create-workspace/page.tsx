@@ -11,7 +11,7 @@ function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCover, setSelectedCover] = useState(
-    "https://img.freepik.com/free-photo/view-beautiful-rainbow-nature-landscape_23-2151597609.jpg?t=st=1724448844~exp=1724452444~hmac=a558745a946f2641dd34ef29a5e5574f8b53714865798bece18339a698ea3879&w=1380",
+    "/coverImages/lakeMountain.jpg",
   );
 
   return (
