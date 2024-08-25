@@ -4,7 +4,7 @@ import SideNavigation from "./_components/SideNavigation";
 import TopNavigation from "./_components/TopNavigation";
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="relative flex h-full w-full dark:bg-[#0D0D10]">
       <SideNavigation setIsOpen={setIsOpen} isOpen={isOpen} />

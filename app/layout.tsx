@@ -11,6 +11,7 @@ import {
 
 import "./globals.css";
 import { Toaster } from "sonner";
+import DarkModeProvider from "@/components/provider/DarkModeProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -57,14 +58,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark dark:bg-[#0D0D10]">
+    <html lang="en" className="">
       <body
         className={`${caveat.variable} ${inter.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
         suppressHydrationWarning={true}
       >
         <ClerkProvider>
-          {children}
-          <Toaster />
+          <DarkModeProvider>
+            {children}
+            <Toaster />
+          </DarkModeProvider>
         </ClerkProvider>
       </body>
     </html>

@@ -1,21 +1,78 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import CoverPicker from "../_components/CoverPicker";
 import EmojiPickerComponent from "@/components/UIComponents/EmojiPickerComponent";
-import { SmilePlus } from "lucide-react";
+import { Loader, SmilePlus } from "lucide-react";
 import { Emoji } from "emoji-picker-react";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { create } from "domain";
+import { coverImages } from "@/constants";
 
 function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [emojiIcon, setEmojiIcon] = useState("");
   const [selectedCover, setSelectedCover] = useState(
     "/coverImages/lakeMountain.jpg",
   );
-  const [emojiIcon, setEmojiIcon] = useState("");
+
+  const { orgId } = useAuth();
+  const { user } = useUser();
+  const router = useRouter();
+
+  // function to create workspace in firebase fireStore database
+  const onCreateWorkSpace = async () => {
+    try {
+      setLoading(true);
+      // create a new workspace
+
+      const workSpaceId = Date.now();
+      await setDoc(doc(db, "WorkSpaces", workSpaceId.toString()), {
+        workspaceName: workSpaceName,
+        emoji: emojiIcon,
+        coverImage: selectedCover,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        id: workSpaceId,
+        orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+      });
+
+      // create a new document for the workspace
+
+      const documentId = uuidv4();
+      await setDoc(doc(db, "WorkSpaceDocuments", documentId.toString()), {
+        workspaceId: workSpaceId,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        coverImage: selectedCover,
+        id: documentId,
+        emoji: emojiIcon,
+        documentName: workSpaceName,
+        documentOutput: [],
+      });
+
+      // create a new document output for the workspace
+
+      await setDoc(doc(db, "DocumentOutput", documentId.toString()), {
+        docId: documentId,
+        output: [],
+      });
+
+      setLoading(false);
+
+      router.replace(`/workspace/${workSpaceId}/${documentId}`);
+    } catch (error: any) {
+      toast(error);
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-black md:px-2 lg:px-0">
@@ -35,6 +92,7 @@ function CreateWorkSpace() {
               width={400}
               height={400}
               alt="empty"
+              priority={true}
               className="h-[160px] w-full object-cover object-center"
             />
           </div>
@@ -60,8 +118,12 @@ function CreateWorkSpace() {
               />
             </div>
             <div className="mt-2 flex items-center justify-end gap-3">
-              <Button className="" disabled={!workSpaceName.length}>
-                Create
+              <Button
+                className=""
+                disabled={!workSpaceName.length || loading}
+                onClick={onCreateWorkSpace}
+              >
+                {loading ? <Loader className="animate-spin" /> : "Create"}
               </Button>
               <Button variant={"outline"}>Cancel</Button>
             </div>
