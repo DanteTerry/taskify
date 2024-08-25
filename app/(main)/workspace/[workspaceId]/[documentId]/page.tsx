@@ -1,9 +1,9 @@
 import PageDocumentInfo from "@/app/(main)/_components/PageDocumentInfo";
 
-function DocumentPage() {
+function DocumentPage({ params }) {
   return (
     <div className="h-full">
-      <PageDocumentInfo />
+      <PageDocumentInfo params={params} />
 
       {/*  Rich text editor */}
     </div>

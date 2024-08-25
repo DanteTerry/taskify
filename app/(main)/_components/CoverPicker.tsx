@@ -17,12 +17,15 @@ import { Dispatch, SetStateAction, useState } from "react";
 function CoverPicker({
   isDialogOpen,
   setIsDialogOpen,
-
   setSelectedCover,
+  selectedCover,
+  updateDocumentInfo,
 }: {
   isDialogOpen: boolean;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedCover: Dispatch<SetStateAction<string>>;
+  selectedCover: string;
+  updateDocumentInfo: (key: string, value: string) => void;
 }) {
   const [selectedImage, setSelectedImage] = useState("");
   return (
@@ -35,7 +38,7 @@ function CoverPicker({
       <DialogContent className="w-[400px]">
         <DialogHeader>
           <DialogTitle className="mb-3">Update Cover</DialogTitle>
-          <div className="grid grid-cols-2 gap-1.5 md:grid-cols-3 lg:grid-cols-4">
+          <div className="gap- 1.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {coverImages.map((image, index) => {
               return (
                 <button
@@ -63,7 +66,10 @@ function CoverPicker({
             <Button
               type="button"
               variant="default"
-              onClick={() => setSelectedCover(selectedImage)}
+              onClick={() => {
+                setSelectedCover(selectedImage);
+                updateDocumentInfo("coverImage", selectedImage);
+              }}
             >
               Update
             </Button>

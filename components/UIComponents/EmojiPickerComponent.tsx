@@ -8,9 +8,13 @@ import { cn } from "@/lib/utils";
 function EmojiPickerComponent({
   children,
   setEmojiIcon,
+  emojiIcon,
+  updateDocumentInfo,
 }: {
   children: React.ReactNode;
   setEmojiIcon: Dispatch<SetStateAction<string>>;
+  emojiIcon: string;
+  updateDocumentInfo: (key: string, value: string) => void;
 }) {
   const [openPicker, setOpenPicker] = useState(false);
   const pathName = usePathname();
@@ -36,6 +40,7 @@ function EmojiPickerComponent({
             emojiStyle="facebook"
             onEmojiClick={(e) => {
               setEmojiIcon(e.emoji);
+              updateDocumentInfo("emoji", e.emoji);
               setOpenPicker(false);
             }}
           />

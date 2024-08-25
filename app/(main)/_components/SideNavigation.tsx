@@ -87,9 +87,7 @@ function SideNavigation({
                   }
                   className="flex items-center justify-start gap-2"
                 >
-                  <div className="h-full rounded-md">
-                    <Emoji unified={documents?.emoji} size={20} />
-                  </div>
+                  <div className="h-full rounded-md">{documents?.emoji}</div>
                   {documents?.documentName}
                 </Button>
               </div>
