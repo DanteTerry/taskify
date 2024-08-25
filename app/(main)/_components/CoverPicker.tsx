@@ -17,12 +17,11 @@ import { Dispatch, SetStateAction, useState } from "react";
 function CoverPicker({
   isDialogOpen,
   setIsDialogOpen,
-  selectedCover,
+
   setSelectedCover,
 }: {
   isDialogOpen: boolean;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
-  selectedCover: string;
   setSelectedCover: Dispatch<SetStateAction<string>>;
 }) {
   const [selectedImage, setSelectedImage] = useState("");

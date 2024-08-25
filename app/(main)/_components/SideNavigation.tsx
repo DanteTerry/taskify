@@ -69,7 +69,7 @@ function SideNavigation({
           <div className="mt-5">
             <div className="flex flex-col justify-center">
               <div className="flex items-center justify-between gap-3 px-2 py-2">
-                <h2 className="text-sm text-black dark:text-white">
+                <h2 className="text-sm font-semibold text-black dark:text-white">
                   {documents?.documentName}
                 </h2>
                 <Button size={"icon"} variant={"ghost"}>
@@ -80,10 +80,16 @@ function SideNavigation({
 
               <div className="mt-3 flex flex-col gap-2">
                 <Button
-                  variant={"secondary"}
+                  variant={
+                    params?.documentId === documents?.id
+                      ? "default"
+                      : "secondary"
+                  }
                   className="flex items-center justify-start gap-2"
                 >
-                  <Emoji unified={documents?.emoji} size={20} />
+                  <div className="h-full rounded-md">
+                    <Emoji unified={documents?.emoji} size={20} />
+                  </div>
                   {documents?.documentName}
                 </Button>
               </div>

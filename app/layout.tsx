@@ -58,16 +58,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="">
+    <html lang="en" className="dark">
       <body
-        className={`${caveat.variable} ${inter.variable} font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
+        className={`${caveat.variable} ${inter.variable} h-full font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
         suppressHydrationWarning={true}
       >
         <ClerkProvider>
-          <DarkModeProvider>
-            {children}
-            <Toaster />
-          </DarkModeProvider>
+          {children}
+          <Toaster />
         </ClerkProvider>
       </body>
     </html>

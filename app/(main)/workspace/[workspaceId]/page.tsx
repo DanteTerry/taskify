@@ -3,7 +3,7 @@ import { FileText, Footprints, Sprout } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import TemplateCard from "@/components/ui/TemplateCard";
 
-function Dashboard() {
+function WorkSpacePage() {
   return (
     <div className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
@@ -97,4 +97,4 @@ function Dashboard() {
     </div>
   );
 }
-export default Dashboard;
+export default WorkSpacePage;

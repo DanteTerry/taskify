@@ -11,7 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { create } from "domain";
 import { coverImages } from "@/constants";
@@ -119,7 +119,7 @@ function CreateWorkSpace() {
             </div>
             <div className="mt-2 flex items-center justify-end gap-3">
               <Button
-                className=""
+                className="bg-[#d2f159]"
                 disabled={!workSpaceName.length || loading}
                 onClick={onCreateWorkSpace}
               >
@@ -133,7 +133,6 @@ function CreateWorkSpace() {
       <CoverPicker
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
-        selectedCover={selectedCover}
         setSelectedCover={setSelectedCover}
       />
     </section>

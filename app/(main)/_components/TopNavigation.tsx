@@ -20,12 +20,23 @@ function TopNavigation({
           <PanelsTopLeft size={20} className="text-[#f1f1f1]" />
         </Button>
       )}
-      <OrganizationSwitcher
-        afterCreateOrganizationUrl={"/dashboards"}
-        afterLeaveOrganizationUrl={"/dashboards"}
-      />
-
-      <UserButton />
+      <div className="justify-self-center">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl={"/dashboards"}
+          afterLeaveOrganizationUrl={"/dashboards"}
+        />
+      </div>
+      <div className="flex items-center gap-5">
+        <Button
+          variant={"secondary"}
+          size={"sm"}
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="text-black dark:bg-[#D2F159]"
+        >
+          Share
+        </Button>
+        <UserButton />
+      </div>
     </div>
   );
 }

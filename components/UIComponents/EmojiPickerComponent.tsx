@@ -3,6 +3,8 @@
 import EmojiPicker from "emoji-picker-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 function EmojiPickerComponent({
   children,
   setEmojiIcon,
@@ -11,6 +13,7 @@ function EmojiPickerComponent({
   setEmojiIcon: Dispatch<SetStateAction<string>>;
 }) {
   const [openPicker, setOpenPicker] = useState(false);
+  const pathName = usePathname();
   return (
     <div className="relative">
       <Button
@@ -21,13 +24,18 @@ function EmojiPickerComponent({
         {children}
       </Button>
       {openPicker && (
-        <div className="absolute -left-3 bottom-12 z-10">
+        <div
+          className={cn(
+            `absolute z-10`,
+            pathName === "/create-workspace" ? "-left-3 bottom-12" : "",
+          )}
+        >
           <EmojiPicker
             height={350}
             theme="auto"
             emojiStyle="facebook"
             onEmojiClick={(e) => {
-              setEmojiIcon(e.unified);
+              setEmojiIcon(e.emoji);
               setOpenPicker(false);
             }}
           />
