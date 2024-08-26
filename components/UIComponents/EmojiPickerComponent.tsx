@@ -14,7 +14,7 @@ function EmojiPickerComponent({
   children: React.ReactNode;
   setEmojiIcon: Dispatch<SetStateAction<string>>;
   emojiIcon: string;
-  updateDocumentInfo: (key: string, value: string) => void;
+  updateDocumentInfo?: (key: string, value: string) => void;
 }) {
   const [openPicker, setOpenPicker] = useState(false);
   const pathName = usePathname();

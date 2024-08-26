@@ -19,7 +19,7 @@ function HeroStartButton() {
 
       <SignedIn>
         <Button
-          onClick={() => router.push("/dashboards")}
+          onClick={() => router.push("/dashboard")}
           variant={"secondary"}
           className="mt-4 rounded-full bg-white font-space text-base text-black transition-all duration-300 hover:bg-gray-300 sm:px-8 sm:py-6 sm:text-lg md:text-xl"
         >

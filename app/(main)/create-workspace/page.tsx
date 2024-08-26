@@ -11,10 +11,8 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import { create } from "domain";
-import { coverImages } from "@/constants";
 
 function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");
@@ -33,8 +31,8 @@ function CreateWorkSpace() {
   const onCreateWorkSpace = async () => {
     try {
       setLoading(true);
-      // create a new workspace
 
+      // create a new workspace
       const workSpaceId = Date.now();
       await setDoc(doc(db, "WorkSpaces", workSpaceId.toString()), {
         workspaceName: workSpaceName,

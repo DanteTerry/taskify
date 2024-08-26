@@ -9,11 +9,24 @@ import { WorkspaceData } from "@/types/type";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import ProjectCard from "../../_components/ProjectCard";
+import { cn } from "@/lib/utils";
 
 function WorkSpacePage() {
   const params = useParams();
   const [documents, setDocuments] = useState<WorkspaceData>();
+  const [projectType, setProjectType] = useState<string>("");
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
 
   // get document data from firebases
   const getDocument = () => {
@@ -50,7 +63,13 @@ function WorkSpacePage() {
           {/* templates */}
           <div className="relative mt-5 flex w-full flex-col items-center justify-center gap-3 md:mt-10 md:flex-row md:gap-5">
             {/* board */}
-            <TemplateCard className="hover:bg-[#FBEDD6] dark:hover:bg-[#372C1C] md:w-2/4">
+            <TemplateCard
+              onclick={() => {
+                setOpen(true);
+                setProjectType("board");
+              }}
+              className="hover:bg-[#FBEDD6] dark:hover:bg-[#372C1C] md:w-2/4"
+            >
               <Sprout
                 size={35}
                 className="text-[#6a6a6a] group-hover:text-[#FFB110]"
@@ -64,7 +83,13 @@ function WorkSpacePage() {
             </TemplateCard>
 
             {/* document */}
-            <TemplateCard className="hover:bg-[#E0EDFB] hover:dark:bg-[#1A2735] md:w-2/4">
+            <TemplateCard
+              onclick={() => {
+                setOpen(true);
+                setProjectType("document");
+              }}
+              className="hover:bg-[#E0EDFB] hover:dark:bg-[#1A2735] md:w-2/4"
+            >
               <FileText
                 size={30}
                 className="text-[#6a6a6a] group-hover:text-[#2383E2]"
@@ -78,7 +103,13 @@ function WorkSpacePage() {
             </TemplateCard>
 
             {/* sprint */}
-            <TemplateCard className="hover:bg-[#FDEBEC] dark:hover:bg-[#362422] md:w-2/4">
+            <TemplateCard
+              onclick={() => {
+                setOpen(true);
+                setProjectType("sprint");
+              }}
+              className="hover:bg-[#FDEBEC] dark:hover:bg-[#362422] md:w-2/4"
+            >
               <Footprints
                 size={30}
                 className="text-[#6a6a6a] group-hover:text-[#DE5550]"
@@ -137,6 +168,11 @@ function WorkSpacePage() {
             </div>
           </div>
           {/* <ProjectCard /> */}
+          <Dialog open={open} onOpenChange={() => setOpen(false)}>
+            <DialogContent className={cn(`w-[350px] bg-[#161616]`)}>
+              <ProjectCard projectType={projectType} />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </div>

@@ -16,14 +16,14 @@ function WorkspaceItemList({
           <div
             key={index}
             onClick={() => router.push(`/workspace/${workSpace.id}`)}
-            className="cursor-pointer rounded-xl border shadow-lg transition-all duration-300 hover:scale-105"
+            className="cursor-pointer rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
           >
             <Image
               src={workSpace?.coverImage}
               width={400}
               height={200}
               alt="cover image"
-              className="h-[150px] rounded-t-2xl object-cover"
+              className="h-[120px] rounded-t-2xl object-cover"
             />
             <div className="rounded-b-xl p-4">
               <h2 className="flex gap-2">

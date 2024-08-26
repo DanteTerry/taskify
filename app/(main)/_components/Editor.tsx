@@ -26,7 +26,7 @@ function Editor({
     documentId: string;
   };
 }) {
-  const [documentOutput, setDocumentOutput] = useState();
+  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>();
 
   // save document
   const saveDocument = async (document: any) => {

@@ -68,7 +68,6 @@ function PageDocumentInfo({ params }: { params: any }) {
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         setSelectedCover={setSelectedCover}
-        selectedCover={selectedCover}
         updateDocumentInfo={updateDocumentInfo}
       />
 
