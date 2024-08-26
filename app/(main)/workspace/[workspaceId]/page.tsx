@@ -1,9 +1,41 @@
+"use client";
 import Image from "next/image";
-import { FileText, Footprints, Sprout } from "lucide-react";
+import { FileText, Footprints, Router, Sprout } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import TemplateCard from "@/components/ui/TemplateCard";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { WorkspaceData } from "@/types/type";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { useRouter } from "next/navigation";
 
 function WorkSpacePage() {
+  const params = useParams();
+  const [documents, setDocuments] = useState<WorkspaceData>();
+  const router = useRouter();
+
+  // get document data from firebases
+  const getDocument = () => {
+    const q = query(
+      collection(db, "WorkSpaceDocuments"),
+      where("workspaceId", "==", Number(params?.workspaceId)),
+    );
+    onSnapshot(q, (querySnapShot) => {
+      querySnapShot.forEach(async (doc) => {
+        if (doc.exists()) {
+          setDocuments(doc.data() as WorkspaceData);
+        }
+      });
+    });
+  };
+
+  // get document data on page load
+  useEffect(() => {
+    getDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.workspaceId]);
+
   return (
     <div className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
@@ -77,19 +109,32 @@ function WorkSpacePage() {
           </div>
 
           {/* project cards */}
-          <div className="mt-2 flex w-full flex-col items-center justify-between gap-3 md:flex-row md:gap-5">
-            <TemplateCard className="hover:bg-[#F9f9f9]/20">
-              <p>hello</p>
-            </TemplateCard>
-            <TemplateCard className="hover:bg-[#F9f9f9]/20">
-              <p>hello</p>
-            </TemplateCard>
-            <TemplateCard className="hover:bg-[#F9f9f9]/20">
-              <p>hello</p>
-            </TemplateCard>
-            <TemplateCard className="hover:bg-[#F9f9f9]/20">
-              <p>hello</p>
-            </TemplateCard>
+          <div className="mt-2 grid w-full grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+            <div
+              onClick={() =>
+                router.push(
+                  `/workspace/${documents?.workspaceId}/${documents?.id}`,
+                )
+              }
+              className="relative mt-3 cursor-pointer rounded-xl border font-space shadow-lg transition-all duration-300 hover:bg-[#1A2735]"
+            >
+              <Image
+                src={documents?.coverImage}
+                width={400}
+                height={200}
+                alt="cover image"
+                className="h-[100px] rounded-t-2xl object-cover"
+              />
+              <div className="mt-5 rounded-b-xl p-4">
+                <h2 className="text-2xl font-semibold">
+                  {documents?.documentName}
+                </h2>
+              </div>
+              <span className="absolute bottom-16 left-4 text-4xl">
+                {" "}
+                {documents?.emoji}
+              </span>
+            </div>
           </div>
           {/* <ProjectCard /> */}
         </div>

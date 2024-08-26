@@ -1,5 +1,9 @@
 import PageDocumentInfo from "@/app/(main)/_components/PageDocumentInfo";
-import Editor from "@/app/(main)/_components/Editor";
+import dynamic from "next/dynamic";
+
+export const Editor = dynamic(() => import("@/app/(main)/_components/Editor"), {
+  ssr: false,
+});
 
 function DocumentPage({
   params,

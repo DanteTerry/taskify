@@ -23,6 +23,7 @@ function WorkSpaceList() {
   const { orgId } = useAuth();
 
   const getWorkspace = async () => {
+    setWorkSpacesList([]);
     const q = query(
       collection(db, "WorkSpaces"),
       where(

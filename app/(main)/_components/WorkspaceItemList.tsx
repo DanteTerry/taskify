@@ -16,7 +16,7 @@ function WorkspaceItemList({
           <div
             key={index}
             onClick={() => router.push(`/workspace/${workSpace.id}`)}
-            className="cursor-pointer rounded-xl border shadow-xl transition-all duration-300 hover:scale-105"
+            className="cursor-pointer rounded-xl border shadow-lg transition-all duration-300 hover:scale-105"
           >
             <Image
               src={workSpace?.coverImage}
