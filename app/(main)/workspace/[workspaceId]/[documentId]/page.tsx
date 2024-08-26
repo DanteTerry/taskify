@@ -14,7 +14,7 @@ function DocumentPage({
       <PageDocumentInfo params={params} />
 
       {/*  Rich text editor */}
-      <Editor />
+      <Editor params={params} />
     </div>
   );
 }
