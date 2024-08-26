@@ -1,15 +1,49 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import { AlignLeft, LayoutGrid, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import WorkspaceItemList from "./WorkspaceItemList";
+import {
+  collection,
+  DocumentData,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
 
 function WorkSpaceList() {
   const { user } = useUser();
 
-  const [workSpacesList, setWorkSpacesList] = useState([]);
+  const [workSpacesList, setWorkSpacesList] = useState<DocumentData[]>([]);
+
+  const { orgId } = useAuth();
+
+  const getWorkspace = async () => {
+    const q = query(
+      collection(db, "WorkSpaces"),
+      where(
+        "orgId",
+        "==",
+        orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+      ),
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      if (doc.data()) {
+        setWorkSpacesList((prev) => [...prev, doc.data()]);
+      }
+    });
+  };
+
+  useEffect(() => {
+    user && getWorkspace();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orgId, user]);
 
   return (
     <>
@@ -60,7 +94,7 @@ function WorkSpaceList() {
           </Link>
         </div>
       ) : (
-        <p>p</p>
+        <WorkspaceItemList workSpacesList={workSpacesList} />
       )}
     </>
   );
