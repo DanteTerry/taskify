@@ -26,7 +26,7 @@ function TopNavigation({
           afterLeaveOrganizationUrl={"/dashboards"}
         />
       </div>
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-3">
         <Button
           variant={"secondary"}
           size={"sm"}
@@ -34,6 +34,9 @@ function TopNavigation({
           className="text-black dark:bg-[#D2F159]"
         >
           Share
+        </Button>
+        <Button size={"sm"} className="text-black dark:bg-[#D2F159]">
+          Publish
         </Button>
         <UserButton />
       </div>

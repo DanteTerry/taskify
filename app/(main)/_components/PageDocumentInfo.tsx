@@ -20,6 +20,7 @@ function PageDocumentInfo({ params }: { params: any }) {
 
   useEffect(() => {
     params.documentId && getDocumentInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.documentId]);
 
   const getDocumentInfo = async () => {
@@ -43,7 +44,7 @@ function PageDocumentInfo({ params }: { params: any }) {
   };
 
   return (
-    <div className="relative h-full w-full dark:bg-[#1F1F1F]">
+    <div className="relative">
       {/* cover image */}
       <div className="group relative flex items-center justify-center overflow-hidden rounded-xl rounded-tl-none rounded-tr-none">
         <Button
@@ -72,7 +73,7 @@ function PageDocumentInfo({ params }: { params: any }) {
       />
 
       {/* emoji picker */}
-      <div className="absolute left-[10%] top-[180px]">
+      <div className="absolute left-[15%] top-[180px]">
         <EmojiPickerComponent
           setEmojiIcon={setEmojiIcon}
           updateDocumentInfo={updateDocumentInfo}
@@ -89,7 +90,7 @@ function PageDocumentInfo({ params }: { params: any }) {
       </div>
 
       {/* file name */}
-      <div className="mt-16 px-10">
+      <div className="mx-auto mt-16 px-5 md:w-full lg:w-3/5 lg:px-10">
         <input
           type="text"
           placeholder="Untitled document"
