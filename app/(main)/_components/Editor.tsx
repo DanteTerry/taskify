@@ -1,8 +1,18 @@
 "use client";
 import "@blocknote/core/fonts/inter.css";
+import { CodeBlock, insertCode } from "@defensestation/blocknote-code";
 import "@blocknote/mantine/style.css";
 import { BlockNoteView } from "@blocknote/mantine";
-import { useCreateBlockNote } from "@blocknote/react";
+import {
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+  useCreateBlockNote,
+} from "@blocknote/react";
+import {
+  BlockNoteSchema,
+  defaultBlockSpecs,
+  filterSuggestionItems,
+} from "@blocknote/core";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -11,7 +21,15 @@ interface EditorProps {
 }
 
 function Editor({}: EditorProps) {
-  const editor = useCreateBlockNote({});
+  const schema = BlockNoteSchema.create({
+    blockSpecs: {
+      ...defaultBlockSpecs,
+      procode: CodeBlock,
+    },
+  });
+  const editor = useCreateBlockNote({
+    schema: schema,
+  });
 
   return (
     <div className="mx-auto mt-6 md:w-full lg:w-3/5">
@@ -22,7 +40,17 @@ function Editor({}: EditorProps) {
         emojiPicker={true}
         tableHandles={true}
         slashMenu={false}
-      ></BlockNoteView>
+      >
+        <SuggestionMenuController
+          triggerCharacter={"/"}
+          getItems={async (query) =>
+            filterSuggestionItems(
+              [...getDefaultReactSlashMenuItems(editor), insertCode()],
+              query,
+            )
+          }
+        />
+      </BlockNoteView>
     </div>
   );
 }
