@@ -18,3 +18,7 @@ export const SignInSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be more than 8 characters"),
 });
+
+export const CreateProjectSchema = z.object({
+  documentName: z.string().min(3, "Name must be more than 3 characters"),
+});

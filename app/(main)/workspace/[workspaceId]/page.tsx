@@ -1,53 +1,46 @@
 "use client";
 import Image from "next/image";
-import { FileText, Footprints, Router, Sprout } from "lucide-react";
+import { FileText, Footprints, Sprout } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import TemplateCard from "@/components/ui/TemplateCard";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { WorkspaceData } from "@/types/type";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
-import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import ProjectCard from "../../_components/ProjectCard";
 import { cn } from "@/lib/utils";
+import DocumentTemplate from "../../_components/DocumentTemplate";
 
-function WorkSpacePage() {
-  const params = useParams();
-  const [documents, setDocuments] = useState<WorkspaceData>();
+function WorkSpacePage({ params }: { params: any }) {
+  const [documents, setDocuments] = useState<WorkspaceData[]>();
   const [projectType, setProjectType] = useState<string>("");
-  const router = useRouter();
-
   const [open, setOpen] = useState(false);
 
-  // get document data from firebases
-  const getDocument = () => {
+  const { workspaceId } = params;
+
+  useEffect(() => {
+    // Create a query to get documents where 'workspaceId' matches the passed workspaceId
     const q = query(
       collection(db, "WorkSpaceDocuments"),
-      where("workspaceId", "==", Number(params?.workspaceId)),
+      where("workspaceId", "==", workspaceId),
     );
-    onSnapshot(q, (querySnapShot) => {
-      querySnapShot.forEach(async (doc) => {
-        if (doc.exists()) {
-          setDocuments(doc.data() as WorkspaceData);
-        }
-      });
-    });
-  };
 
-  // get document data on page load
-  useEffect(() => {
-    getDocument();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params?.workspaceId]);
+    // Set up a real-time listener
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setDocuments(docs);
+    });
+
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
+  }, [workspaceId]);
 
   return (
     <div className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
@@ -127,7 +120,7 @@ function WorkSpacePage() {
               alt="dashboard illustration"
               width={250}
               height={250}
-              className="absolute -right-2 -top-[113px] hidden md:block"
+              className="absolute -right-2 -top-[113px] hidden h-auto w-auto md:block"
             />
           </div>
 
@@ -141,36 +134,25 @@ function WorkSpacePage() {
 
           {/* project cards */}
           <div className="mt-2 grid w-full grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-            <div
-              onClick={() =>
-                router.push(
-                  `/workspace/${documents?.workspaceId}/${documents?.id}`,
-                )
-              }
-              className="relative mt-3 cursor-pointer rounded-xl border font-space shadow-lg transition-all duration-300 hover:bg-[#1A2735]"
-            >
-              <Image
-                src={documents?.coverImage}
-                width={400}
-                height={200}
-                alt="cover image"
-                className="h-[100px] rounded-t-2xl object-cover"
-              />
-              <div className="mt-5 rounded-b-xl p-4">
-                <h2 className="text-2xl font-semibold">
-                  {documents?.documentName}
-                </h2>
-              </div>
-              <span className="absolute bottom-16 left-4 text-4xl">
-                {" "}
-                {documents?.emoji}
-              </span>
-            </div>
+            {documents?.map((document) => (
+              <DocumentTemplate key={document.id} document={document} />
+            ))}
           </div>
           {/* <ProjectCard /> */}
           <Dialog open={open} onOpenChange={() => setOpen(false)}>
             <DialogContent className={cn(`w-[350px] bg-[#161616]`)}>
-              <ProjectCard projectType={projectType} />
+              <DialogHeader>
+                <DialogTitle>
+                  {projectType === "board"
+                    ? "Board"
+                    : projectType === "document"
+                      ? "Page"
+                      : "Sprint"}{" "}
+                  Project
+                </DialogTitle>
+                <ProjectCard params={params} projectType={projectType} />
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
             </DialogContent>
           </Dialog>
         </div>
