@@ -11,14 +11,14 @@ function DocumentTemplate({ document }: { document: WorkspaceData }) {
       onClick={() =>
         router.push(`/workspace/${document?.workspaceId}/${document?.id}`)
       }
-      className="relative mt-3 cursor-pointer rounded-xl border font-space shadow-lg transition-all duration-300 hover:bg-[#1A2735]"
+      className="relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300 hover:bg-[#1A2735] dark:bg-[#1F1F1F]"
     >
       <Image
         src={document?.coverImage || "/coverImages/ocean.jpg"}
         alt="cover image"
         width={400}
         height={200}
-        className="h-[100px] rounded-t-2xl object-cover"
+        className="h-[100px] object-cover"
       />
       <div className="mt-5 rounded-b-xl p-4">
         <h2 className="text-xl font-semibold">{document?.documentName}</h2>

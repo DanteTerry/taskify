@@ -15,7 +15,7 @@ import {
   PartialBlock,
 } from "@blocknote/core";
 import { db } from "@/config/firebaseConfig";
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 
 function Editor({
@@ -26,10 +26,22 @@ function Editor({
     documentId: string;
   };
 }) {
-  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>();
+  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([
+    {
+      id: "",
+      type: "paragraph",
+      props: {
+        textColor: "default",
+        backgroundColor: "default",
+        textAlignment: "left",
+      },
+      content: [],
+      children: [],
+    },
+  ]);
 
   // save document
-  const saveDocument = async (document: any) => {
+  const saveDocument = async (document: PartialBlock[]) => {
     const docRef = doc(db, "DocumentOutput", params?.documentId);
     await updateDoc(docRef, { output: document });
   };
@@ -39,14 +51,19 @@ function Editor({
     const docRef = doc(db, "DocumentOutput", params?.documentId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      docSnap.data().output && setDocumentOutput(docSnap.data()?.output);
+      const output = docSnap.data()?.output;
+      if (Array.isArray(output) && output.length > 0) {
+        setDocumentOutput(output);
+      }
     } else {
       console.log("No such document!");
     }
   };
 
   useEffect(() => {
-    params && getDocument();
+    if (params) {
+      getDocument();
+    }
   }, [params]);
 
   // creating schema for blocknote
@@ -88,4 +105,5 @@ function Editor({
     </div>
   );
 }
+
 export default Editor;

@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { db } from "@/config/firebaseConfig";
+import { cn } from "@/lib/utils";
 import { WorkspaceData } from "@/types/type";
-import { Emoji } from "emoji-picker-react";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { BellDot, PanelsTopLeft, Plus } from "lucide-react";
+import { BellDot, Plus } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function SideNavigation({
@@ -16,25 +17,30 @@ function SideNavigation({
   isOpen: boolean;
 }) {
   const params = useParams();
-  const [documents, setDocuments] = useState<WorkspaceData>();
+  const [documents, setDocuments] = useState<WorkspaceData[]>();
+  const { workspaceId } = params;
 
-  const getDocument = () => {
-    const q = query(
-      collection(db, "WorkSpaceDocuments"),
-      where("workspaceId", "==", Number(params?.workspaceId)),
-    );
-    onSnapshot(q, (querySnapShot) => {
-      querySnapShot.forEach(async (doc) => {
-        if (doc.exists()) {
-          setDocuments(doc.data() as WorkspaceData);
-        }
-      });
-    });
-  };
+  const router = useRouter();
 
   useEffect(() => {
-    getDocument();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!params?.workspaceId) return;
+    // Create a query to get documents where 'workspaceId' matches the passed workspaceId
+    const q = query(
+      collection(db, "WorkSpaceDocuments"),
+      where("workspaceId", "==", workspaceId),
+    );
+
+    // Set up a real-time listener
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as WorkspaceData[];
+      setDocuments(docs);
+    });
+
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
   }, [params?.workspaceId]);
 
   return (
@@ -42,7 +48,10 @@ function SideNavigation({
       {isOpen && (
         <aside className="absolute z-50 h-full w-72 bg-slate-200 px-4 py-2 dark:bg-[#121212] md:relative">
           <div className="flex items-center justify-between">
-            <div className="flex items-center justify-center gap-2">
+            <Link
+              href={"/dashboard"}
+              className="flex items-center justify-center gap-2"
+            >
               <div className="rounded-lg bg-black px-2 py-2 dark:block dark:bg-[#1f1f1f]">
                 <Image
                   src={"/logo/logo.svg"}
@@ -51,11 +60,10 @@ function SideNavigation({
                   height={10}
                 />
               </div>
-
               <h1 className="text-base font-bold dark:text-[#f1f1f1]">
                 Taskify
               </h1>
-            </div>
+            </Link>
 
             <Button
               size={"icon"}
@@ -70,7 +78,7 @@ function SideNavigation({
             <div className="flex flex-col justify-center">
               <div className="flex items-center justify-between gap-3 px-2 py-2">
                 <h2 className="text-sm font-semibold text-black dark:text-white">
-                  {documents?.documentName}
+                  {"Testing Team"}
                 </h2>
                 <Button size={"icon"} variant={"ghost"}>
                   <Plus size={20} className="text-black dark:text-white" />
@@ -79,17 +87,27 @@ function SideNavigation({
               <hr />
 
               <div className="mt-3 flex flex-col gap-2">
-                <Button
-                  variant={
-                    params?.documentId === documents?.id
-                      ? "default"
-                      : "secondary"
-                  }
-                  className="flex items-center justify-start gap-2"
-                >
-                  <div className="h-full rounded-md">{documents?.emoji}</div>
-                  {documents?.documentName}
-                </Button>
+                {documents?.map((doc) => (
+                  <Button
+                    onClick={() => {
+                      router.push(`/workspace/${workspaceId}/${doc?.id}`);
+                    }}
+                    key={doc.id}
+                    variant={
+                      params?.documentId === doc?.id ? "default" : "secondary"
+                    }
+                    className="flex items-center justify-start gap-2"
+                  >
+                    <span
+                      className={cn(
+                        `flex items-center justify-center rounded-bl-lg rounded-tl-lg text-lg`,
+                      )}
+                    >
+                      {doc?.emoji}
+                    </span>
+                    {doc?.documentName}
+                  </Button>
+                ))}
               </div>
             </div>
           </div>

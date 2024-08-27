@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
-import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
 import { CreateProject } from "@/types/type";
@@ -16,7 +15,7 @@ import { CreateProjectSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 
-const emojiIcons: string[] = getRandomEmoji();
+const emojiIcons: [] = getRandomEmoji();
 
 function ProjectCard({
   projectType,
@@ -28,6 +27,7 @@ function ProjectCard({
   const [emoji, setEmoji] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const { user } = useUser();
+  const router = useRouter();
 
   const {
     register,
@@ -50,6 +50,7 @@ function ProjectCard({
         emoji: emoji,
         documentName: documentName,
         documentOutput: [],
+        projectType: projectType,
       });
 
       // create a new document output for the workspace
@@ -59,7 +60,7 @@ function ProjectCard({
       });
 
       toast("Document created successfully");
-      // router.replace(`/workspace/${params?.workspaceId}/${documentId}`);
+      router.replace(`/workspace/${params?.workspaceId}/${documentId}`);
     } catch (error: any) {
       toast(error.message);
     }
@@ -135,7 +136,7 @@ function ProjectCard({
           `w-full rounded-md py-2 font-semibold text-slate-200`,
           projectType === "board" && "bg-[#c98a0d]",
           projectType === "sprint" && "bg-[#933030]",
-          projectType === "document" && "bg-[#1963ae]",
+          projectType === "page" && "bg-[#1963ae]",
         )}
       >
         {isSubmitting ? (

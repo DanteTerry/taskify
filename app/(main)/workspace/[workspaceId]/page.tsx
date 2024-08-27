@@ -17,11 +17,13 @@ import {
 import ProjectCard from "../../_components/ProjectCard";
 import { cn } from "@/lib/utils";
 import DocumentTemplate from "../../_components/DocumentTemplate";
+import { useUser } from "@clerk/nextjs";
 
 function WorkSpacePage({ params }: { params: any }) {
   const [documents, setDocuments] = useState<WorkspaceData[]>();
   const [projectType, setProjectType] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const { user } = useUser();
 
   const { workspaceId } = params;
 
@@ -34,7 +36,9 @@ function WorkSpacePage({ params }: { params: any }) {
 
     // Set up a real-time listener
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const docs = snapshot.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() }) as WorkspaceData,
+      );
       setDocuments(docs);
     });
 
@@ -47,7 +51,7 @@ function WorkSpacePage({ params }: { params: any }) {
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
         <div className="mx-auto flex h-full w-full flex-col items-center">
           <h2 className="font-space text-xl font-semibold md:text-2xl">
-            Welcome Arpit
+            Welcome {user?.fullName}
           </h2>
           <h2 className="font-space text-2xl font-semibold md:text-3xl">
             Start with a template
@@ -79,7 +83,7 @@ function WorkSpacePage({ params }: { params: any }) {
             <TemplateCard
               onclick={() => {
                 setOpen(true);
-                setProjectType("document");
+                setProjectType("page");
               }}
               className="hover:bg-[#E0EDFB] hover:dark:bg-[#1A2735] md:w-2/4"
             >
@@ -133,7 +137,7 @@ function WorkSpacePage({ params }: { params: any }) {
           </div>
 
           {/* project cards */}
-          <div className="mt-2 grid w-full grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-2 grid w-full grid-cols-2 gap-3 pb-7 md:grid-cols-3 lg:grid-cols-4">
             {documents?.map((document) => (
               <DocumentTemplate key={document.id} document={document} />
             ))}

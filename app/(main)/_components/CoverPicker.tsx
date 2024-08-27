@@ -12,6 +12,7 @@ import { coverImages } from "@/constants";
 import { cn } from "@/lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 
 function CoverPicker({
@@ -26,6 +27,9 @@ function CoverPicker({
   updateDocumentInfo?: (key: string, value: string) => void;
 }) {
   const [selectedImage, setSelectedImage] = useState("");
+  const params = useParams();
+  const { workspaceId, documentId } = params;
+
   return (
     <Dialog
       open={isDialogOpen}
@@ -66,7 +70,10 @@ function CoverPicker({
               variant="default"
               onClick={() => {
                 setSelectedCover(selectedImage);
-                updateDocumentInfo("coverImage", selectedImage);
+                if (workspaceId || documentId) {
+                  updateDocumentInfo &&
+                    updateDocumentInfo("coverImage", selectedImage);
+                }
               }}
             >
               Update

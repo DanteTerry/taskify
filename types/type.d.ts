@@ -13,6 +13,7 @@ export type WorkspaceData = {
   workspaceId: number;
   documentName: string;
   id: string;
+  projectType: string;
 };
 
 export type CreateProject = z.infer<typeof CreateProjectSchema>;

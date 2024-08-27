@@ -43,29 +43,9 @@ function CreateWorkSpace() {
         orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
       });
 
-      // create a new document for the workspace
-
-      const documentId = uuidv4();
-      await setDoc(doc(db, "WorkSpaceDocuments", documentId.toString()), {
-        workspaceId: workSpaceId,
-        createdBy: user?.primaryEmailAddress?.emailAddress,
-        coverImage: selectedCover,
-        id: documentId,
-        emoji: emojiIcon,
-        documentName: workSpaceName,
-        documentOutput: [],
-      });
-
-      // create a new document output for the workspace
-
-      await setDoc(doc(db, "DocumentOutput", documentId.toString()), {
-        docId: documentId,
-        output: [],
-      });
-
       setLoading(false);
 
-      router.replace(`/workspace/${workSpaceId}/${documentId}`);
+      router.replace(`/workspace/${workSpaceId}`);
     } catch (error: any) {
       toast(error);
       setLoading(false);
@@ -104,7 +84,7 @@ function CreateWorkSpace() {
             <div className="mt-2 flex items-center gap-3">
               <EmojiPickerComponent setEmojiIcon={setEmojiIcon}>
                 {emojiIcon ? (
-                  <Emoji unified={emojiIcon} size={25} />
+                  <span className="text-2xl">{emojiIcon}</span>
                 ) : (
                   <SmilePlus size={25} />
                 )}
