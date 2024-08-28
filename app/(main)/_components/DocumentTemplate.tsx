@@ -23,7 +23,7 @@ function DocumentTemplate({ document }: { document: WorkspaceData }) {
       <div className="mt-5 rounded-b-xl p-4">
         <h2 className="text-xl font-semibold">{document?.documentName}</h2>
       </div>
-      <span className="absolute bottom-16 left-4 text-4xl">
+      <span className="absolute bottom-[60px] left-4 text-4xl">
         {document?.emoji}
       </span>
     </div>

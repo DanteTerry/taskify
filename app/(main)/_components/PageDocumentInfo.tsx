@@ -61,7 +61,7 @@ function PageDocumentInfo({ params }: { params: any }) {
           height={400}
           alt="cover image"
           sizes="100%"
-          className="h-[200px] w-full object-cover object-center"
+          className="h-[200px] w-full object-cover object-center font-space"
         />
       </div>
       <CoverPicker

@@ -103,7 +103,12 @@ function CreateWorkSpace() {
               >
                 {loading ? <Loader className="animate-spin" /> : "Create"}
               </Button>
-              <Button variant={"outline"}>Cancel</Button>
+              <Button
+                onClick={() => router.push("/dashboard")}
+                variant={"outline"}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </div>

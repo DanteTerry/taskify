@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { FileText, Footprints, Sprout } from "lucide-react";
+import { FileText, Footprints, MoveLeft, Plus, Sprout } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import TemplateCard from "@/components/ui/TemplateCard";
 import { useEffect, useState } from "react";
@@ -17,15 +17,16 @@ import {
 import ProjectCard from "../../_components/ProjectCard";
 import { cn } from "@/lib/utils";
 import DocumentTemplate from "../../_components/DocumentTemplate";
-import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 function WorkSpacePage({ params }: { params: any }) {
   const [documents, setDocuments] = useState<WorkspaceData[]>();
   const [projectType, setProjectType] = useState<string>("");
   const [open, setOpen] = useState(false);
-  const { user } = useUser();
 
   const { workspaceId } = params;
+  const router = useRouter();
 
   useEffect(() => {
     // Create a query to get documents where 'workspaceId' matches the passed workspaceId
@@ -50,12 +51,24 @@ function WorkSpacePage({ params }: { params: any }) {
     <div className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
         <div className="mx-auto flex h-full w-full flex-col items-center">
-          <h2 className="font-space text-xl font-semibold md:text-2xl">
+          {/* <h2 className="font-space text-xl font-semibold md:text-2xl">
             Welcome {user?.fullName}
-          </h2>
-          <h2 className="font-space text-2xl font-semibold md:text-3xl">
-            Start with a template
-          </h2>
+          </h2> */}
+
+          <div className="relative flex w-full items-center justify-center py-4">
+            <Button
+              onClick={() => router.push("/dashboard")}
+              className="absolute left-0 md:left-0"
+              variant="ghost"
+              size="icon"
+            >
+              <MoveLeft />
+            </Button>
+
+            <h2 className="font-space text-xl font-semibold md:text-4xl">
+              Start with a template
+            </h2>
+          </div>
 
           {/* templates */}
           <div className="relative mt-5 flex w-full flex-col items-center justify-center gap-3 md:mt-10 md:flex-row md:gap-5">
@@ -137,14 +150,14 @@ function WorkSpacePage({ params }: { params: any }) {
           </div>
 
           {/* project cards */}
-          <div className="mt-2 grid w-full grid-cols-2 gap-3 pb-7 md:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-2 grid w-full grid-cols-1 gap-3 pb-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {documents?.map((document) => (
               <DocumentTemplate key={document.id} document={document} />
             ))}
           </div>
           {/* <ProjectCard /> */}
           <Dialog open={open} onOpenChange={() => setOpen(false)}>
-            <DialogContent className={cn(`w-[350px] bg-[#161616]`)}>
+            <DialogContent className={cn(`w-[350px] rounded-lg bg-[#161616]`)}>
               <DialogHeader>
                 <DialogTitle>
                   {projectType === "board"

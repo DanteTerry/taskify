@@ -22,8 +22,8 @@ function TopNavigation({
       )}
       <div className="justify-self-center">
         <OrganizationSwitcher
-          afterCreateOrganizationUrl={"/dashboards"}
-          afterLeaveOrganizationUrl={"/dashboards"}
+          afterCreateOrganizationUrl={"/dashboard"}
+          afterLeaveOrganizationUrl={"/dashboard"}
         />
       </div>
       <div className="flex items-center gap-3">

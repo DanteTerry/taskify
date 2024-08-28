@@ -21,20 +21,20 @@ function FeaturesCard({
   return (
     <div
       className={cn(
-        `bg-green-500/25 relative flex  flex-col z-50 gap-4 w-full  md:w-3/4 lg:w-[300px] border-2 border-green-500/30  p-1 rounded-2xl`,
-        className
+        `relative z-50 flex w-full flex-col gap-4 rounded-2xl border-2 border-green-500/30 bg-green-500/25 p-1 md:w-3/4 lg:w-[300px]`,
+        className,
       )}
     >
       <div className="px-3 py-3">
-        <div className="flex items-start gap-5 ">
-          <div className={cn(`p-2 bg-green-500/50 rounded-full`, bgColor)}>
+        <div className="flex items-start gap-5">
+          <div className={cn(`rounded-full bg-green-500/50 p-2`, bgColor)}>
             <ClipboardCheck color="white" size={25} strokeWidth={2.5} />
           </div>
-          <div className="flex flex-col gap-1 text-black/90 items-start ">
-            <h3 className="text-2xl  font-semibold font-space dark:text-slate-300 text-black/90">
+          <div className="flex flex-col items-start gap-1 text-black/90">
+            <h3 className="font-space text-2xl font-semibold text-black/90 dark:text-slate-300">
               {title}
             </h3>
-            <p className=" text-left dark:text-slate-300  pr-6 font-inter">
+            <p className="pr-6 text-left font-inter dark:text-slate-300">
               {description}
             </p>
           </div>
@@ -46,13 +46,13 @@ function FeaturesCard({
           alt={"task progress image"}
           width={250}
           height={100}
-          className="rounded-tl-xl w-5/6 sm:w-4/6  md:w-5/6 rounded-bl-xl"
+          className="w-5/6 rounded-bl-xl rounded-tl-xl sm:w-4/6 md:w-5/6"
         />
       </div>
 
       <div
         className={cn(
-          `bg-gray-300/10 dark:bg-black/5 absolute -left-3 -rotate-6 -z-50 -bottom-3   h-full flex  flex-col gap-4 w-[150px]  p-1 rounded-2xl`
+          `absolute -bottom-3 -left-3 -z-50 flex h-full w-[150px] -rotate-6 flex-col gap-4 rounded-2xl bg-gray-300/10 p-1 dark:bg-black/5`,
         )}
       ></div>
     </div>

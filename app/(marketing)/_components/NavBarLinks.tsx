@@ -25,7 +25,7 @@ function NavBarLinks() {
         </SignedOut>
       </div>
       <div className="flex items-center gap-x-2 md:hidden">
-        <DarkModeToggleBtn />
+        {/* <DarkModeToggleBtn /> */}
         <SignedOut>
           <Link
             className="rounded-lg border-2 border-[#f8f8f8]/5 p-2 px-3 text-sm font-semibold dark:bg-[#f8f8f8]/5"

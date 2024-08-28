@@ -15,7 +15,7 @@ import { db } from "@/config/firebaseConfig";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-function Dashboards() {
+function Dashboard() {
   const { user } = useUser();
   const { orgId } = useAuth();
   const [workSpacesList, setWorkSpacesList] = useState<DocumentData[]>([]);
@@ -53,15 +53,15 @@ function Dashboards() {
             Create Your Ideal Workspace
           </h2>
 
-          <div className="relative mt-10 flex w-full flex-col items-center justify-center gap-3 md:mt-5 md:flex-row md:gap-5">
+          {/* <div className="relative mt-10 flex w-full flex-col items-center justify-center gap-3 md:mt-5 md:flex-row md:gap-5">
             <TemplateCard
               onclick={() => router.push("/create-workspace")}
-              className="flex items-center justify-center gap-2 hover:bg-[#FBEDD6] dark:hover:bg-[#d2f159]/50 md:w-2/4"
+              className="flex items-center justify-center gap-2 hover:bg-[#FBEDD6] dark:hover:bg-[#d2f159]/60 md:w-2/4"
             >
               <Plus
                 size={25}
                 strokeWidth={3}
-                className="text-white transition-all duration-300 group-hover:text-[#d2f159]"
+                className="text-white transition-all duration-300"
               />
 
               <div className="flex flex-col items-start justify-center font-inter dark:text-[#E1E1E1]">
@@ -70,7 +70,7 @@ function Dashboards() {
                 </h3>
               </div>
             </TemplateCard>
-          </div>
+          </div> */}
 
           {/* workspace */}
           <div className="mt-7 flex items-center gap-1 self-start md:mt-10">
@@ -80,7 +80,7 @@ function Dashboards() {
             </h2>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {workSpacesList.map((workSpace, index) => {
               return (
                 <div
@@ -93,7 +93,7 @@ function Dashboards() {
                     width={400}
                     height={200}
                     alt="cover image"
-                    className="h-[120px] rounded-t-2xl object-cover"
+                    className="h-[100px] rounded-t-2xl object-cover"
                   />
                   <div className="flex items-center gap-3 rounded-b-xl p-4 font-space">
                     <span className="text-xl"> {workSpace.emoji}</span>
@@ -104,6 +104,13 @@ function Dashboards() {
                 </div>
               );
             })}
+
+            <button
+              onClick={() => router.push("/create-workspace")}
+              className="group flex w-full items-center justify-center gap-6 rounded-xl border-2 border-slate-300/50 px-5 py-3 shadow-md transition-all duration-300 hover:bg-[#FBEDD6] dark:border-slate-400/5 dark:hover:bg-[#d2f159]/60 hover:dark:text-[#e1e1e1] md:px-3 lg:px-6"
+            >
+              <Plus size={50} strokeWidth={2} />
+            </button>
           </div>
         </div>
       </div>
@@ -111,4 +118,4 @@ function Dashboards() {
   );
 }
 
-export default Dashboards;
+export default Dashboard;

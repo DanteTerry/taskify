@@ -69,9 +69,9 @@ function ProjectCard({
   return (
     <form
       onSubmit={handleSubmit(createProject)}
-      className="flex flex-col gap-4 rounded-lg"
+      className="flex flex-col gap-4 rounded-xl"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col items-center gap-2">
         <input
           id="documentName"
           type="text"
@@ -80,14 +80,12 @@ function ProjectCard({
           {...register("documentName", { required: true })}
         />
         {errors.documentName && (
-          <p className="mt-1 text-sm text-red-500">
-            {errors.documentName.message}
-          </p>
+          <p className="text-sm text-red-500">{errors.documentName.message}</p>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="text-sm">Icons</p>
+        <p className="text-justify text-sm font-semibold">Icons</p>
 
         <div className="mb-2 flex items-center gap-1.5">
           {emojiIcons.map((icon: string, index) => (
@@ -106,7 +104,7 @@ function ProjectCard({
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="text-sm">Background</p>
+        <p className="text-justify text-sm font-semibold">Background</p>
 
         <div className="mx-auto flex w-full flex-wrap gap-1">
           {coverImages.map((image, index) => (
