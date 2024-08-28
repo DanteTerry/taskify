@@ -14,6 +14,7 @@ body,
 .cl-organizationSwitcherPopoverFooter,
 .cl-footer {
   visibility: hidden;
+  height: 0;
 }
 
 .cl-footer {

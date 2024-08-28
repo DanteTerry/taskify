@@ -23,6 +23,10 @@ function SideNavigation({
   const router = useRouter();
 
   useEffect(() => {
+    params?.workspaceId && getDocuments();
+  }, [params?.workspaceId]);
+
+  const getDocuments = () => {
     if (!params?.workspaceId) return;
     // Create a query to get documents where 'workspaceId' matches the passed workspaceId
     const q = query(
@@ -38,10 +42,7 @@ function SideNavigation({
       })) as WorkspaceData[];
       setDocuments(docs);
     });
-
-    // Cleanup the listener on component unmount
-    return () => unsubscribe();
-  }, [params?.workspaceId]);
+  };
 
   return (
     <>

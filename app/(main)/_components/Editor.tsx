@@ -17,6 +17,7 @@ import {
 import { db } from "@/config/firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
+import { sanitizeBlocks } from "@/utils/blockNoteUtil";
 
 function Editor({
   params,
@@ -86,7 +87,10 @@ function Editor({
     <div className="mx-auto mt-6 md:w-full lg:w-3/5">
       <BlockNoteView
         editor={editor}
-        onChange={() => saveDocument(editor.document)}
+        onChange={async () => {
+          const data = await sanitizeBlocks(editor.document);
+          saveDocument(data);
+        }}
         theme={"dark"}
         emojiPicker={true}
         tableHandles={true}

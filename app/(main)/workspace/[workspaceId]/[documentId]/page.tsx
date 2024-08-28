@@ -1,9 +1,7 @@
+"use client";
 import PageDocumentInfo from "@/app/(main)/_components/PageDocumentInfo";
 import dynamic from "next/dynamic";
-
-export const Editor = dynamic(() => import("@/app/(main)/_components/Editor"), {
-  ssr: false,
-});
+import { useMemo } from "react";
 
 function DocumentPage({
   params,
@@ -13,6 +11,13 @@ function DocumentPage({
     documentId: string;
   };
 }) {
+  const Editor = useMemo(
+    () =>
+      dynamic(() => import("@/app/(main)/_components/Editor"), {
+        ssr: false,
+      }),
+    [],
+  );
   return (
     <div className="h-full w-full dark:bg-[#1F1F1F]">
       <PageDocumentInfo params={params} />
