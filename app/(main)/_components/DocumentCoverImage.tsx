@@ -34,6 +34,8 @@ function DocumentCoverImage({
     "gallery",
   );
 
+  const [coverLink, setCoverLink] = useState<string>("");
+
   return (
     <Dialog
       open={isDialogOpen}
@@ -63,6 +65,7 @@ function DocumentCoverImage({
             ))}
           </div>
           <hr className="border-t-2" />
+
           {/* images to render if chooseFrom === upload */}
           {chooseFrom === "upload" && (
             <div className="flex h-full w-full flex-col items-center justify-center">
@@ -84,6 +87,32 @@ function DocumentCoverImage({
               <p className="mt-1 text-xs text-white/30">
                 The maximum size per file is 4 MB
               </p>
+            </div>
+          )}
+
+          {/* /* images to render if chooseFrom === link */}
+          {chooseFrom === "link" && (
+            <div className="h-full">
+              <input
+                id="text"
+                type="url"
+                onChange={(e) => setCoverLink(e.target.value)}
+                className="mt-5 w-full rounded-lg px-3 py-3 text-black/90 outline-none focus:ring-2 dark:border-none dark:bg-[#17181B] dark:text-white dark:placeholder:text-[#80868B]"
+                placeholder="Paste a link to an image"
+                value={coverLink}
+              />
+
+              <Button
+                onClick={() => {
+                  setSelectedCover(coverLink);
+                  setCoverLink("");
+                  setIsDialogOpen(false);
+                }}
+                className="mt-3 w-full"
+                size={"lg"}
+              >
+                Submit
+              </Button>
             </div>
           )}
         </DialogHeader>
