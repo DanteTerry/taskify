@@ -3,10 +3,11 @@ import "@blocknote/core/fonts/inter.css";
 import { CodeBlock, insertCode } from "@defensestation/blocknote-code";
 import "@blocknote/mantine/style.css";
 import { BlockNoteView } from "@blocknote/mantine";
-import {
-  getDefaultReactSlashMenuItems,
-  SuggestionMenuController,
-} from "@blocknote/react";
+import { uploadFiles } from "@/utils/uploadthing";
+import { db } from "@/config/firebaseConfig";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useEffect, useMemo, useState } from "react";
+import { sanitizeBlocks } from "@/utils/blockNoteUtil";
 import {
   BlockNoteEditor,
   BlockNoteSchema,
@@ -14,10 +15,10 @@ import {
   filterSuggestionItems,
   PartialBlock,
 } from "@blocknote/core";
-import { db } from "@/config/firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useEffect, useMemo, useState } from "react";
-import { sanitizeBlocks } from "@/utils/blockNoteUtil";
+import {
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+} from "@blocknote/react";
 
 function Editor({
   params,
@@ -80,11 +81,18 @@ function Editor({
     return BlockNoteEditor.create({
       initialContent: documentOutput,
       schema: schema,
+      uploadFile: async (file: File) => {
+        const [res] = await uploadFiles("imageUploader", {
+          files: [file],
+        });
+
+        return res.url;
+      },
     });
   }, [documentOutput, schema]);
 
   return (
-    <div className="mx-auto mt-6 md:w-full lg:w-3/5">
+    <div className="mx-auto mt-6 -translate-x-4 md:w-full lg:w-3/5">
       <BlockNoteView
         editor={editor}
         onChange={async () => {

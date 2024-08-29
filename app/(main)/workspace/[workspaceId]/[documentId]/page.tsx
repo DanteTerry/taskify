@@ -19,7 +19,7 @@ function DocumentPage({
     [],
   );
   return (
-    <div className="h-full w-full dark:bg-[#1F1F1F]">
+    <div className="w-full dark:bg-[#1F1F1F]">
       <PageDocumentInfo params={params} />
 
       {/*  Rich text editor */}

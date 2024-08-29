@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import CoverPicker from "./CoverPicker";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import EmojiPickerComponent from "@/components/UIComponents/EmojiPickerComponent";
@@ -9,6 +8,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { WorkspaceData } from "@/types/type";
 import { toast } from "sonner";
+import DocumentCoverImage from "./DocumentCoverImage";
 
 function PageDocumentInfo({ params }: { params: any }) {
   const [emojiIcon, setEmojiIcon] = useState("");
@@ -48,10 +48,11 @@ function PageDocumentInfo({ params }: { params: any }) {
       {/* cover image */}
       <div className="group relative flex items-center justify-center overflow-hidden rounded-xl rounded-tl-none rounded-tr-none">
         <Button
+          variant={"outline"}
           onClick={() => {
             setIsDialogOpen(true);
           }}
-          className="absolute hidden h-full w-full items-center border-0 border-none border-transparent bg-transparent p-0 text-lg font-semibold text-white transition-all duration-300 group-hover:flex group-hover:bg-white/20"
+          className="absolute bottom-3 right-3 opacity-0 transition-all duration-300 group-hover:opacity-100"
         >
           Change cover
         </Button>
@@ -64,11 +65,12 @@ function PageDocumentInfo({ params }: { params: any }) {
           className="h-[200px] w-full object-cover object-center font-space"
         />
       </div>
-      <CoverPicker
+      <DocumentCoverImage
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         setSelectedCover={setSelectedCover}
         updateDocumentInfo={updateDocumentInfo}
+        selectedCover={selectedCover}
       />
 
       {/* emoji picker */}
@@ -100,6 +102,8 @@ function PageDocumentInfo({ params }: { params: any }) {
           className="bg-transparent text-3xl font-bold text-white outline-none"
         />
       </div>
+
+      {/* description */}
     </div>
   );
 }
