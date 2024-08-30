@@ -242,7 +242,7 @@ const natureCoverImages = [
   },
   {
     imageUrl:
-      "https://utfs.io/f/18fc34c7-0cf8-4f47-a4ae-e6f65db35d0b-r15x9y.jpeg",
+      "https://utfs.io/f/ebba5ea6-8e8e-46b8-a4ce-62ad27e10112-xym3u7.jpg",
   },
   {
     imageUrl:

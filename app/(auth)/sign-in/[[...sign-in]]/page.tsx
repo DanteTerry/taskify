@@ -10,7 +10,7 @@ export default function Page() {
             width={870}
             height={1110}
             alt="image"
-            src="https://images.unsplash.com/photo-1605106702734-205df224ecce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+            src="https://utfs.io/f/864077f3-a7c2-4c6f-881e-ba690a270d7c-yj9p9x.jpg"
             className="absolute inset-0 h-full w-full object-cover"
           />
         </aside>
