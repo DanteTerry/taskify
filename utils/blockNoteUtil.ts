@@ -1,13 +1,11 @@
-import { PartialBlock } from "@blocknote/core";
-
-export const sanitizeBlocks = (blocks: PartialBlock[]) => {
-  return blocks.map((block: PartialBlock) => {
-    // Only sanitize content if the type is 'image' or 'paragraph'
+export const sanitizeBlocks = (blocks: any) => {
+  return blocks.map((block: any) => {
+    // Initialize sanitizedContent with the existing content
     let sanitizedContent = block.content;
 
     if (block.type === "image") {
-      sanitizedContent =
-        typeof block.content === "undefined" ? "" : block.content;
+      // Ensure content for 'image' type blocks is a string (e.g., URL)
+      sanitizedContent = typeof block.content === "string" ? block.content : "";
     }
 
     // Recursively sanitize the children if they exist

@@ -1,5 +1,7 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { Skeleton } from "@/components/ui/skeleton";
+import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
 import { PanelsTopLeft } from "lucide-react";
 
 function TopNavigation({
@@ -9,6 +11,7 @@ function TopNavigation({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
 }) {
+  const { user } = useUser();
   return (
     <div className="flex h-14 w-full items-center justify-between bg-[#ffffff] px-4 dark:bg-[#161616]">
       {!isOpen && (
@@ -38,7 +41,11 @@ function TopNavigation({
         <Button size={"sm"} className="text-black dark:bg-[#D2F159]">
           Publish
         </Button>
-        <UserButton />
+        {user?.primaryEmailAddress?.emailAddress ? (
+          <UserButton />
+        ) : (
+          <Skeleton className="size-7 rounded-full" />
+        )}
       </div>
     </div>
   );

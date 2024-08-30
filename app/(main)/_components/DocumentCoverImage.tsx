@@ -1,11 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { coverImageCategories, coverImageOptions } from "@/constants";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -30,11 +25,10 @@ function DocumentCoverImage({
 }) {
   const params = useParams();
   const { workspaceId, documentId } = params;
+  const [coverLink, setCoverLink] = useState<string>("");
   const [chooseFrom, setChooseFrom] = useState<"gallery" | "upload" | "link">(
     "gallery",
   );
-
-  const [coverLink, setCoverLink] = useState<string>("");
 
   return (
     <Dialog
@@ -76,7 +70,6 @@ function DocumentCoverImage({
                     updateDocumentInfo &&
                       updateDocumentInfo("coverImage", res[0].url);
                     setSelectedCover(res[0].url);
-
                     setIsDialogOpen(false);
                   }
                 }}
@@ -141,9 +134,9 @@ function DocumentCoverImage({
                       className="relative h-[64px] w-[110px] cursor-pointer rounded-xl"
                       onClick={() => {
                         if (workspaceId || documentId) {
-                          setSelectedCover(image.imageUrl);
                           updateDocumentInfo &&
-                            updateDocumentInfo("coverImage", selectedCover);
+                            updateDocumentInfo("coverImage", image.imageUrl);
+                          setSelectedCover(image.imageUrl);
                           setIsDialogOpen(false);
                         }
                       }}

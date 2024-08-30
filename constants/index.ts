@@ -74,7 +74,7 @@ export const emojiIcons = [
 
 // create a function to generate random emoji and return 10 emoji icons
 export const getRandomEmoji = () => {
-  const randomEmoji = new Set();
+  const randomEmoji = new Set<string>();
   while (randomEmoji.size < 8) {
     randomEmoji.add(emojiIcons[Math.floor(Math.random() * emojiIcons.length)]);
   }
@@ -82,7 +82,6 @@ export const getRandomEmoji = () => {
 };
 
 // type of option for cover image
-
 export const coverImageOptions = [
   {
     value: "gallery",

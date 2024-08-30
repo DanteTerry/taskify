@@ -1,11 +1,12 @@
 import { SignIn } from "@clerk/nextjs";
+import Image from "next/image";
 
 export default function Page() {
   return (
     <section className="h-full overflow-hidden bg-white dark:bg-gray-900">
       <div className="h-full lg:grid lg:min-h-screen lg:grid-cols-12">
         <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
-          <img
+          <Image
             width={870}
             height={1110}
             alt="image"

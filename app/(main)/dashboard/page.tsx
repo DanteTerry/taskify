@@ -1,9 +1,9 @@
 "use client";
 import { useAuth, useUser } from "@clerk/nextjs";
 import TemplateCard from "@/components/ui/TemplateCard";
-import { Plus } from "lucide-react";
+import { Divide, Plus } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   collection,
   DocumentData,
@@ -14,6 +14,8 @@ import {
 import { db } from "@/config/firebaseConfig";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
 
 function Dashboard() {
   const { user } = useUser();
@@ -53,25 +55,6 @@ function Dashboard() {
             Create Your Ideal Workspace
           </h2>
 
-          {/* <div className="relative mt-10 flex w-full flex-col items-center justify-center gap-3 md:mt-5 md:flex-row md:gap-5">
-            <TemplateCard
-              onclick={() => router.push("/create-workspace")}
-              className="flex items-center justify-center gap-2 hover:bg-[#FBEDD6] dark:hover:bg-[#d2f159]/60 md:w-2/4"
-            >
-              <Plus
-                size={25}
-                strokeWidth={3}
-                className="text-white transition-all duration-300"
-              />
-
-              <div className="flex flex-col items-start justify-center font-inter dark:text-[#E1E1E1]">
-                <h3 className="font-space text-xl font-bold">
-                  Create Workspace
-                </h3>
-              </div>
-            </TemplateCard>
-          </div> */}
-
           {/* workspace */}
           <div className="mt-7 flex items-center gap-1 self-start md:mt-10">
             <TbLayoutDashboardFilled color="#7D7D7D" />
@@ -81,29 +64,35 @@ function Dashboard() {
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {workSpacesList.map((workSpace, index) => {
-              return (
-                <div
-                  key={index}
-                  onClick={() => router.push(`/workspace/${workSpace.id}`)}
-                  className="cursor-pointer rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
-                >
-                  <Image
-                    src={workSpace?.coverImage}
-                    width={400}
-                    height={200}
-                    alt="cover image"
-                    className="h-[100px] rounded-t-2xl object-cover"
-                  />
-                  <div className="flex items-center gap-3 rounded-b-xl p-4 font-space">
-                    <span className="text-xl"> {workSpace.emoji}</span>
-                    <h2 className="flex gap-2 text-lg">
-                      {workSpace.workspaceName}
-                    </h2>
-                  </div>
-                </div>
-              );
-            })}
+            {workSpacesList?.length === 0 ? (
+              <SkeletonCard />
+            ) : (
+              <div>
+                {workSpacesList.map((workSpace, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => router.push(`/workspace/${workSpace.id}`)}
+                      className="cursor-pointer rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
+                    >
+                      <Image
+                        src={workSpace?.coverImage}
+                        width={400}
+                        height={200}
+                        alt="cover image"
+                        className="h-[100px] rounded-t-2xl object-cover"
+                      />
+                      <div className="flex items-center gap-3 rounded-b-xl p-4 font-space">
+                        <span className="text-xl"> {workSpace.emoji}</span>
+                        <h2 className="flex gap-2 text-lg">
+                          {workSpace.workspaceName}
+                        </h2>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
             <button
               onClick={() => router.push("/create-workspace")}

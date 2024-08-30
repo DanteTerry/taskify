@@ -1,6 +1,6 @@
 "use client";
 
-import EmojiPicker from "emoji-picker-react";
+import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "../ui/button";
 import { useParams, usePathname } from "next/navigation";
@@ -13,7 +13,7 @@ function EmojiPickerComponent({
 }: {
   children: React.ReactNode;
   setEmojiIcon: Dispatch<SetStateAction<string>>;
-  emojiIcon: string;
+  emojiIcon?: string;
   updateDocumentInfo?: (key: string, value: string) => void;
 }) {
   const [openPicker, setOpenPicker] = useState(false);
@@ -38,12 +38,12 @@ function EmojiPickerComponent({
         >
           <EmojiPicker
             height={350}
-            theme="auto"
-            emojiStyle="facebook"
+            theme={Theme.AUTO}
+            emojiStyle={EmojiStyle.FACEBOOK}
             onEmojiClick={(e) => {
               setEmojiIcon(e.emoji);
               if (workspaceId || documentId) {
-                updateDocumentInfo("emoji", e.emoji);
+                updateDocumentInfo && updateDocumentInfo("emoji", e.emoji);
               }
               setOpenPicker(false);
             }}

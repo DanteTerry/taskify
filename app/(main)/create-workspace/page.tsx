@@ -6,13 +6,11 @@ import { useState } from "react";
 import CoverPicker from "../_components/CoverPicker";
 import EmojiPickerComponent from "@/components/UIComponents/EmojiPickerComponent";
 import { Loader, SmilePlus } from "lucide-react";
-import { Emoji } from "emoji-picker-react";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");

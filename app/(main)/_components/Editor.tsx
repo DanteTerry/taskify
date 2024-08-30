@@ -1,6 +1,5 @@
 "use client";
 import "@blocknote/core/fonts/inter.css";
-import { CodeBlock, insertCode } from "@defensestation/blocknote-code";
 import "@blocknote/mantine/style.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import { uploadFiles } from "@/utils/uploadthing";
@@ -8,17 +7,7 @@ import { db } from "@/config/firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { sanitizeBlocks } from "@/utils/blockNoteUtil";
-import {
-  BlockNoteEditor,
-  BlockNoteSchema,
-  defaultBlockSpecs,
-  filterSuggestionItems,
-  PartialBlock,
-} from "@blocknote/core";
-import {
-  getDefaultReactSlashMenuItems,
-  SuggestionMenuController,
-} from "@blocknote/react";
+import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 
 function Editor({
   params,
@@ -66,21 +55,13 @@ function Editor({
     if (params) {
       getDocument();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
-
-  // creating schema for blocknote
-  const schema = BlockNoteSchema.create({
-    blockSpecs: {
-      ...defaultBlockSpecs,
-      procode: CodeBlock,
-    },
-  });
 
   // create blocknote editors
   const editor = useMemo(() => {
     return BlockNoteEditor.create({
       initialContent: documentOutput,
-      schema: schema,
       uploadFile: async (file: File) => {
         const [res] = await uploadFiles("imageUploader", {
           files: [file],
@@ -89,7 +70,7 @@ function Editor({
         return res.url;
       },
     });
-  }, [documentOutput, schema]);
+  }, [documentOutput]);
 
   return (
     <div className="mx-auto mt-6 -translate-x-4 md:w-full lg:w-3/5">
@@ -102,18 +83,7 @@ function Editor({
         theme={"dark"}
         emojiPicker={true}
         tableHandles={true}
-        slashMenu={false}
-      >
-        <SuggestionMenuController
-          triggerCharacter={"/"}
-          getItems={async (query) =>
-            filterSuggestionItems(
-              [...getDefaultReactSlashMenuItems(editor), insertCode()],
-              query,
-            )
-          }
-        />
-      </BlockNoteView>
+      />
     </div>
   );
 }

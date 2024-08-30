@@ -1,8 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/config/firebaseConfig";
 import { cn } from "@/lib/utils";
-import { WorkspaceData } from "@/types/type";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { WorkspaceData, WorkspaceDocData } from "@/types/type";
+import { DialogOverlayProps } from "@radix-ui/react-dialog";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { BellDot, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,14 +26,32 @@ function SideNavigation({
   isOpen: boolean;
 }) {
   const params = useParams();
-  const [documents, setDocuments] = useState<WorkspaceData[]>();
-  const { workspaceId } = params;
+  const [documents, setDocuments] = useState<WorkspaceDocData[]>();
+  const { workspaceId, documentId } = params;
+  const [workSpace, setWorkSpace] = useState<WorkspaceData | null>(null);
 
   const router = useRouter();
 
   useEffect(() => {
     params?.workspaceId && getDocuments();
+    params?.workspaceId && getWorkspaceInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.workspaceId]);
+
+  const getWorkspaceInfo = async () => {
+    const workspaceRef = doc(db, "WorkSpaces", workspaceId as string);
+
+    try {
+      const docSnap = await getDoc(workspaceRef);
+      if (docSnap.exists()) {
+        setWorkSpace(docSnap.data() as WorkspaceData);
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching workspace info:", error);
+    }
+  };
 
   const getDocuments = () => {
     if (!params?.workspaceId) return;
@@ -39,7 +66,7 @@ function SideNavigation({
       const docs = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      })) as WorkspaceData[];
+      })) as WorkspaceDocData[];
       setDocuments(docs);
     });
   };
@@ -79,36 +106,52 @@ function SideNavigation({
             <div className="flex flex-col justify-center">
               <div className="flex items-center justify-between gap-3 px-2 py-2">
                 <h2 className="text-sm font-semibold text-black dark:text-white">
-                  {"Testing Team"}
+                  {workSpace?.workspaceName}
                 </h2>
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  onClick={() => {
+                    if (workspaceId || documentId) {
+                      router.push(`/workspace/${workspaceId}`);
+                    }
+                  }}
+                  size={"icon"}
+                  variant={"ghost"}
+                >
                   <Plus size={20} className="text-black dark:text-white" />
                 </Button>
               </div>
               <hr />
 
-              <div className="mt-3 flex flex-col gap-2">
-                {documents?.map((doc) => (
-                  <Button
-                    onClick={() => {
-                      router.push(`/workspace/${workspaceId}/${doc?.id}`);
-                    }}
-                    key={doc.id}
-                    variant={
-                      params?.documentId === doc?.id ? "default" : "secondary"
-                    }
-                    className="flex items-center justify-start gap-2"
-                  >
-                    <span
-                      className={cn(
-                        `flex items-center justify-center rounded-bl-lg rounded-tl-lg text-lg`,
-                      )}
-                    >
-                      {doc?.emoji}
-                    </span>
-                    {doc?.documentName}
-                  </Button>
-                ))}
+              <div className="mt-3 flex w-full flex-col gap-2">
+                {documents?.length === undefined ? (
+                  <Skeleton className="h-[40px]" />
+                ) : (
+                  <div className="w-full">
+                    {documents?.map((doc) => (
+                      <Button
+                        onClick={() => {
+                          router.push(`/workspace/${workspaceId}/${doc?.id}`);
+                        }}
+                        key={doc.id}
+                        variant={
+                          params?.documentId === doc?.id
+                            ? "default"
+                            : "secondary"
+                        }
+                        className="flex w-full items-center justify-start gap-2"
+                      >
+                        <span
+                          className={cn(
+                            `flex items-center justify-center rounded-bl-lg rounded-tl-lg text-lg`,
+                          )}
+                        >
+                          {doc?.emoji}
+                        </span>
+                        {doc?.documentName}
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

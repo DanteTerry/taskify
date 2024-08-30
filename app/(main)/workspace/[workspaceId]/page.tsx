@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { FileText, Footprints, MoveLeft, Plus, Sprout } from "lucide-react";
+import { FileText, Footprints, MoveLeft, Sprout } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import TemplateCard from "@/components/ui/TemplateCard";
 import { useEffect, useState } from "react";
-import { WorkspaceData } from "@/types/type";
+import { WorkspaceDocData } from "@/types/type";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import {
@@ -19,9 +19,10 @@ import { cn } from "@/lib/utils";
 import DocumentTemplate from "../../_components/DocumentTemplate";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
 
 function WorkSpacePage({ params }: { params: any }) {
-  const [documents, setDocuments] = useState<WorkspaceData[]>();
+  const [documents, setDocuments] = useState<WorkspaceDocData[]>();
   const [projectType, setProjectType] = useState<string>("");
   const [open, setOpen] = useState(false);
 
@@ -38,7 +39,7 @@ function WorkSpacePage({ params }: { params: any }) {
     // Set up a real-time listener
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as WorkspaceData,
+        (doc) => ({ id: doc.id, ...doc.data() }) as WorkspaceDocData,
       );
       setDocuments(docs);
     });
@@ -151,10 +152,17 @@ function WorkSpacePage({ params }: { params: any }) {
 
           {/* project cards */}
           <div className="mt-2 grid w-full grid-cols-1 gap-3 pb-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {documents?.map((document) => (
-              <DocumentTemplate key={document.id} document={document} />
-            ))}
+            {documents?.length === undefined ? (
+              <SkeletonCard />
+            ) : (
+              <div>
+                {documents?.map((document) => (
+                  <DocumentTemplate key={document.id} document={document} />
+                ))}
+              </div>
+            )}
           </div>
+
           {/* <ProjectCard /> */}
           <Dialog open={open} onOpenChange={() => setOpen(false)}>
             <DialogContent className={cn(`w-[350px] rounded-lg bg-[#161616]`)}>

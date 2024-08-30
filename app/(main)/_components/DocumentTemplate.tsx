@@ -1,10 +1,10 @@
 "use client";
 
-import { WorkspaceData } from "@/types/type";
+import { WorkspaceDocData } from "@/types/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-function DocumentTemplate({ document }: { document: WorkspaceData }) {
+function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   const router = useRouter();
   return (
     <div

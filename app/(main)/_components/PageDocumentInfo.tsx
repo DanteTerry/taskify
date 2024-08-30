@@ -1,22 +1,21 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import EmojiPickerComponent from "@/components/UIComponents/EmojiPickerComponent";
 import { SmilePlus } from "lucide-react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
-import { WorkspaceData } from "@/types/type";
+import { WorkspaceDocData } from "@/types/type";
 import { toast } from "sonner";
 import DocumentCoverImage from "./DocumentCoverImage";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function PageDocumentInfo({ params }: { params: any }) {
   const [emojiIcon, setEmojiIcon] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [documentInfo, setDocumentInfo] = useState<WorkspaceData>();
-  const [selectedCover, setSelectedCover] = useState(
-    "/coverImages/lakeMountain.jpg",
-  );
+  const [documentInfo, setDocumentInfo] = useState<WorkspaceDocData>();
+  const [selectedCover, setSelectedCover] = useState("");
 
   useEffect(() => {
     params.documentId && getDocumentInfo();
@@ -28,7 +27,7 @@ function PageDocumentInfo({ params }: { params: any }) {
 
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      setDocumentInfo(docSnap.data() as WorkspaceData);
+      setDocumentInfo(docSnap.data() as WorkspaceDocData);
       setEmojiIcon(docSnap.data()?.emoji);
       docSnap.data()?.coverImage &&
         setSelectedCover(docSnap.data()?.coverImage);
@@ -40,7 +39,6 @@ function PageDocumentInfo({ params }: { params: any }) {
     await updateDoc(docRef, {
       [key]: value,
     });
-    toast.success("Document Updated!");
   };
 
   return (
@@ -56,14 +54,18 @@ function PageDocumentInfo({ params }: { params: any }) {
         >
           Change cover
         </Button>
-        <Image
-          src={selectedCover}
-          width={400}
-          height={400}
-          alt="cover image"
-          sizes="100%"
-          className="h-[200px] w-full object-cover object-center font-space"
-        />
+        {selectedCover === "" ? (
+          <Skeleton className="h-[200px] w-full rounded-xl" />
+        ) : (
+          <Image
+            src={selectedCover}
+            width={400}
+            height={400}
+            alt="cover image"
+            sizes="100%"
+            className="h-[200px] w-full object-cover object-center font-space"
+          />
+        )}
       </div>
       <DocumentCoverImage
         isDialogOpen={isDialogOpen}

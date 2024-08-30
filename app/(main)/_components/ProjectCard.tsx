@@ -15,7 +15,7 @@ import { CreateProjectSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 
-const emojiIcons: [] = getRandomEmoji();
+const emojiIcons: string[] = getRandomEmoji();
 
 function ProjectCard({
   projectType,
