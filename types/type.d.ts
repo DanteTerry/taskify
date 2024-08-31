@@ -7,7 +7,7 @@ export type DocumentOutput = {
 };
 
 export type WorkspaceDocData = {
-  coverImage: any;
+  coverImage: string;
   emoji: string | null;
   documentOutput: DocumentOutput[]; // or any other specific structure if known
   createdBy: string;

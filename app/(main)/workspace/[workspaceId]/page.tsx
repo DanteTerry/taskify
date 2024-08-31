@@ -52,10 +52,6 @@ function WorkSpacePage({ params }: { params: any }) {
     <div className="flex h-full w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
         <div className="mx-auto flex h-full w-full flex-col items-center">
-          {/* <h2 className="font-space text-xl font-semibold md:text-2xl">
-            Welcome {user?.fullName}
-          </h2> */}
-
           <div className="relative flex w-full items-center justify-center py-4">
             <Button
               onClick={() => router.push("/dashboard")}
@@ -151,11 +147,13 @@ function WorkSpacePage({ params }: { params: any }) {
           </div>
 
           {/* project cards */}
-          <div className="mt-2 grid w-full grid-cols-1 gap-3 pb-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-2 flex w-full justify-start">
             {documents?.length === undefined ? (
-              <SkeletonCard />
+              <div className="grid grid-cols-1 place-items-start">
+                <SkeletonCard />
+              </div>
             ) : (
-              <div>
+              <div className="grid w-full grid-cols-1 gap-3 pb-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {documents?.map((document) => (
                   <DocumentTemplate key={document.id} document={document} />
                 ))}
