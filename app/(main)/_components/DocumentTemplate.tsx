@@ -1,19 +1,23 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { WorkspaceDocData } from "@/types/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   const router = useRouter();
-  console.log(document.coverImage);
+  console.log(document);
   return (
     <div
       onClick={() =>
         router.push(`/workspace/${document?.workspaceId}/${document?.id}`)
       }
-      className="relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300 hover:bg-[#1A2735] dark:bg-[#1F1F1F]"
+      className={cn(
+        `relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300 dark:bg-[#1F1F1F]`,
+        document?.projectType === "page" && "hover:bg-[#FFB110]",
+      )}
     >
       {document?.coverImage ? (
         <Image

@@ -1,9 +1,14 @@
 "use client";
 import { useAuth, useUser } from "@clerk/nextjs";
-import TemplateCard from "@/components/ui/TemplateCard";
-import { Divide, Plus } from "lucide-react";
+import { Ellipsis, Plus } from "lucide-react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { db } from "@/config/firebaseConfig";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
+import { Button } from "@/components/ui/button";
+
 import {
   collection,
   DocumentData,
@@ -11,17 +16,14 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "@/config/firebaseConfig";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
-import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
 
 function Dashboard() {
   const { user } = useUser();
   const { orgId } = useAuth();
   const [workSpacesList, setWorkSpacesList] = useState<DocumentData[]>([]);
   const router = useRouter();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const getWorkspace = () => {
     setWorkSpacesList([]);
@@ -67,27 +69,51 @@ function Dashboard() {
             {workSpacesList?.length === 0 ? (
               <SkeletonCard />
             ) : (
-              <div>
+              <div className="relative">
                 {workSpacesList.map((workSpace, index) => {
                   return (
                     <div
                       key={index}
-                      onClick={() => router.push(`/workspace/${workSpace.id}`)}
-                      className="cursor-pointer rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
+                      className="relative rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
                     >
                       <Image
+                        onClick={() =>
+                          router.push(`/workspace/${workSpace.id}`)
+                        }
                         src={workSpace?.coverImage}
                         width={400}
                         height={200}
                         alt="cover image"
-                        className="h-[100px] rounded-t-2xl object-cover"
+                        className="h-[100px] cursor-pointer rounded-t-2xl object-cover"
                       />
-                      <div className="flex items-center gap-3 rounded-b-xl p-4 font-space">
-                        <span className="text-xl"> {workSpace.emoji}</span>
-                        <h2 className="flex gap-2 text-lg">
-                          {workSpace.workspaceName}
-                        </h2>
+                      <div className="flex items-center justify-between rounded-b-xl p-4 font-space">
+                        <div className="flex gap-3">
+                          <span className="text-xl"> {workSpace.emoji}</span>
+                          <h2 className="flex gap-2 text-lg">
+                            {workSpace.workspaceName}
+                          </h2>
+                        </div>
+
+                        <Button
+                          onClick={() => setIsOpen((prev) => !prev)}
+                          className="z-50"
+                          variant={"ghost"}
+                          size={"sm"}
+                        >
+                          <Ellipsis size={20} />
+                        </Button>
                       </div>
+
+                      {isOpen && (
+                        <div className="absolute -bottom-16 right-2 z-50 flex flex-col gap-1 rounded-md bg-gray-500/30 px-2 py-1">
+                          <Button className="" variant={"ghost"} size={"sm"}>
+                            Edit
+                          </Button>
+                          <Button className="" variant={"ghost"} size={"sm"}>
+                            Delete{" "}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}

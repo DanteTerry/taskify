@@ -153,7 +153,7 @@ function WorkSpacePage({ params }: { params: any }) {
                 <SkeletonCard />
               </div>
             ) : (
-              <div className="grid w-full grid-cols-1 gap-3 pb-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <div className="grid w-full grid-cols-1 gap-6 pb-7 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {documents?.map((document) => (
                   <DocumentTemplate key={document.id} document={document} />
                 ))}

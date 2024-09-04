@@ -126,7 +126,7 @@ function SideNavigation({
                 {documents?.length === undefined ? (
                   <Skeleton className="h-[40px]" />
                 ) : (
-                  <div className="w-full">
+                  <div className="flex w-full flex-col gap-3">
                     {documents?.map((doc) => (
                       <Button
                         onClick={() => {
