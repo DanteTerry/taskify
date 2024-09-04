@@ -14,15 +14,19 @@ function TopNavigation({
   const { user } = useUser();
   return (
     <div className="flex h-14 w-full items-center justify-between bg-[#ffffff] px-4 dark:bg-[#161616]">
-      {!isOpen && (
-        <Button
-          size={"icon"}
-          variant={"ghost"}
-          onClick={() => setIsOpen((prev) => !prev)}
-        >
-          <PanelsTopLeft size={20} className="text-[#f1f1f1]" />
-        </Button>
-      )}
+      <div className="flex items-center gap-2">
+        {" "}
+        {!isOpen && (
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={() => setIsOpen((prev) => !prev)}
+          >
+            <PanelsTopLeft size={20} className="text-[#f1f1f1]" />
+          </Button>
+        )}
+        <h3 className="">🚴 Document Name</h3>
+      </div>
       <div className="justify-self-center">
         <OrganizationSwitcher
           afterCreateOrganizationUrl={"/dashboard"}

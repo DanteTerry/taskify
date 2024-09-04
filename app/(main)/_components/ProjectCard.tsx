@@ -60,7 +60,9 @@ function ProjectCard({
       });
 
       toast("Document created successfully");
-      router.replace(`/workspace/${params?.workspaceId}/${documentId}`);
+      router.replace(
+        `/workspace/${params?.workspaceId}/${projectType}/${documentId}`,
+      );
     } catch (error: any) {
       toast(error.message);
     }

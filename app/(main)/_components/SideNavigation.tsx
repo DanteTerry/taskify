@@ -130,11 +130,14 @@ function SideNavigation({
                     {documents?.map((doc) => (
                       <Button
                         onClick={() => {
-                          router.push(`/workspace/${workspaceId}/${doc?.id}`);
+                          router.push(
+                            `/workspace/${workspaceId}/${doc.projectType}/${doc?.id}`,
+                          );
                         }}
                         key={doc.id}
                         variant={
-                          params?.documentId === doc?.id
+                          params?.documentId === doc?.id ||
+                          params?.boardId === doc?.id
                             ? "default"
                             : "secondary"
                         }

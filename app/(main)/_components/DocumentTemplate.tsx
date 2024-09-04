@@ -12,7 +12,9 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   return (
     <div
       onClick={() =>
-        router.push(`/workspace/${document?.workspaceId}/${document?.id}`)
+        router.push(
+          `/workspace/${document?.workspaceId}/${document.projectType}/${document?.id}`,
+        )
       }
       className={cn(
         `relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300 dark:bg-[#1F1F1F]`,
