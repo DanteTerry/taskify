@@ -11,7 +11,8 @@ import {
 
 import "./globals.css";
 import { Toaster } from "sonner";
-import DarkModeProvider from "@/components/provider/DarkModeProvider";
+import { store } from "@/lib/redux/store";
+import GlobalStateProvider from "@/components/provider/GlobalStateProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -64,8 +65,10 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <ClerkProvider>
-          {children}
-          <Toaster />
+          <GlobalStateProvider>
+            {children}
+            <Toaster />
+          </GlobalStateProvider>
         </ClerkProvider>
       </body>
     </html>
