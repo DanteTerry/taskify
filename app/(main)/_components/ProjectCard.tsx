@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { coverImages, getRandomEmoji } from "@/constants";
+import { coverImages, getRandomEmoji, spaceCoverImages } from "@/constants";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -54,10 +54,19 @@ function ProjectCard({
       });
 
       // create a new document output for the workspace
-      await setDoc(doc(db, "DocumentOutput", documentId.toString()), {
-        docId: documentId,
-        output: [],
-      });
+      if (projectType === "page") {
+        await setDoc(doc(db, "PageDocumentOutput", documentId.toString()), {
+          docId: documentId,
+          output: [],
+        });
+      }
+
+      if (projectType === "board") {
+        await setDoc(doc(db, "BoardDocumentOutput", documentId.toString()), {
+          docId: documentId,
+          output: [],
+        });
+      }
 
       toast("Document created successfully");
       router.replace(
@@ -109,7 +118,7 @@ function ProjectCard({
         <p className="text-justify text-sm font-semibold">Background</p>
 
         <div className="mx-auto flex w-full flex-wrap gap-1">
-          {coverImages.map((image, index) => (
+          {spaceCoverImages.map((image, index) => (
             <div
               key={index}
               onClick={() => setSelectedImage(image.imageUrl)}

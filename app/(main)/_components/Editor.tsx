@@ -33,13 +33,13 @@ function Editor({
 
   // save document
   const saveDocument = async (document: PartialBlock[]) => {
-    const docRef = doc(db, "DocumentOutput", params?.documentId);
+    const docRef = doc(db, "PageDocumentOutput", params?.documentId);
     await updateDoc(docRef, { output: document });
   };
 
   // get document data
   const getDocument = async () => {
-    const docRef = doc(db, "DocumentOutput", params?.documentId);
+    const docRef = doc(db, "PageDocumentOutput", params?.documentId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const output = docSnap.data()?.output;

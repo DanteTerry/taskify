@@ -30,8 +30,19 @@ export interface WorkspaceData {
 
 export type BlockType = {
   id?: string;
-  type?: "paragraph" | "image" | "table" | string; // Specify known types or use a union of known types
-  props?: Partial<Record<string, any>>; // Exact type depends on "type"
+  type?: "paragraph" | "image" | "table" | string;
+  props?: Partial<Record<string, any>>;
   content?: string | InlineContent[] | TableContent;
-  children?: BlockType[]; // Use BlockType to ensure consistency
+  children?: BlockType[];
+};
+
+export type ItemType = {
+  id: number;
+  title: string;
+};
+
+export type listType = {
+  id: string;
+  title: string;
+  items: ItemType[];
 };

@@ -5,39 +5,13 @@ type ItemType = {
   title: string;
 };
 
-type ListType = {
+export type BoardSliceType = {
   id: number;
   title: string;
   items: ItemType[];
-};
+}[];
 
-export type BoardSliceType = {
-  name: string;
-  bgColor: string;
-  list: ListType[];
-};
-
-const initialState: BoardSliceType = {
-  name: "My Board",
-  bgColor: "#069000",
-  list: [
-    {
-      id: 1,
-      title: "To Do",
-      items: [],
-    },
-    {
-      id: 2,
-      title: "In progress",
-      items: [],
-    },
-    {
-      id: 3,
-      title: "Done",
-      items: [],
-    },
-  ],
-};
+const initialState: BoardSliceType = [];
 
 export const boardSlice = createSlice({
   name: "board",
@@ -46,11 +20,14 @@ export const boardSlice = createSlice({
     setBoard: (state, action) => {
       return action.payload;
     },
+    createNewList: (state, action) => {
+      state.push(action.payload);
+    },
   },
 });
 
 // export the actions
-export const { setBoard } = boardSlice.actions;
+export const { setBoard, createNewList } = boardSlice.actions;
 
 // Export the reducer
 export default boardSlice.reducer;
