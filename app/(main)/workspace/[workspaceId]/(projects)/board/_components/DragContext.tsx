@@ -1,17 +1,16 @@
-"use client";
-import CardAdd from "@/app/(main)/_components/CardAdd";
-import { createNewList, setBoard } from "@/lib/redux/boardSlice";
-import { RootState } from "@/lib/redux/store";
-import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { MoreHorizontal, Plus, Trash } from "lucide-react";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { Plus, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import DroppableList from "./DroppableList";
-import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { setBoard, createNewList } from "@/lib/redux/boardSlice";
+import DroppableList from "./DroppableList";
+import CardAdd from "@/app/(main)/_components/CardAdd";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { listType } from "@/types/type";
+import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { RootState } from "@/lib/redux/store";
 
 function DragContext() {
   const [isFocused, setIsFocused] = useState(false);
@@ -23,7 +22,7 @@ function DragContext() {
 
   useEffect(() => {
     if (boardId) {
-      const docRef = doc(db, "BoardDocumentOutput", boardId);
+      const docRef = doc(db, "BoardDocumentOutput", boardId as string);
 
       // Listen for real-time updates
       const unsubscribe = onSnapshot(
@@ -44,6 +43,37 @@ function DragContext() {
       return () => unsubscribe();
     }
   }, [boardId, dispatch]);
+
+  // Function to delete a specific list
+  const deleteList = async (listId: string) => {
+    try {
+      const docRef = doc(db, "BoardDocumentOutput", boardId as string);
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        const currentData = docSnapshot.data();
+        const existingOutput = currentData?.output || [];
+
+        // Filter out the list that matches the `listId`
+        const updatedOutput = existingOutput.filter(
+          (list: listType) => list.id !== listId,
+        );
+
+        // Update Firestore with the new data
+        await updateDoc(docRef, {
+          output: updatedOutput,
+        });
+
+        // Update Redux store
+        dispatch(setBoard(updatedOutput));
+        setData(updatedOutput);
+      } else {
+        console.error("Document does not exist!");
+      }
+    } catch (error) {
+      console.error("Error deleting list from Firestore:", error);
+    }
+  };
 
   // Function to add a new card to a specific list
   const cardData = (title: string, index: number) => {
@@ -114,7 +144,7 @@ function DragContext() {
     };
 
     try {
-      const docRef = doc(db, "BoardDocumentOutput", boardId);
+      const docRef = doc(db, "BoardDocumentOutput", boardId as string);
       const docSnapshot = await getDoc(docRef);
       if (docSnapshot.exists()) {
         const currentData = docSnapshot.data();
@@ -129,6 +159,37 @@ function DragContext() {
       }
     } catch (error) {
       console.error("Error updating Firestore:", error);
+    }
+  };
+
+  // function to update title of list
+  const updateListTitle = async (listId: string, newTitle: string) => {
+    const docRef = doc(db, "BoardDocumentOutput", boardId as string);
+    try {
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const currentData = docSnapshot.data();
+        const existingOutput = currentData?.output || [];
+
+        // Update the title of the specific list
+        const updatedOutput = existingOutput.map((list: listType) => {
+          if (list.id === listId) {
+            return { ...list, title: newTitle }; // Update the title
+          }
+          return list;
+        });
+
+        // Save the updated list back to Firestore
+        await updateDoc(docRef, { output: updatedOutput });
+
+        // Update the Redux store and local state
+        dispatch(setBoard(updatedOutput));
+        setData(updatedOutput);
+      } else {
+        console.error("Document does not exist!");
+      }
+    } catch (error) {
+      console.error("Error updating list title:", error);
     }
   };
 
@@ -150,14 +211,15 @@ function DragContext() {
                     onFocus={() => setIsFocused(true)}
                     defaultValue={data.title}
                     onBlur={(e) => {
-                      if (!e.target.value) {
-                        setIsFocused(false);
+                      setIsFocused(false);
+                      if (e.target.value && e.target.value !== data.title) {
+                        updateListTitle(data.id, e.target.value); // Save the new title
                       }
                     }}
                   />
 
-                  <button>
-                    <Trash size={16} />{" "}
+                  <button onClick={() => deleteList(data.id)}>
+                    <Trash size={16} />
                   </button>
                 </div>
 
@@ -174,7 +236,7 @@ function DragContext() {
           <div className="rounded-sm bg-white">
             <Plus className="text-black" />
           </div>
-          <h3>Add another column</h3>
+          <h3>{data?.length === 0 ? "Add column" : "Add another column"}</h3>
         </button>
       </DragDropContext>
     </div>
