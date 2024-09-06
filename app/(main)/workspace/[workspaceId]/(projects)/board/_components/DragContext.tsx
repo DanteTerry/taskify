@@ -1,6 +1,6 @@
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { Plus, Trash } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
 import { setBoard, createNewList } from "@/lib/redux/boardSlice";
@@ -10,12 +10,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { listType } from "@/types/type";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { RootState } from "@/lib/redux/store";
 
 function DragContext() {
   const [isFocused, setIsFocused] = useState(false);
   const dispatch = useDispatch();
-  const boardData = useSelector((state: RootState) => state.board);
   const { boardId } = useParams();
 
   const [data, setData] = useState<listType[]>();
@@ -24,7 +22,6 @@ function DragContext() {
     if (boardId) {
       const docRef = doc(db, "BoardDocumentOutput", boardId as string);
 
-      // Listen for real-time updates
       const unsubscribe = onSnapshot(
         docRef,
         (docSnap) => {
@@ -54,17 +51,14 @@ function DragContext() {
         const currentData = docSnapshot.data();
         const existingOutput = currentData?.output || [];
 
-        // Filter out the list that matches the `listId`
         const updatedOutput = existingOutput.filter(
           (list: listType) => list.id !== listId,
         );
 
-        // Update Firestore with the new data
         await updateDoc(docRef, {
           output: updatedOutput,
         });
 
-        // Update Redux store
         dispatch(setBoard(updatedOutput));
         setData(updatedOutput);
       } else {
@@ -76,22 +70,40 @@ function DragContext() {
   };
 
   // Function to add a new card to a specific list
-  const cardData = (title: string, index: number) => {
-    const newList = boardData.map((list, i: number) => {
-      if (i === index) {
-        return {
-          ...list,
-          items: [...list.items, { id: uuidv4(), title }],
-        };
-      }
-      return list;
-    });
+  const cardData = async (title: string, listId: string) => {
+    const docRef = doc(db, "BoardDocumentOutput", boardId as string);
 
-    dispatch(setBoard(newList));
+    try {
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        const currentData = docSnapshot.data();
+        const existingOutput = currentData?.output || [];
+
+        const updatedOutput = existingOutput.map((list: listType) => {
+          if (list.id === listId) {
+            return {
+              ...list,
+              items: [...list.items, { id: uuidv4(), title }], // Add the new card
+            };
+          }
+          return list;
+        });
+
+        await updateDoc(docRef, { output: updatedOutput });
+
+        setData(updatedOutput);
+        dispatch(setBoard(updatedOutput));
+      } else {
+        console.error("Document does not exist!");
+      }
+    } catch (error) {
+      console.error("Error updating Firestore with new card:", error);
+    }
   };
 
   // Handle dragging and dropping items between lists
-  const ondragend = (result: DropResult) => {
+  const ondragend = async (result: DropResult) => {
     const { source, destination } = result;
 
     if (!destination) return;
@@ -103,36 +115,69 @@ function DragContext() {
       return;
     }
 
-    const newList = [...boardData];
+    const docRef = doc(db, "BoardDocumentOutput", boardId as string);
+    const docSnapshot = await getDoc(docRef);
 
-    const sourceListIndex = newList.findIndex(
-      (list) => list.id.toString() === source.droppableId,
-    );
+    if (docSnapshot.exists()) {
+      const currentData = docSnapshot.data();
+      const currentOutput = currentData?.output || [];
 
-    const destinationListIndex = newList.findIndex(
-      (list) => list.id.toString() === destination.droppableId,
-    );
+      // Clone the current list data
+      const newList = [...currentOutput];
 
-    const sourceList = newList[sourceListIndex];
-    const destinationList = newList[destinationListIndex];
+      // Find the source and destination lists
+      const sourceListIndex = newList.findIndex(
+        (list: listType) => list.id.toString() === source.droppableId,
+      );
+      const destinationListIndex = newList.findIndex(
+        (list: listType) => list.id.toString() === destination.droppableId,
+      );
 
-    const sourceItems = [...sourceList.items];
-    const destinationItems = [...destinationList.items];
+      // If either the source or destination list is not found, exit
+      if (sourceListIndex === -1 || destinationListIndex === -1) {
+        console.error("Source or destination list not found!");
+        return;
+      }
 
-    const [movedItem] = sourceItems.splice(source.index, 1);
+      const sourceList = newList[sourceListIndex];
+      const destinationList = newList[destinationListIndex];
 
-    destinationItems.splice(destination.index, 0, movedItem);
+      // Clone the items from source and destination lists
+      const sourceItems = [...sourceList.items];
+      const destinationItems = [...destinationList.items];
 
-    newList[sourceListIndex] = {
-      ...sourceList,
-      items: sourceItems,
-    };
-    newList[destinationListIndex] = {
-      ...destinationList,
-      items: destinationItems,
-    };
+      // Handle moving within the same list (reorder logic)
+      if (sourceListIndex === destinationListIndex) {
+        const [movedItem] = sourceItems.splice(source.index, 1);
+        sourceItems.splice(destination.index, 0, movedItem);
+        newList[sourceListIndex] = {
+          ...sourceList,
+          items: sourceItems,
+        };
+      } else {
+        const [movedItem] = sourceItems.splice(source.index, 1);
+        destinationItems.splice(destination.index, 0, movedItem);
+        newList[sourceListIndex] = {
+          ...sourceList,
+          items: sourceItems,
+        };
+        newList[destinationListIndex] = {
+          ...destinationList,
+          items: destinationItems,
+        };
+      }
 
-    dispatch(setBoard(newList));
+      try {
+        await updateDoc(docRef, {
+          output: newList,
+        });
+        console.log("Database updated with new list order!");
+      } catch (error) {
+        console.error("Error updating Firestore:", error);
+      }
+    } else {
+      console.error("Document does not exist!");
+    }
   };
 
   // Function to create a new list
@@ -171,7 +216,6 @@ function DragContext() {
         const currentData = docSnapshot.data();
         const existingOutput = currentData?.output || [];
 
-        // Update the title of the specific list
         const updatedOutput = existingOutput.map((list: listType) => {
           if (list.id === listId) {
             return { ...list, title: newTitle }; // Update the title
@@ -179,10 +223,8 @@ function DragContext() {
           return list;
         });
 
-        // Save the updated list back to Firestore
         await updateDoc(docRef, { output: updatedOutput });
 
-        // Update the Redux store and local state
         dispatch(setBoard(updatedOutput));
         setData(updatedOutput);
       } else {
@@ -225,7 +267,7 @@ function DragContext() {
 
                 {/* Render droppable items */}
                 <DroppableList key={data.id} data={data} />
-                <CardAdd getCard={(e) => cardData(e, index)} />
+                <CardAdd getCard={(e) => cardData(e, data.id)} />
               </div>
             </div>
           ))}

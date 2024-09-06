@@ -4,7 +4,7 @@ import { ItemType } from "@/types/type";
 
 function DroppableList({ data }: { data: any }) {
   return (
-    <Droppable droppableId={`${data.id}`}>
+    <Droppable droppableId={data.id}>
       {(provided, snapshot) => (
         <div
           className="py-1"

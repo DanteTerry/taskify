@@ -4,7 +4,7 @@ import { ItemType } from "@/types/type";
 
 function DraggableItem({ item, index }: { item: ItemType; index: number }) {
   return (
-    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
+    <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
