@@ -1,10 +1,22 @@
 "use client";
-import { Plus, X } from "lucide-react";
+import { Loader, Plus, X } from "lucide-react";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { randomColors } from "@/constants";
+import { cn } from "@/lib/utils";
 
 function CardAdd({ getCard }: { getCard: (card: string) => void }) {
   const [card, setCard] = useState("");
   const [show, setShow] = useState(false);
+  const [selectedColor, setSelectedColor] = useState("");
 
   const saveCard = () => {
     if (!card) {
@@ -62,6 +74,58 @@ function CardAdd({ getCard }: { getCard: (card: string) => void }) {
           <Plus size={16} /> Add a card
         </button>
       </div>
+      <Dialog open={show} onOpenChange={() => setShow(false)}>
+        <DialogContent className="w-[350px]">
+          <DialogHeader>
+            <DialogTitle>Add Card</DialogTitle>
+            <div className="flex flex-col gap-5">
+              <input
+                id="cardTitle"
+                type="text"
+                className="mt-3 w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+                placeholder="Title"
+              />
+
+              <textarea
+                id="cardDescription"
+                className="w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+                placeholder="Description"
+                rows={5}
+              />
+
+              <div className="flex flex-col gap-2">
+                <span>Card color</span>
+
+                <div className="mx-auto flex w-full flex-wrap gap-3">
+                  {randomColors.map((color, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedColor(color)}
+                      className={cn(
+                        `h-[37px] w-[37px] rounded-md border border-transparent transition-all duration-300 hover:border-white`,
+                        selectedColor === color && "border-white",
+                      )}
+                      style={{
+                        backgroundColor: color,
+                      }}
+                    ></button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <button
+                  className={cn(
+                    `w-full rounded-md py-2 font-medium text-slate-200`,
+                    "bg-[#D2F159] text-black",
+                  )}
+                >
+                  Add Card
+                </button>
+              </div>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

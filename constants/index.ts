@@ -266,3 +266,18 @@ export const coverImageCategories = [
     images: natureCoverImages,
   },
 ];
+
+export const randomColors = [
+  "#8c60d0",
+  "#5fb5f7",
+  "#6de2c3",
+  "#86b7cb",
+  "#e7d470",
+  "#cb8ecb",
+  "#f464c9",
+  "#5b62de",
+  "#f3ade5",
+  "#ad8c9f",
+  "#a1d1b0",
+  "#a666fa",
+];

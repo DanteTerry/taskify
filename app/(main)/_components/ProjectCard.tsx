@@ -86,7 +86,7 @@ function ProjectCard({
         <input
           id="documentName"
           type="text"
-          className="mb-3 mt-5 w-full rounded-md px-3 py-2 text-black/90 outline-none dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+          className="mb-3 mt-5 w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
           placeholder="Enter project name"
           {...register("documentName", { required: true })}
         />
