@@ -7,7 +7,7 @@ function CardItem({ item }: { item: ItemType }) {
   return (
     <div
       className={cn(
-        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-zinc-700 px-1.5 py-1.5`,
+        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-zinc-700 px-1.5 py-1.5 shadow-xl`,
         `bg-["${item.randomColor}"]`,
       )}
       // style={{

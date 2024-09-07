@@ -32,6 +32,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
   const {
     register,
     formState: { errors, isSubmitting },
+    reset,
     handleSubmit,
   } = useForm<AddCardTpe>({
     resolver: zodResolver(AddCardSchema),
@@ -49,8 +50,18 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
       deadLine: deadLine?.toLocaleDateString(),
     };
     getCard(itemData);
+    reset();
+    setDeadLine(undefined);
+    setSelectedColor("");
+    setRandomColor("");
+    setPriority({
+      color: "gray",
+      priority: "Without",
+    });
+
     setShow(false);
   };
+
   return (
     <div className="mt-2">
       <div className="flex flex-col">

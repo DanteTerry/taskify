@@ -36,7 +36,7 @@ function BoardPage({ params }: { params: any }) {
       }}
     >
       <div className="relative flex w-full flex-grow flex-col">
-        <div className="absolute bottom-0 left-0 right-0 top-0 mb-1 flex overflow-y-hidden px-8 py-5">
+        <div className="absolute bottom-0 left-0 right-0 top-0 mb-1 flex px-8 py-5">
           {/* added dragDropContext */}
           <DragContext />
         </div>

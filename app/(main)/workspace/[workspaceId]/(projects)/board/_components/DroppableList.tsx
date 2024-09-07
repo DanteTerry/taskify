@@ -7,7 +7,7 @@ function DroppableList({ data }: { data: any }) {
     <Droppable droppableId={data.id}>
       {(provided, snapshot) => (
         <div
-          className="flex flex-col gap-3 py-1"
+          className="flex flex-col gap-3 py-3"
           ref={provided.innerRef}
           style={{
             backgroundColor: snapshot.isDraggingOver ? "#222" : "transparent",
