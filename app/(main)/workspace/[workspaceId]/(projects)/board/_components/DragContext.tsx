@@ -3,7 +3,7 @@ import { Plus, Trash } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
-import { setBoard, createNewList } from "@/lib/redux/boardSlice";
+import { setBoard, createNewList, ItemType } from "@/lib/redux/boardSlice";
 import DroppableList from "./DroppableList";
 import CardAdd from "@/app/(main)/_components/CardAdd";
 import { useEffect, useState } from "react";
@@ -70,7 +70,7 @@ function DragContext() {
   };
 
   // Function to add a new card to a specific list
-  const cardData = async (title: string, listId: string) => {
+  const cardData = async (cardDetails: any, listId: string) => {
     const docRef = doc(db, "BoardDocumentOutput", boardId as string);
 
     try {
@@ -84,7 +84,7 @@ function DragContext() {
           if (list.id === listId) {
             return {
               ...list,
-              items: [...list.items, { id: uuidv4(), title }], // Add the new card
+              items: [...list.items, cardDetails],
             };
           }
           return list;
@@ -267,7 +267,11 @@ function DragContext() {
 
                 {/* Render droppable items */}
                 <DroppableList key={data.id} data={data} />
-                <CardAdd getCard={(e) => cardData(e, data.id)} />
+                <CardAdd
+                  getCard={(cardDetails: ItemType) =>
+                    cardData(cardDetails, data.id)
+                  }
+                />
               </div>
             </div>
           ))}

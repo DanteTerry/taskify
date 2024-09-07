@@ -22,3 +22,7 @@ export const SignInSchema = z.object({
 export const CreateProjectSchema = z.object({
   documentName: z.string().min(3, "Name must be more than 3 characters"),
 });
+export const AddCardSchema = z.object({
+  cardTitle: z.string().min(3, "Name must be more than 3 characters"),
+  cardDescription: z.string().min(3, "Name must be more than 3 characters"),
+});

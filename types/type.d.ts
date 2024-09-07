@@ -1,6 +1,7 @@
-import { CreateProjectSchema } from "@/lib/validation";
+import { AddCardSchema, CreateProjectSchema } from "@/lib/validation";
 import { InlineContent, PartialBlock, TableContent } from "@blocknote/core";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { z } from "zod";
 
 export type DocumentOutput = {
   // Assuming the structure of documentOutput if needed. If unknown, leave it as an empty array.
@@ -18,6 +19,8 @@ export type WorkspaceDocData = {
 };
 
 export type CreateProject = z.infer<typeof CreateProjectSchema>;
+
+export type AddCardTpe = z.infer<typeof AddCardSchema>;
 
 export interface WorkspaceData {
   workspaceName: string;
@@ -46,3 +49,5 @@ export type listType = {
   title: string;
   items: ItemType[];
 };
+
+

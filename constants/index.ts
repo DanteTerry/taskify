@@ -268,16 +268,34 @@ export const coverImageCategories = [
 ];
 
 export const randomColors = [
-  "#8c60d0",
+  "linear-gradient(45deg, #ff7eb9, #ff65a3)",
   "#5fb5f7",
-  "#6de2c3",
-  "#86b7cb",
+  "linear-gradient(90deg, #7afcff, #bfefff)",
+  "linear-gradient(120deg, #ff9a8b, #fecfef)",
   "#e7d470",
-  "#cb8ecb",
-  "#f464c9",
+  "linear-gradient(135deg, #f6d365, #fda085)",
+  "linear-gradient(135deg, #fda085, #f093fb)",
   "#5b62de",
-  "#f3ade5",
-  "#ad8c9f",
+  "linear-gradient(120deg, #c3cfe2, #f3ade5)",
+  "linear-gradient(160deg, #ffb6b9, #fae3d9)",
   "#a1d1b0",
-  "#a666fa",
+];
+
+export const priorities = [
+  {
+    color: "red",
+    priority: "High",
+  },
+  {
+    color: "orange",
+    priority: "Medium",
+  },
+  {
+    color: "yellow",
+    priority: "Low",
+  },
+  {
+    color: "gray",
+    priority: "Without",
+  },
 ];

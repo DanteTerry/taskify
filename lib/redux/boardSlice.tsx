@@ -1,8 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type ItemType = {
+export type PriorityType = {
+  color: string;
+  priority: string;
+};
+
+export type ItemType = {
   id: string;
   title: string;
+  description: string;
+  selectedColor: string;
+  randomColor: string;
+  priority: PriorityType;
+  deadLine: string | undefined;
 };
 
 export type BoardSliceType = {

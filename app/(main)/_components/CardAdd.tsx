@@ -1,75 +1,63 @@
 "use client";
-import { Loader, Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { randomColors } from "@/constants";
 import { cn } from "@/lib/utils";
+import CardColorPicker from "./CardColorPicker";
+import PriorityPicker from "./PriorityPicker";
+import DatePicker from "./DatePicker";
+import { AddCardTpe } from "@/types/type";
+import { AddCardSchema } from "@/lib/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuidv4 } from "uuid";
+import { useForm } from "react-hook-form";
+import { ItemType, PriorityType } from "@/lib/redux/boardSlice";
 
-function CardAdd({ getCard }: { getCard: (card: string) => void }) {
-  const [card, setCard] = useState("");
+function CardAdd({ getCard }: { getCard: (card: any) => void }) {
   const [show, setShow] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState("#161616");
+  const [randomColor, setRandomColor] = useState("");
+  const [priority, setPriority] = useState<PriorityType>({
+    color: "gray",
+    priority: "Without",
+  });
 
-  const saveCard = () => {
-    if (!card) {
-      return;
-    }
-    getCard(card);
-    setCard("");
-    setShow(!show);
-  };
+  const [deadLine, setDeadLine] = useState<Date | undefined>();
 
-  const closeCard = () => {
-    setCard("");
-    setShow(!show);
+  const {
+    register,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = useForm<AddCardTpe>({
+    resolver: zodResolver(AddCardSchema),
+  });
+
+  const onsubmit = (data: AddCardTpe) => {
+    const { cardDescription, cardTitle } = data;
+    const itemData: ItemType = {
+      id: uuidv4().slice(0, 8),
+      title: cardTitle,
+      description: cardDescription,
+      selectedColor,
+      randomColor,
+      priority,
+      deadLine: deadLine?.toLocaleDateString(),
+    };
+    getCard(itemData);
+    setShow(false);
   };
   return (
     <div className="mt-2">
       <div className="flex flex-col">
-        {show && (
-          <div>
-            {/* text area to set card title */}
-            <textarea
-              className="rounded-md border-2 bg-zinc-900 p-1"
-              name=""
-              id=""
-              value={card}
-              onChange={(e) => setCard(e.target.value)}
-              cols={24}
-              rows={2}
-              placeholder="Enter Card Title.."
-            ></textarea>
-
-            {/* buttons to save or delete card */}
-            <div className="flex p-1">
-              <button
-                onClick={saveCard}
-                className="mr-2 rounded bg-sky-600 p-1 text-white hover:bg-gray-600"
-              >
-                Add card
-              </button>
-              <button
-                onClick={closeCard}
-                className="rounded p-1 hover:bg-gray-600"
-              >
-                <X />
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* button to add card */}
         <button
           onClick={() => setShow(true)}
-          className="mt-1 flex h-8 w-full items-center justify-start rounded p-1 hover:bg-gray-500"
+          className="mt-1 flex h-8 w-full items-center justify-start gap-3 rounded p-1 hover:bg-gray-500"
         >
           <Plus size={16} /> Add a card
         </button>
@@ -78,51 +66,71 @@ function CardAdd({ getCard }: { getCard: (card: string) => void }) {
         <DialogContent className="w-[350px]">
           <DialogHeader>
             <DialogTitle>Add Card</DialogTitle>
-            <div className="flex flex-col gap-5">
-              <input
-                id="cardTitle"
-                type="text"
-                className="mt-3 w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
-                placeholder="Title"
-              />
-
-              <textarea
-                id="cardDescription"
-                className="w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
-                placeholder="Description"
-                rows={5}
-              />
-
+            <form
+              onSubmit={handleSubmit(onsubmit)}
+              className="flex flex-col gap-5"
+            >
+              {/* input for title */}
               <div className="flex flex-col gap-2">
-                <span>Card color</span>
+                <input
+                  id="cardTitle"
+                  type="text"
+                  className="mt-3 w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+                  placeholder="Title"
+                  {...register("cardTitle", { required: true })}
+                />
+                {errors.cardTitle && (
+                  <p className="text-sm text-red-500">
+                    {errors.cardTitle.message}
+                  </p>
+                )}
+              </div>
 
-                <div className="mx-auto flex w-full flex-wrap gap-3">
-                  {randomColors.map((color, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedColor(color)}
-                      className={cn(
-                        `h-[37px] w-[37px] rounded-md border border-transparent transition-all duration-300 hover:border-white`,
-                        selectedColor === color && "border-white",
-                      )}
-                      style={{
-                        backgroundColor: color,
-                      }}
-                    ></button>
-                  ))}
-                </div>
+              {/* text area for description */}
+              <div className="flex flex-col gap-2">
+                <textarea
+                  id="cardDescription"
+                  className="w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+                  placeholder="Description"
+                  rows={3}
+                  {...register("cardDescription", { required: true })}
+                />
+                {errors.cardDescription && (
+                  <p className="text-sm text-red-500">
+                    {errors.cardDescription.message}
+                  </p>
+                )}
               </div>
-              <div>
-                <button
-                  className={cn(
-                    `w-full rounded-md py-2 font-medium text-slate-200`,
-                    "bg-[#D2F159] text-black",
-                  )}
-                >
-                  Add Card
-                </button>
-              </div>
-            </div>
+
+              {/* color picker for card */}
+
+              <CardColorPicker
+                setSelectedColor={setSelectedColor}
+                selectedColor={selectedColor}
+                setRandomColor={setRandomColor}
+                randomColor={randomColor}
+              />
+
+              {/* priority picker for card */}
+              <PriorityPicker setPriority={setPriority} priority={priority} />
+
+              {/* date picker for card */}
+              <DatePicker
+                deadLine={deadLine as Date}
+                setDeadLine={setDeadLine}
+              />
+
+              {/* button to add card  */}
+              <button
+                type="submit"
+                className={cn(
+                  `w-full rounded-md py-2 font-medium text-slate-200`,
+                  "bg-[#D2F159] text-black",
+                )}
+              >
+                Add Card
+              </button>
+            </form>
           </DialogHeader>
         </DialogContent>
       </Dialog>

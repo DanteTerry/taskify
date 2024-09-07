@@ -5,7 +5,7 @@ import { coverImageCategories, coverImageOptions } from "@/constants";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { UploadDropzone } from "@uploadthing/react";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
