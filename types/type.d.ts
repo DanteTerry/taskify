@@ -39,15 +39,8 @@ export type BlockType = {
   children?: BlockType[];
 };
 
-export type ItemType = {
-  id: string;
-  title: string;
-};
-
 export type listType = {
   id: string;
   title: string;
   items: ItemType[];
 };
-
-

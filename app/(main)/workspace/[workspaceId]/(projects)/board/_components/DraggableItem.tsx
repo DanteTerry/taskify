@@ -1,6 +1,6 @@
 import { Draggable } from "@hello-pangea/dnd";
 import CardItem from "./CardItem";
-import { ItemType } from "@/types/type";
+import { ItemType } from "@/lib/redux/boardSlice";
 
 function DraggableItem({ item, index }: { item: ItemType; index: number }) {
   return (

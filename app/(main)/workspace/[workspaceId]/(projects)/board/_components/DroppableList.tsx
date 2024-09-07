@@ -1,6 +1,6 @@
 import { Droppable } from "@hello-pangea/dnd";
 import DraggableItem from "./DraggableItem";
-import { ItemType } from "@/types/type";
+import { ItemType } from "@/lib/redux/boardSlice";
 
 function DroppableList({ data }: { data: any }) {
   return (
