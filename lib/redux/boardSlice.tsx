@@ -9,8 +9,6 @@ export type ItemType = {
   id: string;
   title: string;
   description: string;
-  selectedColor: string;
-  randomColor: string;
   priority: PriorityType;
   deadLine: string | undefined;
 };

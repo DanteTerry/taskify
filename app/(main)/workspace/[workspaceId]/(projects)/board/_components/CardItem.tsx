@@ -6,9 +6,21 @@ import { ItemType } from "@/lib/redux/boardSlice";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import { db } from "@/config/firebaseConfig";
+import { Dispatch, SetStateAction, useState } from "react";
+import CardEdit from "@/app/(main)/_components/CardEdit";
+import { toast } from "sonner";
+import { listType } from "@/types/type";
 
-function CardItem({ item }: { item: ItemType }) {
+function CardItem({
+  item,
+  data,
+}: {
+  item: ItemType;
+  data: listType;
+  setData: Dispatch<SetStateAction<listType[] | undefined>>;
+}) {
   const { boardId } = useParams();
+  const [show, setShow] = useState(false);
 
   const deleteItem = async () => {
     try {
@@ -29,18 +41,48 @@ function CardItem({ item }: { item: ItemType }) {
 
         await updateDoc(docRef, { output: updatedItems });
       } else {
-        console.error("Document does not exist!");
+        toast("Document does not exist!");
       }
-    } catch (error) {
-      console.error("Error deleting item from Firestore:", error);
+    } catch (error: any) {
+      toast("Error deleting item from Firestore:", error);
+    }
+  };
+
+  const editCard = async (updatedItem: ItemType, listId: string) => {
+    try {
+      const docRef = doc(db, "BoardDocumentOutput", boardId as string);
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        const currentOutput = docSnapshot.data()?.output || [];
+
+        // Update the specific item in the matching list
+        const updatedOutput = currentOutput.map((list: any) =>
+          list.id === listId
+            ? {
+                ...list,
+                items: list.items.map((item: ItemType) =>
+                  item.id === updatedItem.id ? updatedItem : item,
+                ),
+              }
+            : list,
+        );
+
+        await updateDoc(docRef, { output: updatedOutput });
+        toast.success("Card updated successfully!");
+      } else {
+        toast.error("Document does not exist!");
+      }
+    } catch (error: any) {
+      toast.error(`Error updating item: ${error.message}`);
+      console.error("Error updating Firestore:", error);
     }
   };
 
   return (
     <div
       className={cn(
-        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-zinc-700 px-1.5 py-1.5 shadow-xl`,
-        `bg-["${item.randomColor}"]`,
+        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 px-1.5 py-1.5 shadow-xl`,
       )}
     >
       <div className="flex w-[400px] flex-col gap-1 rounded-md p-2 dark:bg-[#161616]">
@@ -83,7 +125,10 @@ function CardItem({ item }: { item: ItemType }) {
             >
               <Bell size={16} />
             </button>
-            <button className="text-[white/50] transition-all duration-300 hover:text-white">
+            <button
+              onClick={() => setShow(true)}
+              className="text-[white/50] transition-all duration-300 hover:text-white"
+            >
               <Pencil size={16} />
             </button>
             <button
@@ -95,6 +140,12 @@ function CardItem({ item }: { item: ItemType }) {
           </div>
         </div>
       </div>
+      <CardEdit
+        getCardData={(item: ItemType) => editCard(item, data.id)}
+        show={show}
+        item={item}
+        setShow={setShow}
+      />
     </div>
   );
 }

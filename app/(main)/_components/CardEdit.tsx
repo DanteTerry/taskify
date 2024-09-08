@@ -1,14 +1,7 @@
 "use client";
-import { Plus } from "lucide-react";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import CardColorPicker from "./CardColorPicker";
 import PriorityPicker from "./PriorityPicker";
 import DatePicker from "./DatePicker";
 import { AddCardTpe } from "@/types/type";
@@ -17,17 +10,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from "react-hook-form";
 import { ItemType, PriorityType } from "@/lib/redux/boardSlice";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
-function CardAdd({ getCard }: { getCard: (card: any) => void }) {
-  const [show, setShow] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("#161616");
-  const [randomColor, setRandomColor] = useState("");
+function CardEdit({
+  setShow,
+  item,
+  getCardData,
+  show,
+}: {
+  show: boolean;
+  setShow: Dispatch<SetStateAction<boolean>>;
+  item: ItemType;
+  getCardData: (data: ItemType) => void;
+}) {
+  const [deadLine, setDeadLine] = useState<Date | undefined>();
   const [priority, setPriority] = useState<PriorityType>({
     color: "gray",
     priority: "Without",
   });
-
-  const [deadLine, setDeadLine] = useState<Date | undefined>();
 
   const {
     register,
@@ -41,13 +41,14 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
   const onsubmit = (data: AddCardTpe) => {
     const { cardDescription, cardTitle } = data;
     const itemData: ItemType = {
-      id: uuidv4().slice(0, 8),
+      id: item.id,
       title: cardTitle,
       description: cardDescription,
       priority,
       deadLine: deadLine?.toLocaleDateString(),
     };
-    getCard(itemData);
+
+    getCardData(itemData);
     reset();
     setDeadLine(undefined);
     setPriority({
@@ -58,21 +59,19 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
     setShow(false);
   };
 
+  console.log(deadLine);
+  useEffect(() => {
+    setDeadLine(item?.deadLine ? new Date(item.deadLine) : undefined);
+    setPriority(item.priority);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="mt-2">
-      <div className="flex flex-col">
-        {/* button to add card */}
-        <button
-          onClick={() => setShow(true)}
-          className="mt-1 flex h-8 w-full items-center justify-start gap-3 rounded p-1 hover:bg-gray-500"
-        >
-          <Plus size={16} /> Add a card
-        </button>
-      </div>
       <Dialog open={show} onOpenChange={() => setShow(false)}>
         <DialogContent className="w-[350px]">
           <DialogHeader>
-            <DialogTitle>Add Card</DialogTitle>
+            <DialogTitle>Edit Card</DialogTitle>
             <form
               onSubmit={handleSubmit(onsubmit)}
               className="flex flex-col gap-5"
@@ -81,6 +80,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
               <div className="flex flex-col gap-2">
                 <input
                   id="cardTitle"
+                  defaultValue={item.title}
                   type="text"
                   className="mt-3 w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
                   placeholder="Title"
@@ -96,6 +96,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
               {/* text area for description */}
               <div className="flex flex-col gap-2">
                 <textarea
+                  defaultValue={item.description}
                   id="cardDescription"
                   className="w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
                   placeholder="Description"
@@ -128,7 +129,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
                   "bg-[#D2F159] text-black",
                 )}
               >
-                Add Card
+                Edit Card
               </button>
             </form>
           </DialogHeader>
@@ -137,4 +138,4 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
     </div>
   );
 }
-export default CardAdd;
+export default CardEdit;

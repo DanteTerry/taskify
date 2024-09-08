@@ -1,8 +1,20 @@
 import { Draggable } from "@hello-pangea/dnd";
 import CardItem from "./CardItem";
-import { ItemType } from "@/lib/redux/boardSlice";
+import { BoardSliceType, ItemType } from "@/lib/redux/boardSlice";
+import { listType } from "@/types/type";
+import { Dispatch, SetStateAction } from "react";
 
-function DraggableItem({ item, index }: { item: ItemType; index: number }) {
+function DraggableItem({
+  item,
+  data,
+  index,
+  setData,
+}: {
+  item: ItemType;
+  data: listType;
+  index: number;
+  setData: Dispatch<SetStateAction<listType[] | undefined>>;
+}) {
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => (
@@ -11,7 +23,7 @@ function DraggableItem({ item, index }: { item: ItemType; index: number }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <CardItem item={item} />
+          <CardItem setData={setData} data={data} item={item} />
         </div>
       )}
     </Draggable>

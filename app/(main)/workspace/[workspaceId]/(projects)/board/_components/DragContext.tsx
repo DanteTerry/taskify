@@ -16,8 +16,7 @@ function DragContext() {
   const dispatch = useDispatch();
   const { boardId } = useParams();
 
-  const [data, setData] = useState<listType[]>();
-
+  const [data, setData] = useState<listType[] | undefined>(undefined);
   useEffect(() => {
     if (boardId) {
       const docRef = doc(db, "BoardDocumentOutput", boardId as string);
@@ -266,7 +265,7 @@ function DragContext() {
                 </div>
 
                 {/* Render droppable items */}
-                <DroppableList key={data.id} data={data} />
+                <DroppableList setData={setData} key={data.id} data={data} />
                 <CardAdd
                   getCard={(cardDetails: ItemType) =>
                     cardData(cardDetails, data.id)

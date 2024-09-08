@@ -1,8 +1,16 @@
 import { Droppable } from "@hello-pangea/dnd";
 import DraggableItem from "./DraggableItem";
 import { ItemType } from "@/lib/redux/boardSlice";
+import { Dispatch, SetStateAction } from "react";
+import { listType } from "@/types/type";
 
-function DroppableList({ data }: { data: any }) {
+function DroppableList({
+  data,
+  setData,
+}: {
+  data: any;
+  setData: Dispatch<SetStateAction<listType[] | undefined>>;
+}) {
   return (
     <Droppable droppableId={data.id}>
       {(provided, snapshot) => (
@@ -17,7 +25,15 @@ function DroppableList({ data }: { data: any }) {
           {/* list becomes droppable */}
           {data.items &&
             data.items.map((item: ItemType, index: number) => {
-              return <DraggableItem key={index} item={item} index={index} />;
+              return (
+                <DraggableItem
+                  setData={setData}
+                  data={data}
+                  key={index}
+                  item={item}
+                  index={index}
+                />
+              );
             })}
           {provided.placeholder}
         </div>
