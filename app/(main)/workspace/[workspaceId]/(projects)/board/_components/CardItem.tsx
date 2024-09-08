@@ -1,19 +1,47 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Bell, Pencil, Trash2 } from "lucide-react";
 import { ItemType } from "@/lib/redux/boardSlice";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useParams } from "next/navigation";
+import { db } from "@/config/firebaseConfig";
 
 function CardItem({ item }: { item: ItemType }) {
+  const { boardId } = useParams();
+
+  const deleteItem = async () => {
+    try {
+      const docRef = doc(db, "BoardDocumentOutput", boardId as string);
+      const docSnapshot = await getDoc(docRef);
+
+      if (docSnapshot.exists()) {
+        const currentData = docSnapshot.data();
+        const currentOutput = currentData?.output || [];
+
+        // Filter out the item with the matching ID
+        const updatedItems = currentOutput.map((list: any) => ({
+          ...list,
+          items: list.items.filter(
+            (listItem: ItemType) => listItem.id !== item.id,
+          ),
+        }));
+
+        await updateDoc(docRef, { output: updatedItems });
+      } else {
+        console.error("Document does not exist!");
+      }
+    } catch (error) {
+      console.error("Error deleting item from Firestore:", error);
+    }
+  };
+
   return (
     <div
       className={cn(
         `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-zinc-700 px-1.5 py-1.5 shadow-xl`,
         `bg-["${item.randomColor}"]`,
       )}
-      // style={{
-      //   background: item.selectedColor,
-      //   backgroundColor: item.randomColor,
-      // }}
     >
       <div className="flex w-[400px] flex-col gap-1 rounded-md p-2 dark:bg-[#161616]">
         <h3 className="font-medium">{item.title}</h3>
@@ -58,7 +86,10 @@ function CardItem({ item }: { item: ItemType }) {
             <button className="text-[white/50] transition-all duration-300 hover:text-white">
               <Pencil size={16} />
             </button>
-            <button className="text-[white/50] transition-all duration-300 hover:text-white">
+            <button
+              onClick={deleteItem}
+              className="text-[white/50] transition-all duration-300 hover:text-white"
+            >
               <Trash2 size={16} />
             </button>
           </div>
