@@ -241,14 +241,14 @@ function DragContext() {
           data.map((data, index) => (
             <div
               key={data.id}
-              className="mr-3 h-fit w-80 flex-shrink-0 rounded-md p-2 dark:bg-[#161616]"
+              className="mr-3 h-fit w-80 flex-shrink-0 rounded-md bg-[#283D3B] p-2 dark:bg-[#161616]"
             >
               <div className="list-body">
                 <div className="flex items-center justify-between p-1">
                   <input
                     type="text"
                     placeholder={isFocused ? "" : "Click to edit"}
-                    className="border-none text-white outline-none placeholder:text-white focus-within:placeholder:hidden dark:bg-[#161616]"
+                    className="border-none bg-transparent text-white outline-none placeholder:text-white focus-within:placeholder:hidden dark:bg-[#161616] dark:text-white"
                     onFocus={() => setIsFocused(true)}
                     defaultValue={data.title}
                     onBlur={(e) => {
@@ -260,7 +260,7 @@ function DragContext() {
                   />
 
                   <button onClick={() => deleteList(data.id)}>
-                    <Trash size={16} />
+                    <Trash size={16} className="text-white" />
                   </button>
                 </div>
 
@@ -276,9 +276,9 @@ function DragContext() {
           ))}
         <button
           onClick={createList}
-          className="mr-3 flex h-fit w-80 flex-shrink-0 items-center justify-center gap-3 rounded-md p-3 dark:bg-[#161616]"
+          className="mr-3 flex h-fit w-80 flex-shrink-0 items-center justify-center gap-3 rounded-md bg-[#283D3B] p-3 text-white dark:bg-[#161616] dark:text-black"
         >
-          <div className="rounded-sm bg-white">
+          <div className="rounded-sm bg-[] bg-white">
             <Plus className="text-black" />
           </div>
           <h3>{data?.length === 0 ? "Add column" : "Add another column"}</h3>

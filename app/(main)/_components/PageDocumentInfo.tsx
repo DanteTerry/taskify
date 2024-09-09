@@ -101,7 +101,7 @@ function PageDocumentInfo({ params }: { params: any }) {
           onBlur={(e) => {
             updateDocumentInfo("documentName", e.target.value);
           }}
-          className="bg-transparent text-3xl font-bold text-white outline-none"
+          className="bg-transparent text-3xl font-bold outline-none dark:text-white"
         />
       </div>
 

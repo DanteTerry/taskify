@@ -38,11 +38,15 @@ function TopNavigation({
           variant={"secondary"}
           size={"sm"}
           onClick={() => setIsOpen((prev) => !prev)}
-          className="text-black dark:bg-[#D2F159]"
+          className="bg-[#283D3B] text-white hover:bg-[#203432]"
         >
           Share
         </Button>
-        <Button size={"sm"} className="text-black dark:bg-[#D2F159]">
+        <Button
+          size={"sm"}
+          variant={"default"}
+          className="bg-[#283D3B] text-white hover:bg-[#203432]"
+        >
           Publish
         </Button>
         {user?.primaryEmailAddress?.emailAddress ? (

@@ -27,10 +27,10 @@ body,
 }
 .cl-organizationSwitcherTrigger:hover {
   background: transparent;
-  color: white;
 }
+
 .cl-organizationSwitcherTrigger {
-  color: white;
+  @apply font-medium text-black dark:text-white;
 }
 
 .cl-userButtonPopoverCard {

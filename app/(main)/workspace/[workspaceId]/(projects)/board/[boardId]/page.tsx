@@ -5,6 +5,12 @@ import { WorkspaceDocData } from "@/types/type";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import DragContext from "../_components/DragContext";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+
+export interface Artwork {
+  artist: string;
+  art: string;
+}
 
 function BoardPage({ params }: { params: any }) {
   const [documentInfo, setDocumentInfo] = useState<WorkspaceDocData>();
@@ -35,11 +41,14 @@ function BoardPage({ params }: { params: any }) {
         backgroundSize: "cover",
       }}
     >
-      <div className="relative flex w-full flex-grow flex-col">
-        <div className="absolute bottom-0 left-0 right-0 top-0 mb-1 flex px-8 py-5">
-          {/* added dragDropContext */}
-          <DragContext />
-        </div>
+      <div className="relative flex w-full flex-grow flex-col px-8">
+        <ScrollArea className="relative h-full w-full">
+          <div className="absolute bottom-0 left-0 right-0 top-0 mb-1 flex px-8 py-5">
+            {/* added dragDropContext */}
+            <DragContext />
+          </div>
+          <ScrollBar orientation="horizontal" />{" "}
+        </ScrollArea>
       </div>
     </section>
   );

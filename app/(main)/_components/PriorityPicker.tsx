@@ -32,7 +32,8 @@ function PriorityPicker({
                   key={index}
                   className={cn(
                     `flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-transparent transition-all duration-300 hover:border-[#1f1f1f]`,
-                    pri.priority === priority.priority && "border-[#1f1f1f]",
+                    pri.priority === priority.priority &&
+                      "border-[#1f1f1f] dark:border-white/70",
                   )}
                 >
                   <div

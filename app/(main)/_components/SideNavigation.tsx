@@ -4,6 +4,7 @@ import { db } from "@/config/firebaseConfig";
 import { cn } from "@/lib/utils";
 import { WorkspaceData, WorkspaceDocData } from "@/types/type";
 import { DialogOverlayProps } from "@radix-ui/react-dialog";
+import { Separator } from "@radix-ui/react-separator";
 import {
   collection,
   doc,
@@ -74,7 +75,7 @@ function SideNavigation({
   return (
     <>
       {isOpen && (
-        <aside className="absolute z-50 h-full w-72 bg-slate-200 px-4 py-2 dark:bg-[#121212] md:relative">
+        <aside className="absolute z-50 h-full w-72 bg-[#283D3B] px-4 py-2 dark:bg-[#121212] md:relative">
           <div className="flex items-center justify-between">
             <Link
               href={"/dashboard"}
@@ -88,9 +89,7 @@ function SideNavigation({
                   height={10}
                 />
               </div>
-              <h1 className="text-base font-bold dark:text-[#f1f1f1]">
-                Taskify
-              </h1>
+              <h1 className="text-base font-bold text-[#f1f1f1]">Taskify</h1>
             </Link>
 
             <Button
@@ -98,14 +97,14 @@ function SideNavigation({
               variant={"ghost"}
               onClick={() => setIsOpen((prev) => !prev)}
             >
-              <BellDot size={20} className="dark:text-[#f1f1f1]" />
+              <BellDot size={20} className="text-[#f1f1f1]" />
             </Button>
           </div>
 
           <div className="mt-5">
             <div className="flex flex-col justify-center">
               <div className="flex items-center justify-between gap-3 px-2 py-2">
-                <h2 className="text-sm font-semibold text-black dark:text-white">
+                <h2 className="text-sm font-semibold text-[#d8d8e6] dark:text-white">
                   {workSpace?.workspaceName}
                 </h2>
                 <Button
@@ -117,10 +116,10 @@ function SideNavigation({
                   size={"icon"}
                   variant={"ghost"}
                 >
-                  <Plus size={20} className="text-black dark:text-white" />
+                  <Plus size={20} className="text-white" />
                 </Button>
               </div>
-              <hr />
+              <Separator />
 
               <div className="mt-3 flex w-full flex-col gap-2">
                 {documents?.length === undefined ? (

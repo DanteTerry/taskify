@@ -17,8 +17,13 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
         )
       }
       className={cn(
-        `relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300 dark:bg-[#1F1F1F]`,
-        document?.projectType === "page" && "hover:bg-[#FFB110]",
+        `relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300`,
+        document?.projectType === "board" &&
+          "hover:bg-[#FBEDD6] hover:dark:bg-[#372C1C]",
+        document?.projectType === "page" &&
+          "hover:bg-[#E0EDFB] hover:dark:bg-[#1A2735]",
+        document?.projectType === "sprint" &&
+          "hover:bg-[#FDEBEC] hover:dark:bg-[#362422]",
       )}
     >
       {document?.coverImage ? (

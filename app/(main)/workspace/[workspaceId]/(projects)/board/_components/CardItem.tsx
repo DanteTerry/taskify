@@ -82,12 +82,12 @@ function CardItem({
   return (
     <div
       className={cn(
-        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 px-1.5 py-1.5 shadow-xl`,
+        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-white px-1.5 py-1.5 shadow-xl dark:bg-[#161616]`,
       )}
     >
-      <div className="flex w-[400px] flex-col gap-1 rounded-md p-2 dark:bg-[#161616]">
+      <div className="flex w-[400px] flex-col gap-1 rounded-md bg-white p-2 dark:bg-[#161616]">
         <h3 className="font-medium">{item.title}</h3>
-        <p className="mb-2 text-justify text-xs text-white/70">
+        <p className="mb-2 text-justify text-xs dark:text-white/70">
           {item.description}
         </p>
 
@@ -97,7 +97,7 @@ function CardItem({
           <div className="flex items-center gap-4">
             {/* priority */}
             <div className="flex flex-col gap-1">
-              <span className="text-[10px]">Priority</span>
+              <span className="text-[12px] font-medium">Priority</span>
               <div className="flex items-center gap-1.5">
                 <div
                   className={cn(`h-2.5 w-2.5 rounded-full bg-green-500`)}
@@ -111,7 +111,7 @@ function CardItem({
 
             {/* deadline */}
             <div className="flex flex-col gap-1">
-              <span className="text-[10px]">Deadline</span>
+              <span className="text-[12px] font-medium">Deadline</span>
               <span className="text-[10px]">
                 {item.deadLine?.split(", ")[0]}
               </span>
@@ -121,19 +121,19 @@ function CardItem({
           <div className="flex items-center gap-5">
             <button
               disabled
-              className="text-[white/50] transition-all duration-300"
+              className="text-[#283D3B] transition-all duration-300 dark:text-white"
             >
               <Bell size={16} />
             </button>
             <button
               onClick={() => setShow(true)}
-              className="text-[white/50] transition-all duration-300 hover:text-white"
+              className="text-[#283D3B] transition-all duration-300 hover:text-black dark:text-white hover:dark:text-white/70"
             >
               <Pencil size={16} />
             </button>
             <button
               onClick={deleteItem}
-              className="text-[white/50] transition-all duration-300 hover:text-white"
+              className="text-[#283D3B] transition-all duration-300 hover:text-black dark:text-white hover:dark:text-white/70"
             >
               <Trash2 size={16} />
             </button>

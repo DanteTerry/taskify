@@ -64,7 +64,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
         {/* button to add card */}
         <button
           onClick={() => setShow(true)}
-          className="mt-1 flex h-8 w-full items-center justify-start gap-3 rounded p-1 hover:bg-gray-500"
+          className="mt-1 flex h-8 w-full items-center justify-start gap-3 rounded p-1 text-white hover:bg-gray-500"
         >
           <Plus size={16} /> Add a card
         </button>
@@ -82,7 +82,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
                 <input
                   id="cardTitle"
                   type="text"
-                  className="mt-3 w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+                  className="mt-3 w-full rounded-md border-2 px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
                   placeholder="Title"
                   {...register("cardTitle", { required: true })}
                 />
@@ -97,7 +97,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
               <div className="flex flex-col gap-2">
                 <textarea
                   id="cardDescription"
-                  className="w-full rounded-md px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
+                  className="w-full rounded-md border-2 px-3 py-2 text-black/90 outline-none focus:border-[#D2F159]/50 dark:border-2 dark:bg-[#1f1f1f] dark:text-white dark:placeholder:text-[#80868B]"
                   placeholder="Description"
                   rows={3}
                   {...register("cardDescription", { required: true })}
@@ -125,7 +125,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
                 type="submit"
                 className={cn(
                   `w-full rounded-md py-2 font-medium text-slate-200`,
-                  "bg-[#D2F159] text-black",
+                  "bg-[#283D3B] text-white",
                 )}
               >
                 Add Card
