@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { listType } from "@/types/type";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function DragContext() {
   const [isFocused, setIsFocused] = useState(false);
@@ -237,7 +238,7 @@ function DragContext() {
   return (
     <div className="flex w-full gap-5">
       <DragDropContext onDragEnd={ondragend}>
-        {data &&
+        {data ? (
           data.map((data, index) => (
             <div
               key={data.id}
@@ -273,12 +274,15 @@ function DragContext() {
                 />
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <Skeleton />
+        )}
         <button
           onClick={createList}
-          className="mr-3 flex h-fit w-80 flex-shrink-0 items-center justify-center gap-3 rounded-md bg-[#283D3B] p-3 text-white dark:bg-[#161616] dark:text-black"
+          className="mr-3 flex h-fit w-80 flex-shrink-0 items-center justify-center gap-3 rounded-md bg-[#283D3B] p-3 text-white dark:bg-[#161616]"
         >
-          <div className="rounded-sm bg-[] bg-white">
+          <div className="rounded-sm bg-white">
             <Plus className="text-black" />
           </div>
           <h3>{data?.length === 0 ? "Add column" : "Add another column"}</h3>

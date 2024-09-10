@@ -80,6 +80,7 @@ function Editor({
           const data = await sanitizeBlocks(editor.document);
           saveDocument(data);
         }}
+        formattingToolbar={true}
         theme={"dark"}
         emojiPicker={true}
         tableHandles={true}

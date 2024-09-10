@@ -3,6 +3,7 @@ import DraggableItem from "./DraggableItem";
 import { ItemType } from "@/lib/redux/boardSlice";
 import { Dispatch, SetStateAction } from "react";
 import { listType } from "@/types/type";
+import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
 
 function DroppableList({
   data,

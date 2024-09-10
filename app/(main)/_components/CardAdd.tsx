@@ -64,7 +64,7 @@ function CardAdd({ getCard }: { getCard: (card: any) => void }) {
         {/* button to add card */}
         <button
           onClick={() => setShow(true)}
-          className="mt-1 flex h-8 w-full items-center justify-start gap-3 rounded p-1 text-white hover:bg-gray-500"
+          className="mt-1 flex h-8 w-full items-center justify-start gap-3 rounded p-1 text-white hover:bg-[#203432]"
         >
           <Plus size={16} /> Add a card
         </button>

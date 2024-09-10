@@ -25,9 +25,8 @@ function TopNavigation({
             <PanelsTopLeft size={20} className="text-[#f1f1f1]" />
           </Button>
         )}
-        <h3 className="">🚴 Document Name</h3>
       </div>
-      <div className="justify-self-center">
+      <div className="hidden justify-self-center md:block">
         <OrganizationSwitcher
           afterCreateOrganizationUrl={"/dashboard"}
           afterLeaveOrganizationUrl={"/dashboard"}

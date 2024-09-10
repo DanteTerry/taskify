@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   const router = useRouter();
-  console.log(document);
   return (
     <div
       onClick={() =>
