@@ -11,6 +11,7 @@ import { db } from "@/config/firebaseConfig";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 function CreateWorkSpace() {
   const [workSpaceName, setWorkSpaceName] = useState("");
@@ -31,7 +32,7 @@ function CreateWorkSpace() {
       setLoading(true);
 
       // create a new workspace
-      const workSpaceId = Date.now();
+      const workSpaceId = uuidv4().slice(0, 8);
       await setDoc(doc(db, "WorkSpaces", workSpaceId.toString()), {
         workspaceName: workSpaceName,
         emoji: emojiIcon,
@@ -84,7 +85,7 @@ function CreateWorkSpace() {
                 {emojiIcon ? (
                   <span className="text-2xl">{emojiIcon}</span>
                 ) : (
-                  <SmilePlus size={25} />
+                  <SmilePlus className="text-black dark:text-white" size={25} />
                 )}
               </EmojiPickerComponent>
               <Input

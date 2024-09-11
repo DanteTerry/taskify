@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { coverImages, getRandomEmoji, spaceCoverImages } from "@/constants";
+import { getRandomEmoji, spaceCoverImages } from "@/constants";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -41,7 +41,7 @@ function ProjectCard({
     const { documentName } = document;
 
     try {
-      const documentId = uuidv4();
+      const documentId = uuidv4().slice(0, 8);
       await setDoc(doc(db, "WorkSpaceDocuments", documentId.toString()), {
         workspaceId: params?.workspaceId,
         createdBy: user?.primaryEmailAddress?.emailAddress,
