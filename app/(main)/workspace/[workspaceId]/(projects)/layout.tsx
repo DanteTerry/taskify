@@ -6,13 +6,16 @@ import TopNavigation from "../../../_components/TopNavigation";
 function MainLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
   return (
-    <div className="relative flex h-full w-full dark:bg-[#0D0D10]">
+    <div className="relative flex h-screen w-full overflow-hidden dark:bg-[#0D0D10]">
       <SideNavigation setIsOpen={setIsOpen} isOpen={isOpen} />
-      <div className="flex h-full w-full flex-col">
+      <div className="relative flex h-full flex-1 flex-col overflow-auto">
         <TopNavigation setIsOpen={setIsOpen} isOpen={isOpen} />
-        <main className="h-full flex-1 dark:bg-[#1F1F1F]">{children}</main>
+        <main className="relative flex-1 overflow-y-auto dark:bg-[#1F1F1F]">
+          {children}
+        </main>
       </div>
     </div>
   );
 }
+
 export default MainLayout;

@@ -38,7 +38,7 @@ function DocumentCoverImage({
       }}
     >
       <DialogContent
-        className={cn(`h-[485px] max-w-[540px]`)} // Add padding top equal to the header height
+        className={cn(`h-[485px] rounded-xl md:max-w-[540px]`)} // Add padding top equal to the header height
       >
         {/* header of selector  */}
         <DialogHeader className="bg-[#0a0a0a]">
@@ -127,11 +127,11 @@ function DocumentCoverImage({
                 <p className="text-sm font-semibold dark:text-[#7E7E7E]">
                   {category.type}
                 </p>
-                <div className="mt-3 grid grid-cols-4 gap-2 pr-4">
+                <div className="mt-3 grid grid-cols-3 gap-2 pr-4 md:grid-cols-4">
                   {category.images.map((image) => (
                     <div
                       key={image.imageUrl}
-                      className="relative h-[64px] w-[110px] cursor-pointer rounded-xl"
+                      className="relative h-[64px] w-[105px] cursor-pointer rounded-xl md:w-[110px]"
                       onClick={() => {
                         if (workspaceId || documentId) {
                           updateDocumentInfo &&

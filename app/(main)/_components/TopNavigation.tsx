@@ -13,7 +13,7 @@ function TopNavigation({
 }) {
   const { user } = useUser();
   return (
-    <div className="flex h-14 w-full items-center justify-between bg-[#ffffff] px-4 dark:bg-[#161616]">
+    <div className="flex h-14 w-full items-center justify-between bg-[#ffffff] px-4 py-3 dark:bg-[#161616]">
       <div className="flex items-center gap-2">
         {" "}
         {!isOpen && (

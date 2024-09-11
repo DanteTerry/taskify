@@ -236,13 +236,13 @@ function DragContext() {
   };
 
   return (
-    <div className="flex w-full gap-5">
+    <div className="flex h-full w-full flex-col items-center gap-5 pl-3 md:flex-row md:items-start">
       <DragDropContext onDragEnd={ondragend}>
         {data ? (
           data.map((data, index) => (
             <div
               key={data.id}
-              className="mr-3 h-fit w-80 flex-shrink-0 rounded-md bg-[#283D3B] p-2 dark:bg-[#161616]"
+              className="mr-3 h-fit w-[350px] flex-shrink-0 rounded-md bg-[#283D3B] p-2 dark:bg-[#161616] md:max-w-80"
             >
               <div className="list-body">
                 <div className="flex items-center justify-between p-1">

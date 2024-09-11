@@ -35,19 +35,17 @@ function BoardPage({ params }: { params: any }) {
 
   return (
     <section
-      className={cn(`flex h-full w-full flex-col`)}
+      className={cn(`flex h-full w-full flex-col md:pt-0`)}
       style={{
         backgroundImage: selectedCover ? `url(${selectedCover})` : undefined,
         backgroundSize: "cover",
       }}
     >
-      <div className="relative flex w-full flex-grow flex-col px-8">
-        <ScrollArea className="relative h-full w-full">
-          <div className="absolute bottom-0 left-0 right-0 top-0 mb-1 flex px-8 py-5">
-            {/* added dragDropContext */}
-            <DragContext />
-          </div>
-          <ScrollBar orientation="horizontal" />{" "}
+      <div className="flex w-full flex-grow flex-col">
+        <ScrollArea className="mb-1 flex h-full w-full px-3 py-5 md:px-8">
+          {/* added dragDropContext */}
+          <DragContext />
+          <ScrollBar orientation="horizontal" className="hidden md:flex" />{" "}
         </ScrollArea>
       </div>
     </section>

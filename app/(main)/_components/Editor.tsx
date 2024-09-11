@@ -73,12 +73,15 @@ function Editor({
   }, [documentOutput]);
 
   return (
-    <div className="mx-auto mt-6 -translate-x-4 md:w-full lg:w-3/5">
+    <div className="mx-auto mt-6 md:w-full md:-translate-x-4 lg:w-3/5">
       <BlockNoteView
         editor={editor}
         onChange={async () => {
           const data = await sanitizeBlocks(editor.document);
           saveDocument(data);
+        }}
+        style={{
+          width: "100%",
         }}
         formattingToolbar={true}
         theme={"dark"}

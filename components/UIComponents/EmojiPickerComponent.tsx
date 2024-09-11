@@ -24,8 +24,8 @@ function EmojiPickerComponent({
     <div className="relative">
       <Button
         onClick={() => setOpenPicker((prev) => !prev)}
+        className="w-full bg-transparent hover:bg-transparent"
         size={"icon"}
-        variant={"ghost"}
       >
         {children}
       </Button>
@@ -33,11 +33,14 @@ function EmojiPickerComponent({
         <div
           className={cn(
             `absolute z-10`,
-            pathName === "/create-workspace" ? "-left-3 bottom-12" : "",
+            pathName === "/create-workspace"
+              ? "-left-3 bottom-12"
+              : "left-5 top-14",
           )}
         >
           <EmojiPicker
             height={350}
+            width={300}
             theme={Theme.AUTO}
             emojiStyle={EmojiStyle.FACEBOOK}
             onEmojiClick={(e) => {

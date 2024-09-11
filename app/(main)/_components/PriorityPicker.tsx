@@ -17,7 +17,7 @@ function PriorityPicker({
   setPriority: Dispatch<SetStateAction<PriorityType>>;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col items-start gap-2">
       <span>Priority</span>
       <div className="flex items-center gap-2">
         {priorities.map((pri, index) => (

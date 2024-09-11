@@ -3,7 +3,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/config/firebaseConfig";
 import { cn } from "@/lib/utils";
 import { WorkspaceData, WorkspaceDocData } from "@/types/type";
-import { DialogOverlayProps } from "@radix-ui/react-dialog";
 import { Separator } from "@radix-ui/react-separator";
 import {
   collection,

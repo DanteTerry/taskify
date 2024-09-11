@@ -17,7 +17,7 @@ function DatePicker({
   setDeadLine: any;
 }) {
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col items-start gap-2">
       <span>Deadline</span>
       <div className="mx-auto flex w-full flex-wrap gap-1">
         <Popover>
