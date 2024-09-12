@@ -77,6 +77,10 @@ function ProjectCard({
     }
   };
 
+  if (projectType === "sprint") {
+    return <p>Coming soon</p>;
+  }
+
   return (
     <form
       onSubmit={handleSubmit(createProject)}
@@ -139,7 +143,7 @@ function ProjectCard({
         </div>
       </div>
       <button
-        disabled={isSubmitting}
+        disabled={isSubmitting || projectType === "sprint"}
         type="submit"
         className={cn(
           `w-full rounded-md py-2 font-semibold text-slate-200`,
