@@ -13,6 +13,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { store } from "@/lib/redux/store";
 import GlobalStateProvider from "@/components/provider/GlobalStateProvider";
+import DarkModeProvider from "@/components/provider/DarkModeProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -59,17 +60,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
         className={`${caveat.variable} ${inter.variable} h-full font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
         suppressHydrationWarning={true}
       >
-        <ClerkProvider>
-          <GlobalStateProvider>
-            {children}
-            <Toaster />
-          </GlobalStateProvider>
-        </ClerkProvider>
+        <DarkModeProvider>
+          <ClerkProvider>
+            <GlobalStateProvider>
+              {children}
+              <Toaster />
+            </GlobalStateProvider>
+          </ClerkProvider>
+        </DarkModeProvider>
       </body>
     </html>
   );
