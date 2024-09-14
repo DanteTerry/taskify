@@ -82,7 +82,7 @@ function CardItem({
   return (
     <div
       className={cn(
-        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-white px-1.5 py-1.5 shadow-xl dark:bg-[#161616]`,
+        `item flex cursor-pointer justify-between gap-2 rounded-md border-2 bg-white px-1.5 py-1.5 text-black shadow-xl dark:bg-[#161616] dark:text-white`,
       )}
     >
       <div className="flex w-[400px] flex-col gap-1 rounded-md bg-white p-2 dark:bg-[#161616]">

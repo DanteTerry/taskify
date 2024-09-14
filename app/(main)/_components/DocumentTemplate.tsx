@@ -38,7 +38,9 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
       )}
 
       <div className="mt-5 rounded-b-xl p-4">
-        <h2 className="text-xl font-semibold">{document?.documentName}</h2>
+        <h2 className="text-xl font-semibold text-black dark:text-white">
+          {document?.documentName}
+        </h2>
       </div>
       <span className="absolute bottom-[60px] left-4 text-4xl">
         {document?.emoji}
