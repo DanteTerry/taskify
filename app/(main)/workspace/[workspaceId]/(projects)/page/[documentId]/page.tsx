@@ -24,12 +24,13 @@ function DocumentPage({
   return (
     <section className="flex h-full w-full flex-col md:pt-0">
       <div className="flex w-full flex-grow flex-col">
-        {" "}
-        {/* Adjust for Top and Side Navigation */}
-        <ScrollArea className="flex h-full w-full dark:bg-[#1F1F1F]">
-          <PageDocumentInfo params={params} />
-          {/* Rich text editor */}
-          <Editor params={params} />
+        <ScrollArea className="flex h-[calc(100vh-60px)] w-full overflow-auto dark:bg-[#1F1F1F]">
+          <div className="pb-4">
+            {" "}
+            {/* Add padding-bottom to prevent text cutoff */}
+            <PageDocumentInfo params={params} />
+            <Editor params={params} />
+          </div>
         </ScrollArea>
       </div>
     </section>
