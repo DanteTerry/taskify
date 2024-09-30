@@ -18,6 +18,7 @@ function PageDocumentInfo({ params }: { params: any }) {
 
   useEffect(() => {
     params.documentId && getDocumentInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.documentId]);
 
   const getDocumentInfo = async () => {

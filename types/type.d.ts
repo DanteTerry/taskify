@@ -16,6 +16,7 @@ export type WorkspaceDocData = {
   documentName: string;
   id: string;
   projectType: string;
+  isPublished: boolean;
 };
 
 export type CreateProject = z.infer<typeof CreateProjectSchema>;

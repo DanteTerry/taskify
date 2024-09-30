@@ -11,8 +11,6 @@ import {
 
 import "./globals.css";
 import { Toaster } from "sonner";
-import { store } from "@/lib/redux/store";
-import GlobalStateProvider from "@/components/provider/GlobalStateProvider";
 import DarkModeProvider from "@/components/provider/DarkModeProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
@@ -67,10 +65,8 @@ export default function RootLayout({
       >
         <DarkModeProvider>
           <ClerkProvider>
-            <GlobalStateProvider>
-              {children}
-              <Toaster />
-            </GlobalStateProvider>
+            {children}
+            <Toaster />
           </ClerkProvider>
         </DarkModeProvider>
       </body>

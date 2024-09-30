@@ -29,7 +29,7 @@ function DocumentPage({
             {" "}
             {/* Add padding-bottom to prevent text cutoff */}
             <PageDocumentInfo params={params} />
-            <Editor params={params} />
+            <Editor params={params} editable={true} />
           </div>
         </ScrollArea>
       </div>

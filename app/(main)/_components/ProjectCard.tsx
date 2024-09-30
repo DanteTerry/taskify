@@ -51,6 +51,7 @@ function ProjectCard({
         documentName: documentName,
         documentOutput: [],
         projectType: projectType,
+        isPublished: false,
       });
 
       // create a new document output for the workspace
