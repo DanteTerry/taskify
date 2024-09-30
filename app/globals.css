@@ -107,3 +107,19 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes spin-quarter {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Applying custom keyframes to Tailwind */
+@layer utilities {
+  .animate-spin-quarter {
+    animation: spin-quarter 1.2s linear infinite;
+  }
+}
