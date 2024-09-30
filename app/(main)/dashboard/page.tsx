@@ -16,16 +16,18 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { cn } from "@/lib/utils";
 
 function Dashboard() {
   const { user } = useUser();
   const { orgId } = useAuth();
   const [workSpacesList, setWorkSpacesList] = useState<DocumentData[]>([]);
   const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const getWorkspace = () => {
+    setIsLoading(true);
     setWorkSpacesList([]);
     const q = query(
       collection(db, "WorkSpaces"),
@@ -39,6 +41,8 @@ function Dashboard() {
       const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setWorkSpacesList(docs);
     });
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -46,7 +50,6 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orgId, user]);
 
-  // todo add the condition for skeleton if there is no workspace
   return (
     <section className="flex h-full w-full flex-col justify-between bg-[#fafafa] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
@@ -66,8 +69,13 @@ function Dashboard() {
             </h2>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {workSpacesList?.length === 0 ? (
+          <div
+            className={cn(
+              `mt-6 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4`,
+              workSpacesList.length === 0 && "flex justify-start gap-0",
+            )}
+          >
+            {isLoading && workSpacesList.length === 0 ? (
               <SkeletonCard />
             ) : (
               <div className="relative">
@@ -123,7 +131,7 @@ function Dashboard() {
 
             <button
               onClick={() => router.push("/create-workspace")}
-              className="group flex w-full items-center justify-center gap-6 rounded-xl border-2 border-slate-300/50 px-5 py-3 shadow-md transition-all duration-300 hover:bg-[#FBEDD6] dark:border-slate-400/5 dark:hover:bg-[#d2f159]/60 hover:dark:text-[#e1e1e1] md:px-3 lg:px-6"
+              className="group flex h-auto w-full items-center justify-center rounded-xl border-2 border-slate-300/50 px-5 py-3 shadow-md transition-all duration-300 hover:bg-[#FBEDD6] dark:border-slate-400/5 dark:hover:bg-[#d2f159]/60 hover:dark:text-[#e1e1e1] md:h-[150px] md:w-[150px] lg:h-[165px] lg:w-[165px] lg:px-0"
             >
               <Plus size={50} strokeWidth={2} />
             </button>

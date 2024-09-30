@@ -91,7 +91,12 @@ function Publish({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72" align="end" alignOffset={8} forceMount>
+      <PopoverContent
+        className="w-full md:w-72"
+        align="end"
+        alignOffset={8}
+        forceMount
+      >
         {documentInfo?.isPublished ? (
           <div className="space-y-4">
             <div className="flex items-center gap-x-2">
