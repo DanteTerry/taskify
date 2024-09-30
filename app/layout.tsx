@@ -12,6 +12,7 @@ import {
 import "./globals.css";
 import { Toaster } from "sonner";
 import DarkModeProvider from "@/components/provider/DarkModeProvider";
+import GlobalStateProvider from "@/components/provider/GlobalStateProvider";
 
 const spaceSpace_Grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -65,8 +66,10 @@ export default function RootLayout({
       >
         <DarkModeProvider>
           <ClerkProvider>
-            {children}
-            <Toaster />
+            <GlobalStateProvider>
+              {children}
+              <Toaster />
+            </GlobalStateProvider>
           </ClerkProvider>
         </DarkModeProvider>
       </body>
