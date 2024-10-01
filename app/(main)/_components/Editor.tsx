@@ -57,6 +57,7 @@ function Editor({
 
   useEffect(() => {
     getDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   useEffect(() => {

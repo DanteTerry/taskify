@@ -66,12 +66,10 @@ function DocumentCoverImage({
               <UploadDropzone<OurFileRouter, "imageUploader">
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
-                  if (workspaceId || documentId) {
-                    updateDocumentInfo &&
-                      updateDocumentInfo("coverImage", res[0].url);
-                    setSelectedCover(res[0].url);
-                    setIsDialogOpen(false);
-                  }
+                  updateDocumentInfo &&
+                    updateDocumentInfo("coverImage", res[0].url);
+                  setSelectedCover(res[0].url);
+                  setIsDialogOpen(false);
                 }}
                 className={
                   "border border-slate-300/50 shadow-none ut-button:bg-black/70 ut-allowed-content:hidden ut-label:text-white dark:border-slate-400/5 dark:bg-[#252525]"
@@ -102,13 +100,11 @@ function DocumentCoverImage({
 
               <Button
                 onClick={() => {
-                  if (workspaceId || documentId) {
-                    updateDocumentInfo &&
-                      updateDocumentInfo("coverImage", coverLink);
-                    setSelectedCover(coverLink);
-                    setCoverLink("");
-                    setIsDialogOpen(false);
-                  }
+                  updateDocumentInfo &&
+                    updateDocumentInfo("coverImage", coverLink);
+                  setSelectedCover(coverLink);
+                  setCoverLink("");
+                  setIsDialogOpen(false);
                 }}
                 className="mt-3 w-full"
                 size={"lg"}
@@ -133,12 +129,10 @@ function DocumentCoverImage({
                       key={image.imageUrl}
                       className="relative h-[64px] w-[105px] cursor-pointer rounded-xl md:w-[110px]"
                       onClick={() => {
-                        if (workspaceId || documentId) {
-                          updateDocumentInfo &&
-                            updateDocumentInfo("coverImage", image.imageUrl);
-                          setSelectedCover(image.imageUrl);
-                          setIsDialogOpen(false);
-                        }
+                        updateDocumentInfo &&
+                          updateDocumentInfo("coverImage", image.imageUrl);
+                        setSelectedCover(image.imageUrl);
+                        setIsDialogOpen(false);
                       }}
                     >
                       <Image

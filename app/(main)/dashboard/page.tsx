@@ -8,7 +8,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
 import { Button } from "@/components/ui/button";
-
+import CreateWorkspace from "../_components/CreateWorkspace";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   collection,
   DocumentData,
@@ -40,9 +45,8 @@ function Dashboard() {
     onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setWorkSpacesList(docs);
+      setIsLoading(false);
     });
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -51,7 +55,12 @@ function Dashboard() {
   }, [orgId, user]);
 
   return (
-    <section className="flex h-full w-full flex-col justify-between bg-[#fafafa] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:px-0">
+    <section
+      className={cn(
+        `flex w-full flex-col justify-between bg-[#fafafa] px-4 py-2 dark:bg-[#1f1f1f] md:h-screen md:px-2 md:pt-16 lg:px-0`,
+        workSpacesList.length < 3 ? "h-screen" : "h-max",
+      )}
+    >
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
         <div className="mx-auto flex h-full w-full flex-col items-center text-black dark:text-white">
           <h2 className="font-space text-xl font-semibold md:text-2xl">
@@ -61,7 +70,7 @@ function Dashboard() {
             Create Your Ideal Workspace
           </h2>
 
-          {/* workspace */}
+          {/* Workspace section header */}
           <div className="mt-7 flex items-center gap-1 self-start md:mt-10">
             <TbLayoutDashboardFilled color="#7D7D7D" />
             <h2 className="font-poppins text-sm font-semibold text-[#7D7D7D]">
@@ -69,68 +78,65 @@ function Dashboard() {
             </h2>
           </div>
 
+          {/* Workspace Grid */}
           <div
             className={cn(
-              `mt-6 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4`,
-              workSpacesList.length === 0 && "flex justify-start gap-0",
+              "mt-6 grid w-full gap-6", // Base grid layout with gaps
+              workSpacesList.length === 1
+                ? "grid-cols-1"
+                : workSpacesList.length === 2
+                  ? "grid-cols-2"
+                  : workSpacesList.length === 3
+                    ? "grid-cols-3"
+                    : "grid-cols-4", // Dynamic grid column based on the number of workspaces
+              "grid-cols-1",
+              "sm:grid-cols-2", // 2 columns for small screens (640px and above)
+              "md:grid-cols-3", // 3 columns for medium screens (768px and above)
+              "lg:grid-cols-4", // 4 columns for large screens (1024px and above)
             )}
           >
-            {isLoading && workSpacesList.length === 0 ? (
-              <SkeletonCard />
-            ) : (
-              <div className="relative">
-                {workSpacesList.map((workSpace, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="relative rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
-                    >
-                      <Image
-                        onClick={() =>
-                          router.push(`/workspace/${workSpace.id}`)
-                        }
-                        src={workSpace?.coverImage}
-                        width={400}
-                        height={200}
-                        alt="cover image"
-                        className="h-[100px] cursor-pointer rounded-t-2xl object-cover"
-                      />
-                      <div className="flex items-center justify-between rounded-b-xl p-4 font-space">
-                        <div className="flex gap-3">
-                          <span className="text-xl"> {workSpace.emoji}</span>
-                          <h2 className="flex gap-2 text-lg">
-                            {workSpace.workspaceName}
-                          </h2>
-                        </div>
+            {/* Loop through the workspaces and display them */}
+            {workSpacesList.map((workSpace, index) => (
+              <div
+                key={index}
+                className="relative rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
+              >
+                <Image
+                  onClick={() => router.push(`/workspace/${workSpace.id}`)}
+                  src={workSpace?.coverImage}
+                  width={400}
+                  height={200}
+                  alt="cover image"
+                  className="h-[100px] cursor-pointer rounded-t-2xl object-cover"
+                />
+                <div className="flex items-center justify-between rounded-b-xl p-4 font-space">
+                  <div className="flex gap-3">
+                    <span className="text-xl">{workSpace.emoji}</span>
+                    <h2 className="flex gap-2 text-lg">
+                      {workSpace.workspaceName}
+                    </h2>
+                  </div>
 
-                        <Button
-                          onClick={() => setIsOpen((prev) => !prev)}
-                          className="z-50"
-                          variant={"ghost"}
-                          size={"sm"}
-                        >
-                          <Ellipsis size={20} />
-                        </Button>
-                      </div>
-
-                      {isOpen && (
-                        <div className="absolute -bottom-16 right-2 z-50 flex flex-col gap-1 rounded-md bg-gray-500/30 px-2 py-1">
-                          <Button className="" variant={"ghost"} size={"sm"}>
-                            Edit
-                          </Button>
-                          <Button className="" variant={"ghost"} size={"sm"}>
-                            Delete{" "}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                  <Popover>
+                    <PopoverTrigger>
+                      <Ellipsis size={20} />
+                    </PopoverTrigger>
+                    <PopoverContent className="flex w-max flex-col">
+                      <Button className="" variant={"ghost"} size={"sm"}>
+                        Edit
+                      </Button>
+                      <Button className="" variant={"ghost"} size={"sm"}>
+                        Delete
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
-            )}
+            ))}
 
+            {/* Add Workspace Button as part of the grid */}
             <button
-              onClick={() => router.push("/create-workspace")}
+              onClick={() => setIsOpen(true)}
               className="group flex h-auto w-full items-center justify-center rounded-xl border-2 border-slate-300/50 px-5 py-3 shadow-md transition-all duration-300 hover:bg-[#FBEDD6] dark:border-slate-400/5 dark:hover:bg-[#d2f159]/60 hover:dark:text-[#e1e1e1] md:h-[150px] md:w-[150px] lg:h-[165px] lg:w-[165px] lg:px-0"
             >
               <Plus size={50} strokeWidth={2} />
@@ -138,6 +144,7 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      <CreateWorkspace isOpen={isOpen} setIsOpen={setIsOpen} />
     </section>
   );
 }

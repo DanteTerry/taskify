@@ -33,9 +33,7 @@ function EmojiPickerComponent({
         <div
           className={cn(
             `absolute z-10`,
-            pathName === "/create-workspace"
-              ? "-left-3 bottom-12"
-              : "left-5 top-14",
+            pathName === "/dashboard" ? "-left-3 bottom-12" : "left-5 top-14",
           )}
         >
           <EmojiPicker
