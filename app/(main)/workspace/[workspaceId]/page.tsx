@@ -23,7 +23,9 @@ import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
 
 function WorkSpacePage({ params }: { params: any }) {
   const [documents, setDocuments] = useState<WorkspaceDocData[]>();
-  const [projectType, setProjectType] = useState<string>("");
+  const [projectType, setProjectType] = useState<"board" | "sprint" | "page">(
+    "board",
+  );
   const [open, setOpen] = useState(false);
 
   const { workspaceId } = params;
@@ -168,9 +170,9 @@ function WorkSpacePage({ params }: { params: any }) {
                 <DialogTitle>
                   {projectType === "board"
                     ? "Board"
-                    : projectType === "document"
+                    : projectType === "page"
                       ? "Page"
-                      : "Sprint"}{" "}
+                      : "sprint"}{" "}
                   Project
                 </DialogTitle>
                 <ProjectCard params={params} projectType={projectType} />

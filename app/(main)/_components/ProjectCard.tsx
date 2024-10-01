@@ -58,6 +58,7 @@ function ProjectCard({
       if (projectType === "page") {
         await setDoc(doc(db, "PageDocumentOutput", documentId.toString()), {
           docId: documentId,
+          workspaceId: params?.workspaceId,
           output: [],
         });
       }
@@ -65,6 +66,7 @@ function ProjectCard({
       if (projectType === "board") {
         await setDoc(doc(db, "BoardDocumentOutput", documentId.toString()), {
           docId: documentId,
+          workspaceId: params?.workspaceId,
           output: [],
         });
       }
