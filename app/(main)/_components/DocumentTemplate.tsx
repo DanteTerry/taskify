@@ -5,16 +5,46 @@ import { cn } from "@/lib/utils";
 import { WorkspaceDocData } from "@/types/type";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Ellipsis } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { toast } from "sonner";
 
 function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   const router = useRouter();
+
+  const onDelete = async () => {
+    const documentId = document?.id;
+
+    if (!documentId) return;
+
+    try {
+      await deleteDoc(doc(db, "WorkSpaceDocuments", documentId));
+
+      if (document.projectType === "page") {
+        await deleteDoc(doc(db, "PageDocumentOutput", documentId));
+      } else if (document.projectType === "board") {
+        await deleteDoc(doc(db, "BoardDocumentOutput", documentId));
+      }
+      toast("Document deleted successfully");
+    } catch (error: any) {
+      toast(error.message || "Error deleting document");
+    }
+  };
+
   return (
     <div
-      onClick={() =>
+      onClick={() => {
         router.push(
           `/workspace/${document?.workspaceId}/${document.projectType}/${document?.id}`,
-        )
-      }
+        );
+      }}
       className={cn(
         `relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300`,
         document?.projectType === "board" &&
@@ -37,10 +67,34 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
         <Skeleton />
       )}
 
-      <div className="mt-5 rounded-b-xl p-4">
+      <div className="mt-5 flex justify-between rounded-b-xl p-4">
         <h2 className="text-xl font-semibold text-black dark:text-white">
           {document?.documentName}
         </h2>
+        <Popover>
+          <PopoverTrigger
+            className="z-50"
+            onClick={(e) => e.stopPropagation()} // Stop event propagation here
+          >
+            <Ellipsis size={20} />
+          </PopoverTrigger>
+          <PopoverContent
+            className="flex w-max flex-col p-1"
+            onClick={(e) => e.stopPropagation()} // Stop event propagation here
+          >
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(); // Call the delete function
+              }}
+              className="rounded-sm"
+              variant={"ghost"}
+              size={"sm"}
+            >
+              Delete
+            </Button>
+          </PopoverContent>
+        </Popover>
       </div>
       <span className="absolute bottom-[60px] left-4 text-4xl">
         {document?.emoji}
@@ -48,4 +102,5 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
     </div>
   );
 }
+
 export default DocumentTemplate;

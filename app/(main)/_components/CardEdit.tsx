@@ -59,7 +59,6 @@ function CardEdit({
     setShow(false);
   };
 
-  console.log(deadLine);
   useEffect(() => {
     setDeadLine(item?.deadLine ? new Date(item.deadLine) : undefined);
     setPriority(item.priority);
