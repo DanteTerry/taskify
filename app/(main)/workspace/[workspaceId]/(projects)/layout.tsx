@@ -4,7 +4,7 @@ import SideNavigation from "../../../_components/SideNavigation";
 import TopNavigation from "../../../_components/TopNavigation";
 
 function MainLayout({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative flex h-screen w-full overflow-hidden dark:bg-[#0D0D10]">
