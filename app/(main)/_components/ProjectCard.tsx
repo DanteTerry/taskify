@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { getRandomEmoji, spaceCoverImages } from "@/constants";
+import { CoverImages, getRandomEmoji, spaceCoverImages } from "@/constants";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -13,9 +13,10 @@ import { CreateProject } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProjectSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { Loader } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 
 const emojiIcons: string[] = getRandomEmoji();
+const images = CoverImages.sort(() => Math.random() - 0.5).slice(0, 12);
 
 function ProjectCard({
   projectType,
@@ -105,14 +106,14 @@ function ProjectCard({
       <div className="flex flex-col gap-2">
         <p className="text-justify text-sm font-semibold">Icons</p>
 
-        <div className="mb-2 flex items-center gap-1.5">
+        <div className="mb-2 flex items-center gap-0.5">
           {emojiIcons.map((icon: string, index) => (
             <div
               key={index}
               onClick={() => setEmoji(icon)}
               className={cn(
-                `cursor-pointer rounded-md border-2`,
-                emoji !== icon && "border-transparent",
+                `cursor-pointer rounded-md border border-transparent p-1 transition-all duration-300 hover:border-white`, // Same hover effect as images
+                emoji === icon && "border-white", // Show white border if selected
               )}
             >
               <span className="text-xl">{icon}</span>
@@ -125,7 +126,7 @@ function ProjectCard({
         <p className="text-justify text-sm font-semibold">Background</p>
 
         <div className="mx-auto flex w-full flex-wrap gap-1">
-          {spaceCoverImages.map((image, index) => (
+          {images.map((image, index) => (
             <div
               key={index}
               onClick={() => setSelectedImage(image.imageUrl)}

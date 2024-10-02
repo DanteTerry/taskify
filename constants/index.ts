@@ -267,6 +267,8 @@ export const coverImageCategories = [
   },
 ];
 
+export const CoverImages = [...spaceCoverImages, ...natureCoverImages];
+
 export const randomColors = [
   "linear-gradient(45deg, #ff7eb9, #ff65a3)",
   "#5fb5f7",

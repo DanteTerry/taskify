@@ -21,10 +21,9 @@ function DocumentCoverImage({
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedCover: Dispatch<SetStateAction<string>>;
   updateDocumentInfo?: (key: string, value: string) => void;
-  selectedCover: string;
+  selectedCover?: string;
 }) {
   const params = useParams();
-  const { workspaceId, documentId } = params;
   const [coverLink, setCoverLink] = useState<string>("");
   const [chooseFrom, setChooseFrom] = useState<"gallery" | "upload" | "link">(
     "gallery",
