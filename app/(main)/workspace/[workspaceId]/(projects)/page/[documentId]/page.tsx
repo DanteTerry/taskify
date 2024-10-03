@@ -1,7 +1,9 @@
 "use client";
 import GenerateWithAi from "@/app/(main)/_components/GenerateWithAi";
 import PageDocumentInfo from "@/app/(main)/_components/PageDocumentInfo";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { PopoverContent } from "@radix-ui/react-popover";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 
