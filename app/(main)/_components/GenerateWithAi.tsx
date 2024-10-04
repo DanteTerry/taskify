@@ -17,32 +17,52 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Dispatch, SetStateAction, useState } from "react";
+import { chatSession } from "@/config/GoogleAIModel";
+import { Loader2Icon } from "lucide-react";
+import { PartialBlock } from "@blocknote/core";
+import { sanitizeStyleBlocks } from "@/utils/blockNoteUtil";
+import { set } from "mongoose";
 
-function GenerateWithAi() {
+function GenerateWithAi({
+  setDocumentOutput,
+}: {
+  setDocumentOutput: Dispatch<SetStateAction<PartialBlock[]>>;
+}) {
+  const [userInput, setUserInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const generateWithAi = async () => {
+    setLoading(true);
+    const PROMPT =
+      "Generate template for blocknote.js in JSON for " + userInput;
+    const result = await chatSession.sendMessage(PROMPT);
+    try {
+      const output = JSON.parse(result.response.text());
+      const sanitizedBlocks = sanitizeStyleBlocks(output.blocks); // Sanitize styles
+      setDocumentOutput(sanitizedBlocks);
+      setLoading(false);
+      setUserInput("");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setUserInput("");
+    }
+  };
+
   return (
     <div className="fixed bottom-8 right-5 flex h-20 w-20 items-center justify-center overflow-hidden">
       <div className="relative">
         <Popover>
-          <PopoverTrigger>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <button className="flex transform items-center justify-between rounded-md bg-black/80 p-2 shadow-lg hover:bg-black">
-                    <video
-                      src="/ai-loader.mp4"
-                      className="h-10 w-10 rounded-full object-cover"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                    />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent className="rounded-md p-2 text-white shadow-lg dark:bg-[#0A0A0A]">
-                  <p className="text-sm font-semibold">Generate With AI</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <PopoverTrigger className="flex transform items-center justify-between rounded-md bg-black/80 p-2 shadow-lg hover:bg-black">
+            <video
+              src="/ai-loader.mp4"
+              className="h-10 w-10 rounded-full object-cover"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
           </PopoverTrigger>
 
           <PopoverContent className="absolute -right-8 bottom-16 p-0">
@@ -54,18 +74,25 @@ function GenerateWithAi() {
               </CardHeader>
               <CardContent className="p-4">
                 <Textarea
+                  value={userInput}
+                  onChange={(e) => setUserInput(e.target.value)}
                   placeholder="Describe your template..."
                   className="mb-4 border-gray-700 bg-[#292929] text-gray-200 focus:ring-2 focus:ring-blue-500"
                 />
               </CardContent>
               <CardFooter className="flex justify-between border-t border-gray-700 p-4">
                 <Button
+                  disabled={!userInput || loading}
+                  onClick={() => generateWithAi()}
                   variant="secondary"
-                  className="bg-indigo-500 transition duration-200 hover:bg-indigo-600"
+                  className="w-full bg-indigo-500 transition duration-200 hover:bg-indigo-600"
                 >
-                  Generate
+                  {loading ? (
+                    <Loader2Icon className="animate-spin" />
+                  ) : (
+                    "Generate"
+                  )}
                 </Button>
-                <Button variant="secondary">Cancel</Button>
               </CardFooter>
             </Card>
           </PopoverContent>

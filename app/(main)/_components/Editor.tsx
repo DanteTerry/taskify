@@ -5,21 +5,24 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { uploadFiles } from "@/utils/uploadthing";
 import { db } from "@/config/firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { sanitizeBlocks } from "@/utils/blockNoteUtil";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { sanitizeImageBlocks } from "@/utils/blockNoteUtil";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 
 function Editor({
   params,
   editable,
+  documentOutput,
+  setDocumentOutput,
 }: {
   params: {
     workspaceId: string;
     documentId: string;
   };
   editable: boolean;
+  setDocumentOutput: Dispatch<SetStateAction<PartialBlock[]>>;
+  documentOutput: PartialBlock[];
 }) {
-  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([]);
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
   const saveDocument = async (document: PartialBlock[]) => {
@@ -55,13 +58,15 @@ function Editor({
     }
   };
 
+  console.log("AI Generated Output: ", documentOutput);
+
   useEffect(() => {
     getDocument();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   useEffect(() => {
-    if (documentOutput.length > 0) {
+    if (documentOutput?.length > 0) {
       const newEditor = BlockNoteEditor.create({
         initialContent: documentOutput,
         uploadFile: async (file: File) => {
@@ -81,7 +86,7 @@ function Editor({
         <BlockNoteView
           editor={editor}
           onChange={async () => {
-            const data = await sanitizeBlocks(editor.document);
+            const data = await sanitizeImageBlocks(editor.document);
             await saveDocument(data);
           }}
           style={{

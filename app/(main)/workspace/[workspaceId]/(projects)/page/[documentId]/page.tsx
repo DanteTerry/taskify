@@ -3,9 +3,10 @@ import GenerateWithAi from "@/app/(main)/_components/GenerateWithAi";
 import PageDocumentInfo from "@/app/(main)/_components/PageDocumentInfo";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { PartialBlock } from "@blocknote/core";
 import { PopoverContent } from "@radix-ui/react-popover";
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 function DocumentPage({
   params,
@@ -24,6 +25,8 @@ function DocumentPage({
     [],
   );
 
+  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([]);
+  console.log(documentOutput);
   return (
     <section className="flex h-full w-full flex-col md:pt-0">
       <div className="flex w-full flex-grow flex-col">
@@ -32,9 +35,14 @@ function DocumentPage({
             {" "}
             {/* Add padding-bottom to prevent text cutoff */}
             <PageDocumentInfo params={params} />
-            <Editor params={params} editable={true} />
+            <Editor
+              params={params}
+              setDocumentOutput={setDocumentOutput}
+              documentOutput={documentOutput}
+              editable={true}
+            />
           </div>
-          <GenerateWithAi />
+          <GenerateWithAi setDocumentOutput={setDocumentOutput} />
         </ScrollArea>
       </div>
     </section>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PreviewDocumentInfo from "../../_components/PreviewDocumentInfo";
 import { WorkspaceDocData } from "@/types/type";
+import { PartialBlock } from "@blocknote/core";
 
 // Dynamically import the editor
 function DocumentPreviewPage({
@@ -25,6 +26,7 @@ function DocumentPreviewPage({
       }),
     [],
   );
+  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([]);
 
   const [emojiIcon, setEmojiIcon] = useState("");
   const [documentInfo, setDocumentInfo] = useState<
@@ -109,7 +111,12 @@ function DocumentPreviewPage({
               documentInfo={documentInfo}
               selectedCover={selectedCover}
             />
-            <Editor params={params} editable={false} />
+            <Editor
+              documentOutput={documentOutput}
+              setDocumentOutput={setDocumentOutput}
+              params={params}
+              editable={false}
+            />
           </div>
         </ScrollArea>
       </div>
