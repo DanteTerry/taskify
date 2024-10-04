@@ -72,6 +72,14 @@ function ProjectCard({
         });
       }
 
+      if (projectType === "sprint") {
+        await setDoc(doc(db, "SprintDocumentOutput", documentId.toString()), {
+          docId: documentId,
+          workspaceId: params?.workspaceId,
+          output: [],
+        });
+      }
+
       toast("Document created successfully");
       router.replace(
         `/workspace/${params?.workspaceId}/${projectType}/${documentId}`,
@@ -80,10 +88,6 @@ function ProjectCard({
       toast(error.message);
     }
   };
-
-  if (projectType === "sprint") {
-    return <p>Coming soon</p>;
-  }
 
   return (
     <form
@@ -147,7 +151,7 @@ function ProjectCard({
         </div>
       </div>
       <button
-        disabled={isSubmitting || projectType === "sprint"}
+        disabled={isSubmitting}
         type="submit"
         className={cn(
           `w-full rounded-md py-2 font-semibold text-slate-200`,

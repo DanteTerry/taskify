@@ -23,6 +23,7 @@ import {
   deleteDoc,
   getDocs,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -98,6 +99,25 @@ function Dashboard() {
       setIsDeleteDialogOpen(false); // Close the dialog after deletion
     }
   };
+  useEffect(() => {
+    async function saveUser() {
+      if (user) {
+        const id = user?.id;
+        try {
+          await setDoc(doc(db, "Users", id), {
+            id: id,
+            fullName: user.fullName,
+            email: user.primaryEmailAddress?.emailAddress,
+            picture: user.imageUrl,
+          });
+        } catch (error: any) {
+          toast(error.message);
+        }
+      }
+    }
+
+    saveUser();
+  }, [user]);
 
   return (
     <section
