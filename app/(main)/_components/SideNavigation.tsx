@@ -135,6 +135,7 @@ function SideNavigation({
                         router.push(
                           `/workspace/${workspaceId}/${doc.projectType}/${doc?.id}`,
                         );
+                        setIsOpen(false);
                       }}
                       key={doc.id}
                       variant={

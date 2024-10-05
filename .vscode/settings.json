@@ -1,5 +1,6 @@
 {
-    "workbench.colorCustomizations": {
-        "sash.hoverBorder": "#b450f3"
-    }
+  "workbench.colorCustomizations": {
+    "sash.hoverBorder": "#b450f3"
+  },
+  "cSpell.words": ["Kanban"]
 }
