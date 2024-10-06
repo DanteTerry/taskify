@@ -61,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${caveat.variable} dark ${inter.variable} h-full font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
+        className={`${caveat.variable} ${inter.variable} h-full font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
         suppressHydrationWarning={true}
       >
         <DarkModeProvider>

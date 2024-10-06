@@ -45,3 +45,16 @@ export type listType = {
   title: string;
   items: ItemType[];
 };
+
+// sprint project types
+export interface issueDataType {
+  description: string;
+  issueType: string;
+  shortSummary: string;
+  reporter: string[];
+  assignees: string[];
+  priority: string;
+  comments: string[];
+  status: "backlog" | "selected for development" | "inprogress" | "done";
+  id: string;
+}

@@ -1,10 +1,9 @@
 import { Droppable } from "@hello-pangea/dnd";
-import DraggableItem from "./DraggableItem";
-import { ItemType } from "@/lib/redux/boardSlice";
 import { Dispatch, SetStateAction } from "react";
-import { listType } from "@/types/type";
+import { issueDataType, listType } from "@/types/type";
+import SprintDraggableItem from "./SprintDraggableItem";
 
-function DroppableList({
+function SprintDroppableList({
   data,
   setData,
 }: {
@@ -18,15 +17,17 @@ function DroppableList({
           className="flex flex-col gap-3 py-3"
           ref={provided.innerRef}
           style={{
-            backgroundColor: snapshot.isDraggingOver ? "#222" : "transparent",
+            backgroundColor: snapshot.isDraggingOver
+              ? "#e6e9ee"
+              : "transparent",
           }}
           {...provided.droppableProps}
         >
           {/* list becomes droppable */}
           {data.items &&
-            data.items.map((item: ItemType, index: number) => {
+            data.items.map((item: issueDataType, index: number) => {
               return (
-                <DraggableItem
+                <SprintDraggableItem
                   setData={setData}
                   data={data}
                   key={index}
@@ -41,4 +42,4 @@ function DroppableList({
     </Droppable>
   );
 }
-export default DroppableList;
+export default SprintDroppableList;

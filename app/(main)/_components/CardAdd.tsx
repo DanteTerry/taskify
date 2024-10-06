@@ -20,8 +20,6 @@ import { ItemType, PriorityType } from "@/lib/redux/boardSlice";
 
 function CardAdd({ getCard }: { getCard: (card: any) => void }) {
   const [show, setShow] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("#161616");
-  const [randomColor, setRandomColor] = useState("");
   const [priority, setPriority] = useState<PriorityType>({
     color: "gray",
     priority: "Without",
