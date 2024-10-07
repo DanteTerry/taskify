@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { issueDataType, listType } from "@/types/type";
 import Image from "next/image";
+import { useState } from "react";
 import {
   FaBookmark,
   FaCheckCircle,
@@ -8,6 +9,7 @@ import {
   FaNetworkWired,
 } from "react-icons/fa";
 import { IoSparklesSharp } from "react-icons/io5";
+import IssueDetails from "./IssueDetails";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -31,8 +33,13 @@ function SprintDragItem({
   item: issueDataType;
   data: listType;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="hover:scale-1.1 flex max-w-sm transform flex-col gap-2 overflow-hidden rounded-lg bg-white p-4 shadow-lg transition-transform hover:scale-105">
+    <div
+      onClick={() => setOpen(true)}
+      className="flex max-w-sm transform flex-col gap-2 overflow-hidden rounded-lg bg-white p-4 shadow-lg transition-transform hover:scale-[101%]"
+    >
       <p className="text-sm font-medium text-gray-800">{item.shortSummary}</p>
 
       <div className="flex items-center justify-between">
@@ -44,9 +51,6 @@ function SprintDragItem({
               <span className="text-sm text-gray-600">
                 {priorityStyles[item.priority].label}
               </span>
-              {/* <span
-                className={`h-3 w-3 rounded-full ${priorityStyles[item.priority].color}`}
-              ></span> */}
             </div>
           )}
         </div>
@@ -75,6 +79,7 @@ function SprintDragItem({
           </div>
         </div>
       </div>
+      <IssueDetails item={item} open={open} setOpen={setOpen} />
     </div>
   );
 }

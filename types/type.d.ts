@@ -44,6 +44,7 @@ export type listType = {
   id: string;
   title: string;
   items: ItemType[];
+  status?: "backlog" | "selected for development" | "in progress" | "done";
 };
 
 // sprint project types
@@ -55,6 +56,6 @@ export interface issueDataType {
   assignees: string[];
   priority: string;
   comments: string[];
-  status: "backlog" | "selected for development" | "inprogress" | "done";
+  status: "backlog" | "selected for development" | "in progress" | "done";
   id: string;
 }
