@@ -1,3 +1,4 @@
+import { Collaborator } from "@/app/(main)/_components/CreateIssue";
 import { AddCardSchema, CreateProjectSchema } from "@/lib/validation";
 import { InlineContent, PartialBlock, TableContent } from "@blocknote/core";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
@@ -47,15 +48,30 @@ export type listType = {
   status?: "backlog" | "selected for development" | "in progress" | "done";
 };
 
+export interface issueType {
+  id: string;
+  items: issueDataType[];
+  status: "backlog" | "selected for development" | "in progress" | "done";
+}
+
 // sprint project types
 export interface issueDataType {
   description: string;
   issueType: string;
   shortSummary: string;
-  reporter: string[];
-  assignees: string[];
+  reporter: Collaborator;
+  assignees: Collaborator[];
   priority: string;
   comments: string[];
   status: "backlog" | "selected for development" | "in progress" | "done";
   id: string;
 }
+
+// board
+export type ItemType = {
+  id: string;
+  title: string;
+  description: string;
+  priority: PriorityType;
+  deadLine: string | undefined;
+};

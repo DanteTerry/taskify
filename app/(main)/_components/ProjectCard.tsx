@@ -28,6 +28,8 @@ function ProjectCard({
   const [emoji, setEmoji] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const { user } = useUser();
+  const id = user?.id;
+
   const router = useRouter();
 
   const {
@@ -76,7 +78,36 @@ function ProjectCard({
         await setDoc(doc(db, "SprintDocumentOutput", documentId.toString()), {
           docId: documentId,
           workspaceId: params?.workspaceId,
-          output: [],
+          output: [
+            {
+              id: uuidv4().slice(0, 8),
+              status: "backlog",
+              items: [],
+            },
+            {
+              id: uuidv4().slice(0, 8),
+              status: "selected for Development",
+              items: [],
+            },
+            {
+              id: uuidv4().slice(0, 8),
+              status: "in Progress",
+              items: [],
+            },
+            {
+              id: uuidv4().slice(0, 8),
+              status: "done",
+              items: [],
+            },
+          ],
+          collaborators: [
+            {
+              id: id,
+              fullName: user?.fullName,
+              email: user?.primaryEmailAddress?.emailAddress,
+              picture: user?.imageUrl,
+            },
+          ],
         });
       }
 

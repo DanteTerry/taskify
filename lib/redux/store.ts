@@ -1,41 +1,18 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
-import createFilter from "redux-persist-transform-filter";
-import { persistReducer, persistStore } from "redux-persist";
-import boardSlice, { BoardSliceType } from "./boardSlice";
-
-export interface RootState {
-  board: BoardSliceType;
-}
-
-const DarkModeFilter = createFilter("root", ["darkMode"]);
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import sprintSlice from "./sprintSlice"; // Ensure this path is correct
 
 const rootReducer = combineReducers({
-  board: boardSlice,
+  sprint: sprintSlice,
 });
 
-// Define the persist configuration
-const persistConfig = {
-  key: "root",
-  storage,
-  whitelist: ["darkMode"],
-  transforms: [DarkModeFilter],
-};
-
-// Create a persisted reducer
-const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);
-
-export const store = configureStore({
+// Configure store
+const store = configureStore({
   reducer: rootReducer,
   devTools: true,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
 });
 
-export const persister = persistStore(store);
-
-// Define AppDispatch type
 export type AppDispatch = typeof store.dispatch;
-export type AppState = RootState;
+export type RootState = ReturnType<typeof rootReducer>;
+
+export default store;

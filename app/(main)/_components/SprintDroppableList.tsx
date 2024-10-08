@@ -1,6 +1,6 @@
 import { Droppable } from "@hello-pangea/dnd";
 import { Dispatch, SetStateAction } from "react";
-import { issueDataType, listType } from "@/types/type";
+import { issueDataType, issueType } from "@/types/type";
 import SprintDraggableItem from "./SprintDraggableItem";
 
 function SprintDroppableList({
@@ -8,7 +8,7 @@ function SprintDroppableList({
   setData,
 }: {
   data: any;
-  setData: Dispatch<SetStateAction<listType[] | undefined>>;
+  setData: Dispatch<SetStateAction<issueType[] | undefined>>;
 }) {
   return (
     <Droppable droppableId={data.id}>

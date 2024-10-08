@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { issueDataType, listType } from "@/types/type";
+import { issueDataType, issueType, listType } from "@/types/type";
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -31,10 +31,9 @@ function SprintDragItem({
   data,
 }: {
   item: issueDataType;
-  data: listType;
+  data: issueType;
 }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div
       onClick={() => setOpen(true)}
@@ -56,27 +55,19 @@ function SprintDragItem({
         </div>
 
         <div className="flex items-center">
-          <div className="h-[24px] w-[24px] overflow-hidden rounded-full border-2 border-white">
-            <Image
-              src={
-                "https://img.freepik.com/free-psd/3d-illustration-with-online-avatar_23-2151303073.jpg?t=st=1728226672~exp=1728230272~hmac=47a7a411bcead40083ef9b51c7b79edae21127fcf034b74b529b5723c5950556&w=740"
-              }
-              width={24}
-              height={24}
-              alt="user avatar"
-            />
-          </div>
-
-          <div className="-ml-1.5 h-[24px] w-[24px] overflow-hidden rounded-full border-2 border-white">
-            <Image
-              src={
-                "https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611746.jpg?t=st=1728226638~exp=1728230238~hmac=110cf24c7e3c45473289cf4431ede0803eddd19ea262492ee0135d615f4f7bbd&w=740"
-              }
-              width={24}
-              height={24}
-              alt="user avatar"
-            />
-          </div>
+          {item.assignees.map((assignee, index) => (
+            <div
+              key={index}
+              className="h-[24px] w-[24px] overflow-hidden rounded-full border-2 border-white"
+            >
+              <Image
+                src={assignee.picture}
+                width={24}
+                height={24}
+                alt="user avatar"
+              />
+            </div>
+          ))}
         </div>
       </div>
       <IssueDetails item={item} open={open} setOpen={setOpen} />

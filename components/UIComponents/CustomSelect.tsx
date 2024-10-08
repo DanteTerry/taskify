@@ -102,11 +102,7 @@ function CustomSelect({
                       onClick={() => {
                         setIssueData({
                           ...issueData,
-                          assignees: issueData.assignees.some(
-                            (assignee: any) => assignee.id === item.id,
-                          )
-                            ? issueData.assignees
-                            : [...issueData.assignees, item],
+                          assignees: [...issueData.assignees, item],
                         });
                         handleClose();
                       }}

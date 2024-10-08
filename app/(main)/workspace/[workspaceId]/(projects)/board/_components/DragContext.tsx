@@ -1,20 +1,17 @@
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { Plus, Trash } from "lucide-react";
-import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/config/firebaseConfig";
-import { setBoard, createNewList, ItemType } from "@/lib/redux/boardSlice";
 import DroppableList from "./DroppableList";
 import CardAdd from "@/app/(main)/_components/CardAdd";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { listType } from "@/types/type";
+import { ItemType, listType } from "@/types/type";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function DragContext() {
   const [isFocused, setIsFocused] = useState(false);
-  const dispatch = useDispatch();
   const { boardId } = useParams();
 
   const [data, setData] = useState<listType[] | undefined>(undefined);
@@ -26,7 +23,6 @@ function DragContext() {
         docRef,
         (docSnap) => {
           if (docSnap.exists()) {
-            dispatch(setBoard(docSnap.data().output));
             setData(docSnap.data().output);
           } else {
             console.log("No such document!");
@@ -39,7 +35,7 @@ function DragContext() {
 
       return () => unsubscribe();
     }
-  }, [boardId, dispatch]);
+  }, [boardId]);
 
   // Function to delete a specific list
   const deleteList = async (listId: string) => {
@@ -59,7 +55,6 @@ function DragContext() {
           output: updatedOutput,
         });
 
-        dispatch(setBoard(updatedOutput));
         setData(updatedOutput);
       } else {
         console.error("Document does not exist!");
@@ -93,7 +88,6 @@ function DragContext() {
         await updateDoc(docRef, { output: updatedOutput });
 
         setData(updatedOutput);
-        dispatch(setBoard(updatedOutput));
       } else {
         console.error("Document does not exist!");
       }
@@ -198,7 +192,6 @@ function DragContext() {
         await updateDoc(docRef, {
           output: updatedOutput,
         });
-        dispatch(createNewList(newList));
       } else {
         console.error("Document does not exist!");
       }
@@ -225,7 +218,6 @@ function DragContext() {
 
         await updateDoc(docRef, { output: updatedOutput });
 
-        dispatch(setBoard(updatedOutput));
         setData(updatedOutput);
       } else {
         console.error("Document does not exist!");

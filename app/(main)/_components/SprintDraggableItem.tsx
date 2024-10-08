@@ -1,6 +1,5 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { ItemType } from "@/lib/redux/boardSlice";
-import { issueDataType, listType } from "@/types/type";
+import { issueDataType, issueType,  } from "@/types/type";
 import { Dispatch, SetStateAction } from "react";
 import SprintDragItem from "./SprintDragItem";
 
@@ -11,9 +10,9 @@ function SprintDraggableItem({
   setData,
 }: {
   item: issueDataType;
-  data: listType;
+  data: issueType;
   index: number;
-  setData: Dispatch<SetStateAction<listType[] | undefined>>;
+  setData: Dispatch<SetStateAction<issueType[] | undefined>>;
 }) {
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>

@@ -2,8 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import KanbanSpritBoard from "./KanbanSprintBoard";
-import { Dispatch, SetStateAction } from "react";
-import CreateIssue from "./CreateIssue";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import CreateIssue, { Collaborator } from "./CreateIssue";
+import { useParams } from "next/navigation";
+import { issueType, listType } from "@/types/type";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/lib/redux/store"; // Import the AppDispatch type
+import { fetchSprintDocumentOutput } from "@/lib/redux/sprintSlice";
 
 function MainSprint({
   open,
@@ -12,6 +19,49 @@ function MainSprint({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { sprintId } = useParams();
+  const dispatch = useDispatch<AppDispatch>(); // Use the AppDispatch type
+
+  const [data, setData] = useState<issueType[] | undefined>(undefined);
+
+  const [collaborators, setCollaborators] = useState<
+    Collaborator[] | undefined
+  >([]);
+
+  const output = useSelector((state: RootState) => state.sprint.output);
+  const collaborator = useSelector(
+    (state: RootState) => state.sprint.collaborators,
+  );
+
+  console.log(output, data);
+
+  useEffect(() => {
+    if (sprintId) {
+      const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
+
+      const unsubscribe = onSnapshot(
+        docRef,
+        (docSnap) => {
+          if (docSnap.exists()) {
+            setCollaborators(docSnap.data().collaborators);
+            setData(docSnap.data().output);
+          } else {
+            console.log("No such document!");
+          }
+        },
+        (error) => {
+          console.error("Error getting real-time updates:", error);
+        },
+      );
+
+      return () => unsubscribe();
+    }
+  }, [sprintId]);
+
+  useEffect(() => {
+    dispatch(fetchSprintDocumentOutput(sprintId as string));
+  }, [dispatch, sprintId]);
+
   return (
     <section className="ml-60 flex h-full w-full flex-grow flex-col gap-6 px-8 py-6">
       <div className="text-xl font-medium">
@@ -34,48 +84,19 @@ function MainSprint({
 
         {/* collaborators */}
         <div className="flex items-center">
-          <div className="h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-white">
-            <Image
-              src={
-                "https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100221.jpg?t=st=1728226717~exp=1728230317~hmac=5dd08cd2edd78cb6c4c62b2a20d99b65dbac5e8cd34458400ba17be07ab43a3a&w=740"
-              }
-              width={30}
-              height={30}
-              alt="user avatar"
-            />
-          </div>
-
-          <div className="-ml-1.5 h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-white">
-            <Image
-              src={
-                "https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100259.jpg?t=st=1728226738~exp=1728230338~hmac=64e266e595f08f4a90b8451a545d8064d3906e705e77cedfeb771fdd84909f62&w=740"
-              }
-              width={30}
-              height={30}
-              alt="user avatar"
-            />
-          </div>
-          <div className="-ml-1.5 h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-white">
-            <Image
-              src={
-                "https://img.freepik.com/free-photo/androgynous-avatar-non-binary-queer-person_23-2151100278.jpg?t=st=1728226753~exp=1728230353~hmac=8d7b0bf2092a4ea9ad61543577f4801206bc55f85c1a2b49095b9227d1e59f74&w=740"
-              }
-              width={30}
-              height={30}
-              alt="user avatar"
-            />
-          </div>
-          <div className="-ml-1.5 h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-white">
-            <Image
-              src={
-                "https://img.freepik.com/free-photo/view-three-dimensional-cartoon-animated-bird_23-2150946553.jpg?t=st=1728226863~exp=1728230463~hmac=91330683503be23192daed58a25bfae4649c2b7e5b9ae242e98e791d49d0890e&w=740"
-              }
-              width={30}
-              className="object-contain"
-              height={30}
-              alt="user avatar"
-            />
-          </div>
+          {collaborators?.map((collaborator, index) => (
+            <div
+              key={index}
+              className="h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-white"
+            >
+              <Image
+                src={collaborator.picture}
+                width={34}
+                height={34}
+                alt={collaborator.fullName}
+              />
+            </div>
+          ))}
         </div>
 
         {/* only my issues */}
@@ -93,7 +114,7 @@ function MainSprint({
         </div>
       </div>
 
-      <KanbanSpritBoard />
+      <KanbanSpritBoard data={data} setData={setData} />
       <CreateIssue open={open} setOpen={setOpen} />
     </section>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   Dialog,
@@ -27,9 +27,17 @@ import { db } from "@/config/firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
 import { issueDataType, listType } from "@/types/type";
+import Image from "next/image";
 
 // Dynamically import ReactQuill to avoid server-side rendering issues
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+export interface Collaborator {
+  id: string;
+  fullName: string;
+  picture: string;
+  email: string;
+}
 
 function CreateIssue({
   open,
@@ -44,12 +52,36 @@ function CreateIssue({
     description: "",
     issueType: "",
     shortSummary: "",
-    reporter: [],
+    reporter: {
+      id: "",
+      fullName: "",
+      picture: "",
+      email: "",
+    },
     assignees: [],
     priority: "",
     comments: [],
     status: "backlog",
   });
+  const [collaborators, setCollaborators] = useState<
+    Collaborator[] | undefined
+  >([]);
+
+  useEffect(() => {
+    function findCollaborators() {
+      const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setCollaborators(data?.collaborators);
+        } else {
+          console.log("No such document!");
+        }
+      });
+    }
+
+    findCollaborators();
+  }, [sprintId]);
 
   // Handle change for single selection
   const handleChange = (key: string, value: string) => {
@@ -57,21 +89,6 @@ function CreateIssue({
       ...prevState,
       [key]: value,
     }));
-  };
-
-  // Handle change for multi-select (pushing values into an array)
-  const handleMultiSelect = (key: string, value: string) => {
-    setIssueData((prevState) => {
-      const selectedValues = prevState[key as keyof issueDataType] as string[];
-      const newValues = selectedValues.includes(value)
-        ? selectedValues.filter((item) => item !== value) // Remove if already selected
-        : [...selectedValues, value]; // Add if not selected
-
-      return {
-        ...prevState,
-        [key]: newValues,
-      };
-    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,9 +101,8 @@ function CreateIssue({
       if (docSnapshot.exists()) {
         const currentData = docSnapshot.data();
         const existingOutput = currentData?.output || [];
-
         const updatedOutput = existingOutput.map((list: listType) => {
-          if (list.id === "e419b29e") {
+          if (list.status === "backlog") {
             return {
               ...list,
               items: [...list.items, issueData],
@@ -102,7 +118,12 @@ function CreateIssue({
           description: "",
           issueType: "",
           shortSummary: "",
-          reporter: [],
+          reporter: {
+            id: "",
+            fullName: "",
+            picture: "",
+            email: "",
+          },
           assignees: [],
           priority: "",
           comments: [],
@@ -117,8 +138,6 @@ function CreateIssue({
       console.error("Error updating Firestore with new card:", error);
     }
   };
-
-  console.log(issueData);
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -237,18 +256,41 @@ function CreateIssue({
                 Reporter
               </p>
               <Select
-                onValueChange={(value) => handleMultiSelect("reporter", value)}
+                onValueChange={(value) => {
+                  const selectedReporter = collaborators?.find(
+                    (collaborator) => collaborator.fullName === value,
+                  );
+                  if (selectedReporter) {
+                    setIssueData({ ...issueData, reporter: selectedReporter });
+                  }
+                }}
               >
                 <SelectTrigger className="mt-2 w-full rounded-md border bg-gray-100 focus:ring-0 dark:border-gray-600 dark:bg-[#1f1f1f]">
-                  <SelectValue placeholder="Select reporter(s)" />
+                  <SelectValue placeholder="Select reporter" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="me">Me</SelectItem>
-                  <SelectItem value="someone">Someone else</SelectItem>
+                  {collaborators?.length &&
+                    collaborators.map((collaborator) => (
+                      <SelectItem
+                        key={collaborator.id}
+                        value={collaborator?.fullName}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Image
+                            width={24}
+                            height={24}
+                            src={collaborator?.picture}
+                            alt={collaborator?.fullName}
+                            className="h-6 w-6 rounded-full"
+                          />
+                          <span>{collaborator?.fullName}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <p className="mt-1 text-xs text-gray-500">
-                Current reporters: {issueData?.reporter?.join(", ")}
+                Current reporters: {issueData?.reporter.fullName}
               </p>
             </div>
 
@@ -258,18 +300,47 @@ function CreateIssue({
                 Assignees
               </p>
               <Select
-                onValueChange={(value) => handleMultiSelect("assignees", value)}
+                onValueChange={(value) => {
+                  const selectedAssignee = collaborators?.find(
+                    (collaborator) => collaborator.fullName === value,
+                  );
+                  if (selectedAssignee) {
+                    setIssueData((prevState) => ({
+                      ...prevState,
+                      assignees: [...prevState.assignees, selectedAssignee],
+                    }));
+                  }
+                }}
               >
                 <SelectTrigger className="mt-2 w-full rounded-md border bg-gray-100 focus:ring-0 dark:border-gray-600 dark:bg-[#1f1f1f]">
                   <SelectValue placeholder="Select assignees" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="me">Me</SelectItem>
-                  <SelectItem value="someone">Someone else</SelectItem>
+                  {collaborators?.length &&
+                    collaborators.map((collaborator) => (
+                      <SelectItem
+                        key={collaborator.id}
+                        value={collaborator?.fullName}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Image
+                            width={24}
+                            height={24}
+                            src={collaborator?.picture}
+                            alt={collaborator?.fullName}
+                            className="h-6 w-6 rounded-full"
+                          />
+                          <span>{collaborator?.fullName}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <p className="mt-1 text-xs text-gray-500">
-                Current assignees: {issueData?.assignees?.join(", ")}
+                Current assignees:{" "}
+                {issueData?.assignees
+                  .map((assignee) => assignee.fullName)
+                  .join(", ")}
               </p>
             </div>
 

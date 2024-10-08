@@ -28,9 +28,9 @@ const issueTypeIcons: { [key: string]: JSX.Element } = {
 
 export interface IssueData {
   status: "backlog" | "selected for development" | "in progress" | "done";
-  assignees: { fullName: string; imageUrl: string }[];
+  assignees: { fullName: string; picture: string; id: string; email: string }[];
   priority: { label: string; color: string };
-  reporter: { fullName: string; imageUrl: string };
+  reporter: { fullName: string; picture: string; id: string; email: string };
 }
 
 export interface ShowState {
@@ -55,15 +55,12 @@ function IssueDetails({
 
   const [issueData, setIssueData] = useState<IssueData>({
     status: item.status,
-    assignees: [],
+    assignees: item.assignees,
     priority: {
       label: "Urgent",
       color: "bg-purple-500",
     },
-    reporter: {
-      fullName: "Jane Smith",
-      imageUrl: "https://randomuser.me/api/portraits/women/2.jpg",
-    },
+    reporter: item.reporter,
   });
 
   const [show, setShow] = useState<ShowState>({
@@ -351,7 +348,7 @@ function IssueDetails({
                               key={index}
                               width={24}
                               height={24}
-                              src={assignee.imageUrl}
+                              src={assignee.picture}
                               alt="profile"
                               className="rounded-full"
                             />
@@ -432,7 +429,7 @@ function IssueDetails({
                         <Image
                           width={24}
                           height={24}
-                          src={issueData.reporter.imageUrl}
+                          src={issueData.reporter.picture}
                           alt="profile"
                           className="rounded-full"
                         />
