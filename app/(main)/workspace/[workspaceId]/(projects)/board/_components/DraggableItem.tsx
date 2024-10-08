@@ -1,7 +1,6 @@
 import { Draggable } from "@hello-pangea/dnd";
 import CardItem from "./CardItem";
-import { BoardSliceType, ItemType } from "@/lib/redux/boardSlice";
-import { listType } from "@/types/type";
+import { ItemType, listType } from "@/types/type";
 import { Dispatch, SetStateAction } from "react";
 
 function DraggableItem({

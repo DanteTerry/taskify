@@ -2,14 +2,13 @@
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Bell, Pencil, Trash2 } from "lucide-react";
-import { ItemType } from "@/lib/redux/boardSlice";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import { db } from "@/config/firebaseConfig";
 import { Dispatch, SetStateAction, useState } from "react";
 import CardEdit from "@/app/(main)/_components/CardEdit";
 import { toast } from "sonner";
-import { listType } from "@/types/type";
+import { ItemType, listType } from "@/types/type";
 
 function CardItem({
   item,

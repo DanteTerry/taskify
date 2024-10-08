@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { PriorityType } from "@/lib/redux/boardSlice";
+import { PriorityType } from "@/types/type";
 
 function PriorityPicker({
   priority,

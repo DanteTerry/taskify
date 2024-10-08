@@ -75,3 +75,10 @@ export type ItemType = {
   priority: PriorityType;
   deadLine: string | undefined;
 };
+
+
+// priority type
+export interface PriorityType {
+  color: string;
+  priority: string;
+}

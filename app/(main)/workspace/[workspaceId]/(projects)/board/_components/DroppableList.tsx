@@ -1,8 +1,7 @@
 import { Droppable } from "@hello-pangea/dnd";
 import DraggableItem from "./DraggableItem";
-import { ItemType } from "@/lib/redux/boardSlice";
 import { Dispatch, SetStateAction } from "react";
-import { listType } from "@/types/type";
+import { ItemType, listType } from "@/types/type";
 
 function DroppableList({
   data,

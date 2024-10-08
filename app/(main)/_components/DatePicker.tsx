@@ -8,13 +8,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Dispatch, SetStateAction } from "react";
 
 function DatePicker({
-  deadLine,
-  setDeadLine,
+  date,
+  setDate,
 }: {
-  deadLine: Date;
-  setDeadLine: any;
+  date: Date | undefined;
+  setDate: Dispatch<SetStateAction<Date | undefined>>;
 }) {
   return (
     <div className="flex w-full flex-col items-start gap-2">
@@ -26,18 +27,18 @@ function DatePicker({
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal",
-                !deadLine && "text-muted-foreground",
+                !date && "text-muted-foreground",
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {deadLine ? format(deadLine, "PPP") : <span>Pick a date</span>}
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-full p-0" align="start">
             <Calendar
               mode="single"
-              selected={deadLine}
-              onSelect={setDeadLine}
+              selected={date}
+              onSelect={setDate}
               initialFocus
             />
           </PopoverContent>

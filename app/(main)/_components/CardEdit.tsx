@@ -4,13 +4,12 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import PriorityPicker from "./PriorityPicker";
 import DatePicker from "./DatePicker";
-import { AddCardTpe } from "@/types/type";
+import { AddCardTpe, ItemType, PriorityType } from "@/types/type";
 import { AddCardSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { v4 as uuidv4 } from "uuid";
 import { useForm } from "react-hook-form";
-import { ItemType, PriorityType } from "@/lib/redux/boardSlice";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { setDate } from "date-fns";
 
 function CardEdit({
   setShow,
@@ -23,7 +22,7 @@ function CardEdit({
   item: ItemType;
   getCardData: (data: ItemType) => void;
 }) {
-  const [deadLine, setDeadLine] = useState<Date | undefined>();
+  const [date, setDate] = useState<Date>();
   const [priority, setPriority] = useState<PriorityType>({
     color: "gray",
     priority: "Without",
@@ -45,12 +44,12 @@ function CardEdit({
       title: cardTitle,
       description: cardDescription,
       priority,
-      deadLine: deadLine?.toLocaleDateString(),
+      deadLine: date?.toLocaleDateString(),
     };
 
     getCardData(itemData);
     reset();
-    setDeadLine(undefined);
+    setDate(undefined);
     setPriority({
       color: "gray",
       priority: "Without",
@@ -60,7 +59,7 @@ function CardEdit({
   };
 
   useEffect(() => {
-    setDeadLine(item?.deadLine ? new Date(item.deadLine) : undefined);
+    setDate(item?.deadLine ? new Date(item.deadLine) : undefined);
     setPriority(item.priority);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,10 +114,7 @@ function CardEdit({
               <PriorityPicker setPriority={setPriority} priority={priority} />
 
               {/* date picker for card */}
-              <DatePicker
-                deadLine={deadLine as Date}
-                setDeadLine={setDeadLine}
-              />
+              <DatePicker date={date} setDate={setDate} />
 
               {/* button to add card  */}
               <button
