@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { issueDataType } from "@/types/type";
 import { useUser } from "@clerk/nextjs";
-import { ChevronDown, Timer, Trash2, X } from "lucide-react";
+import { ChevronDown, Plus, Timer, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -17,7 +17,6 @@ import ReactQuill from "react-quill";
 import { Separator } from "@/components/ui/separator";
 import CustomSelect from "@/components/UIComponents/CustomSelect";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import CustomPopOver from "@/components/UIComponents/CustomPopOver";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -57,8 +56,14 @@ function IssueDetails({
   const [issueData, setIssueData] = useState<IssueData>({
     status: item.status,
     assignees: [],
-    priority: { label: "", color: "" },
-    reporter: { fullName: "", imageUrl: "" },
+    priority: {
+      label: "Urgent",
+      color: "bg-purple-500",
+    },
+    reporter: {
+      fullName: "Jane Smith",
+      imageUrl: "https://randomuser.me/api/portraits/women/2.jpg",
+    },
   });
 
   const [show, setShow] = useState<ShowState>({
@@ -322,16 +327,65 @@ function IssueDetails({
                     },
                   ]}
                 >
-                  <Button
-                    onClick={() => handleToggle("assignees")}
-                    variant="outline"
-                    className="flex w-max items-center justify-between"
-                  >
-                    <span className="text-sm font-medium">
-                      {issueData.assignees[0]?.fullName || "Unassigned"}
-                    </span>
-                    <ChevronDown size={16} />
-                  </Button>
+                  <div className="">
+                    {issueData.assignees.length === 0 && (
+                      <Button
+                        onClick={() => handleToggle("assignees")}
+                        variant="ghost"
+                        className="flex w-max items-center justify-between px-2"
+                      >
+                        <span className="text-sm font-medium">
+                          {"Unassigned"}
+                        </span>
+                      </Button>
+                    )}
+
+                    {issueData.assignees.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1">
+                        {issueData.assignees.map((assignee, index) => (
+                          <div
+                            className="flex items-center gap-2 rounded-md bg-gray-200 p-1 shadow-sm"
+                            key={index}
+                          >
+                            <Image
+                              key={index}
+                              width={24}
+                              height={24}
+                              src={assignee.imageUrl}
+                              alt="profile"
+                              className="rounded-full"
+                            />
+
+                            <span className="text-xs font-medium text-gray-700">
+                              {assignee.fullName}
+                            </span>
+
+                            <button
+                              className="p-0.5 text-gray-500 hover:text-red-500"
+                              onClick={() => {
+                                setIssueData((prevIssueData) => ({
+                                  ...prevIssueData,
+                                  assignees: prevIssueData.assignees.filter(
+                                    (_, i) => i !== index,
+                                  ),
+                                }));
+                              }}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ))}
+
+                        <Button
+                          onClick={() => handleToggle("assignees")}
+                          variant="ghost"
+                          className="flex w-max items-center justify-between px-2 text-gray-500 hover:text-blue-500"
+                        >
+                          <Plus size={20} />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </CustomSelect>
 
                 {/* reporter */}
@@ -371,12 +425,23 @@ function IssueDetails({
                   <Button
                     onClick={() => handleToggle("reporter")}
                     variant="outline"
-                    className="flex w-max items-center justify-between"
+                    className="flex w-max items-center justify-between gap-2 bg-gray-200 px-1 hover:bg-gray-200"
                   >
-                    <span className="text-sm font-medium">
-                      {issueData?.reporter?.fullName}
-                    </span>
-                    <ChevronDown size={16} />
+                    {issueData.reporter && (
+                      <>
+                        <Image
+                          width={24}
+                          height={24}
+                          src={issueData.reporter.imageUrl}
+                          alt="profile"
+                          className="rounded-full"
+                        />
+
+                        <span className="text-xs font-medium text-gray-700">
+                          {issueData.reporter.fullName}
+                        </span>
+                      </>
+                    )}
                   </Button>
                 </CustomSelect>
 
@@ -411,12 +476,18 @@ function IssueDetails({
                   <Button
                     onClick={() => handleToggle("priority")}
                     variant="outline"
-                    className="flex w-max items-center justify-between"
+                    className="flex w-max items-center justify-between gap-2 bg-gray-200 px-1 hover:bg-slate-200"
                   >
-                    <span className="text-sm font-medium">
-                      {issueData.priority.label}
-                    </span>
-                    <ChevronDown size={16} />
+                    {issueData.priority && (
+                      <>
+                        <span
+                          className={`h-3 w-3 rounded-full ${issueData.priority.color}`}
+                        ></span>
+                        <span className="text-xs font-medium text-gray-700">
+                          {issueData.priority.label}
+                        </span>
+                      </>
+                    )}
                   </Button>
                 </CustomSelect>
 

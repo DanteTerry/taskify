@@ -35,7 +35,7 @@ function CustomSelect({
       >
         {type}
       </label>
-      {children}
+      <div className="flex flex-wrap items-center gap-2">{children}</div>
       {show[type as keyof ShowState] && (
         <>
           {type === "status" && (
@@ -102,7 +102,11 @@ function CustomSelect({
                       onClick={() => {
                         setIssueData({
                           ...issueData,
-                          assignees: [...issueData.assignees, item],
+                          assignees: issueData.assignees.some(
+                            (assignee: any) => assignee.id === item.id,
+                          )
+                            ? issueData.assignees
+                            : [...issueData.assignees, item],
                         });
                         handleClose();
                       }}
@@ -118,7 +122,7 @@ function CustomSelect({
                           alt={item.fullName}
                           className="rounded-full"
                         />
-                        <span className="text-sm font-medium">
+                        <span className="text-xs font-medium">
                           {item.fullName}
                         </span>
                       </div>
