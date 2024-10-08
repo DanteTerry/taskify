@@ -1,17 +1,13 @@
-import { Droppable } from "@hello-pangea/dnd";
-import { Dispatch, SetStateAction } from "react";
-import { issueDataType, issueType } from "@/types/type";
+import { Droppable } from "@hello-pangea/dnd"; // This is the correct import, ignore the spell check warning
+import { issueDataType } from "@/types/type";
 import SprintDraggableItem from "./SprintDraggableItem";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
+import { SprintOutput } from "@/lib/redux/sprintSlice";
 
-function SprintDroppableList({
-  data,
-  setData,
-}: {
-  data: any;
-  setData: Dispatch<SetStateAction<issueType[] | undefined>>;
-}) {
+function SprintDroppableList({ data }: { data: SprintOutput }) {
   return (
-    <Droppable droppableId={data.id}>
+    <Droppable droppableId={data.id.toString()}>
       {(provided, snapshot) => (
         <div
           className="flex flex-col gap-3 py-3"
@@ -27,13 +23,7 @@ function SprintDroppableList({
           {data.items &&
             data.items.map((item: issueDataType, index: number) => {
               return (
-                <SprintDraggableItem
-                  setData={setData}
-                  data={data}
-                  key={index}
-                  item={item}
-                  index={index}
-                />
+                <SprintDraggableItem key={item.id} item={item} index={index} />
               );
             })}
           {provided.placeholder}

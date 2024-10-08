@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { issueDataType, issueType, listType } from "@/types/type";
+import { issueDataType } from "@/types/type";
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -26,14 +26,9 @@ const priorityStyles: { [key: string]: { color: string; label: string } } = {
   urgent: { color: "bg-purple-500", label: "Urgent" },
 };
 
-function SprintDragItem({
-  item,
-  data,
-}: {
-  item: issueDataType;
-  data: issueType;
-}) {
+function SprintDragItem({ item }: { item: issueDataType }) {
   const [open, setOpen] = useState(false);
+  console.log(item);
   return (
     <div
       onClick={() => setOpen(true)}

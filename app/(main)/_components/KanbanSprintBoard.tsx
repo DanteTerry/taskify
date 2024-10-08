@@ -1,22 +1,22 @@
 "use client";
 import { db } from "@/config/firebaseConfig";
-import { issueType, listType } from "@/types/type";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { doc, updateDoc } from "firebase/firestore";
 import { useParams } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
 import SprintDroppableList from "./SprintDroppableList";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/lib/redux/store";
+import { setOutput } from "@/lib/redux/sprintSlice";
 
-function KanbanSprintBoard({
-  data,
-  setData,
-}: {
-  data: issueType[] | undefined;
-  setData: Dispatch<SetStateAction<issueType[] | undefined>>;
-}) {
+function KanbanSprintBoard() {
   const { sprintId } = useParams();
+
+  const data = useSelector((state: RootState) => state.sprint.output);
+
+  const dispatch = useDispatch<AppDispatch>();
+
   // Handle dragging and dropping items between lists
-  const ondragend = async (result: DropResult) => {
+  const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
     // If no destination, return
@@ -58,7 +58,7 @@ function KanbanSprintBoard({
       };
 
       // Update the state
-      setData(updatedData);
+      dispatch(setOutput(updatedData));
 
       // Update the database
       const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
@@ -86,11 +86,18 @@ function KanbanSprintBoard({
     // Remove the item from the source list
     const [movedItem] = sourceItems.splice(source.index, 1);
 
-    // Change the status of the moved item to the destination list's status
-    movedItem.status = destinationList.status;
+    // Clone the moved item to avoid modifying the original object
+    const updatedMovedItem = {
+      ...movedItem,
+      status: destinationList.status as
+        | "backlog"
+        | "selected for development"
+        | "in progress"
+        | "done",
+    };
 
     // Add the item to the destination list
-    destinationItems.splice(destination.index, 0, movedItem);
+    destinationItems.splice(destination.index, 0, updatedMovedItem);
 
     // Update the lists
     const updatedData = [...data];
@@ -104,7 +111,7 @@ function KanbanSprintBoard({
     };
 
     // Update the state
-    setData(updatedData);
+    dispatch(setOutput(updatedData));
 
     // Update the database
     const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
@@ -115,7 +122,7 @@ function KanbanSprintBoard({
 
   return (
     <div className="h-full w-full">
-      <DragDropContext onDragEnd={ondragend}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-4 gap-3">
           {data &&
             data.map((data, index) => (
@@ -139,11 +146,7 @@ function KanbanSprintBoard({
                   </div>
 
                   {/* Render droppable items */}
-                  <SprintDroppableList
-                    setData={setData}
-                    key={data.id}
-                    data={data}
-                  />
+                  <SprintDroppableList data={data} key={data.id} />
                 </div>
               </div>
             ))}

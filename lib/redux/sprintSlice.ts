@@ -1,24 +1,39 @@
 import { db } from "@/config/firebaseConfig";
-import { issueDataType } from "@/types/type";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { doc, onSnapshot } from "firebase/firestore";
 
+export interface Collaborator {
+  id: string;
+  fullName: string;
+  email: string;
+  picture: string;
+}
+
+interface issueDataType {
+  description: string;
+  issueType: string;
+  shortSummary: string;
+  reporter: Collaborator;
+  assignees: Collaborator[];
+  priority: string;
+  comments: string[];
+  status: "backlog" | "selected for development" | "in progress" | "done";
+  id: string;
+}
+
+export interface SprintOutput {
+  id: string;
+  status: string;
+  items: issueDataType[];
+}
+
 export interface SprintState {
-  collaborators: {
-    id: string;
-    fullName: string;
-    email: string;
-    picture: string;
-  }[];
-  output: {
-    id: string;
-    status: string;
-    items: issueDataType[];
-  }[];
+  collaborators: Collaborator[];
+  output: SprintOutput[];
 }
 
 // Initial state: Collaborators and output data
-const initialState = {
+const initialState: SprintState = {
   collaborators: [],
   output: [],
 };
@@ -36,9 +51,10 @@ export const fetchSprintDocumentOutput = createAsyncThunk(
       docRef,
       (docSnap) => {
         if (docSnap.exists()) {
+          const data = docSnap.data();
           // Dispatch actions to update store
-          dispatch(setCollaborators(docSnap.data().collaborators));
-          dispatch(setOutput(docSnap.data().output));
+          dispatch(setCollaborators(data.collaborators));
+          dispatch(setOutput(data.output));
         } else {
           console.log("No such document!");
         }
@@ -56,11 +72,11 @@ const sprintSlice = createSlice({
   initialState,
   reducers: {
     // Update collaborators in state
-    setCollaborators: (state, action) => {
+    setCollaborators: (state, action: PayloadAction<Collaborator[]>) => {
       state.collaborators = action.payload;
     },
     // Update sprint output data in state
-    setOutput: (state, action) => {
+    setOutput: (state, action: PayloadAction<SprintOutput[]>) => {
       state.output = action.payload;
     },
   },

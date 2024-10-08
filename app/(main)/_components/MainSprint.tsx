@@ -2,14 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import KanbanSpritBoard from "./KanbanSprintBoard";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import CreateIssue, { Collaborator } from "./CreateIssue";
 import { useParams } from "next/navigation";
-import { issueType, listType } from "@/types/type";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "@/config/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "@/lib/redux/store"; // Import the AppDispatch type
+import type { AppDispatch, RootState } from "@/lib/redux/store";
 import { fetchSprintDocumentOutput } from "@/lib/redux/sprintSlice";
 
 function MainSprint({
@@ -20,43 +17,11 @@ function MainSprint({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { sprintId } = useParams();
-  const dispatch = useDispatch<AppDispatch>(); // Use the AppDispatch type
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [data, setData] = useState<issueType[] | undefined>(undefined);
-
-  const [collaborators, setCollaborators] = useState<
-    Collaborator[] | undefined
-  >([]);
-
-  const output = useSelector((state: RootState) => state.sprint.output);
-  const collaborator = useSelector(
+  const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );
-
-  console.log(output, data);
-
-  useEffect(() => {
-    if (sprintId) {
-      const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
-
-      const unsubscribe = onSnapshot(
-        docRef,
-        (docSnap) => {
-          if (docSnap.exists()) {
-            setCollaborators(docSnap.data().collaborators);
-            setData(docSnap.data().output);
-          } else {
-            console.log("No such document!");
-          }
-        },
-        (error) => {
-          console.error("Error getting real-time updates:", error);
-        },
-      );
-
-      return () => unsubscribe();
-    }
-  }, [sprintId]);
 
   useEffect(() => {
     dispatch(fetchSprintDocumentOutput(sprintId as string));
@@ -84,7 +49,7 @@ function MainSprint({
 
         {/* collaborators */}
         <div className="flex items-center">
-          {collaborators?.map((collaborator, index) => (
+          {collaborators?.map((collaborator: Collaborator, index) => (
             <div
               key={index}
               className="h-[30px] w-[30px] overflow-hidden rounded-full border-2 border-white"
@@ -114,7 +79,7 @@ function MainSprint({
         </div>
       </div>
 
-      <KanbanSpritBoard data={data} setData={setData} />
+      <KanbanSpritBoard />
       <CreateIssue open={open} setOpen={setOpen} />
     </section>
   );
