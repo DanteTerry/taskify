@@ -9,7 +9,6 @@ import { AddCardSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { setDate } from "date-fns";
 
 function CardEdit({
   setShow,
@@ -30,7 +29,7 @@ function CardEdit({
 
   const {
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
     handleSubmit,
   } = useForm<AddCardTpe>({
@@ -61,8 +60,7 @@ function CardEdit({
   useEffect(() => {
     setDate(item?.deadLine ? new Date(item.deadLine) : undefined);
     setPriority(item.priority);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [item]);
 
   return (
     <div className="mt-2">

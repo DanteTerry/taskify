@@ -64,14 +64,12 @@ export default function RootLayout({
         className={`${caveat.variable} dark ${inter.variable} h-full font-poppins ${dancingScript.variable} ${spaceSpace_Grotesk.variable} ${poppins.variable} `}
         suppressHydrationWarning={true}
       >
-        <DarkModeProvider>
-          <ClerkProvider>
-            <GlobalStateProvider>
-              {children}
-              <Toaster />
-            </GlobalStateProvider>
-          </ClerkProvider>
-        </DarkModeProvider>
+        <ClerkProvider>
+          <GlobalStateProvider>
+            {children}
+            <Toaster />
+          </GlobalStateProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

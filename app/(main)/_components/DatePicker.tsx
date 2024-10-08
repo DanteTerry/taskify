@@ -21,7 +21,7 @@ function DatePicker({
     <div className="flex w-full flex-col items-start gap-2">
       <span>Deadline</span>
       <div className="mx-auto flex w-full flex-wrap gap-1">
-        <Popover>
+        <Popover modal={true}>
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
@@ -38,7 +38,11 @@ function DatePicker({
             <Calendar
               mode="single"
               selected={date}
-              onSelect={setDate}
+              onSelect={(selectedDate) => {
+                if (selectedDate) {
+                  setDate(selectedDate);
+                }
+              }}
               initialFocus
             />
           </PopoverContent>
