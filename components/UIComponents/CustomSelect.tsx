@@ -93,7 +93,6 @@ function CustomSelect({
         // Update the Firestore database
         try {
           await updateDoc(docRef, { output: updatedOutput });
-          console.log("Firestore updated successfully.");
         } catch (error) {
           console.error("Error updating Firestore:", error);
         }

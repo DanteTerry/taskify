@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Timer, X } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { IssueData } from "./IssueDetails";
 import { Progress } from "@/components/ui/progress";
 
@@ -22,13 +22,15 @@ function EstimatedTimeSetter({
   issueData: IssueData;
   setIssueData: Dispatch<SetStateAction<IssueData>>;
 }) {
-  // Ensure remainingTime is set to estimatedTime when both are 0
-  if (issueData.loggedTime === 0 && issueData.remainingTime === 0) {
-    setIssueData((prev) => ({
-      ...prev,
-      remainingTime: prev.estimatedTime,
-    }));
-  }
+  // Update remainingTime when both loggedTime and remainingTime are 0
+  useEffect(() => {
+    if (issueData.loggedTime === 0 && issueData.remainingTime === 0) {
+      setIssueData((prev) => ({
+        ...prev,
+        remainingTime: prev.estimatedTime,
+      }));
+    }
+  }, [issueData.loggedTime, issueData.remainingTime, setIssueData]);
 
   // Handlers for updating logged and remaining times
   const handleLoggedTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {

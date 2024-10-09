@@ -29,6 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -116,6 +117,7 @@ function IssueDetails({
         <DialogContent className="h-[92vh] max-w-[1040px] overflow-y-auto rounded-lg border border-gray-200 shadow-lg dark:border-gray-700">
           <DialogHeader className="h-full w-full">
             <ScrollArea className="h-full w-full">
+              <DialogTitle></DialogTitle>
               <div className="flex w-full items-center justify-between">
                 <Button
                   variant={"ghost"}
@@ -146,9 +148,10 @@ function IssueDetails({
 
               {/* title */}
               <div className="flex gap-10">
-                <div className="flex w-[600px] flex-col gap-5">
+                <div className="flex w-[600px] flex-col gap-3">
                   <textarea
                     value={currentItem.shortSummary || ""}
+                    onChange={(e) => console.log(e.target.value)}
                     className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                     required
                     rows={
@@ -490,6 +493,7 @@ function IssueDetails({
                     <input
                       value={issueData.estimatedTime}
                       type="number"
+                      onChange={(e) => console.log(e.target.value)}
                       className="mt-1 w-full resize-none rounded-md border-2 border-transparent px-1 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                       required
                     />
