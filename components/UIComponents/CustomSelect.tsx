@@ -3,6 +3,15 @@ import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import { IssueData, ShowState } from "@/app/(main)/_components/IssueDetails";
 import { getPriorityColor } from "@/utils/sprintUtil";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
 
 function CustomSelect({
   setIssueData,

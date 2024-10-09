@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { issueDataType } from "@/types/type";
 import { useUser } from "@clerk/nextjs";
-import { Plus, Timer, Trash2, X } from "lucide-react";
+import { CalendarIcon, Plus, Timer, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -21,6 +21,14 @@ import { getIssueColor, getPriorityColor } from "@/utils/sprintUtil";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import EstimatedTimeSetter from "./EstimatedTimeSetter";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -36,7 +44,7 @@ export interface IssueData {
   priority: string;
   reporter: { fullName: string; picture: string; id: string; email: string };
   estimatedTime: number;
-  deadLine: string;
+  deadLine: Date | undefined;
   loggedTime: number;
   remainingTime: number;
 }
@@ -46,6 +54,7 @@ export interface ShowState {
   assignees: boolean;
   priority: boolean;
   reporter: boolean;
+  deadline: boolean;
 }
 
 function IssueDetails({
@@ -73,7 +82,7 @@ function IssueDetails({
     priority: item.priority,
     reporter: item.reporter,
     estimatedTime: item.estimatedTime,
-    deadLine: item.deadLine,
+    deadLine: item?.deadLine ? new Date(item.deadLine) : undefined,
     loggedTime: 0,
     remainingTime: 0,
   });
@@ -83,6 +92,7 @@ function IssueDetails({
     assignees: false,
     priority: false,
     reporter: false,
+    deadline: false,
   });
 
   const handleToggle = (type: keyof ShowState) => {
@@ -101,7 +111,7 @@ function IssueDetails({
   return (
     <div>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className="max-h-[90vh] max-w-[1040px] overflow-y-auto rounded-lg border border-gray-200 shadow-lg dark:border-gray-700">
+        <DialogContent className="h-[92vh] max-w-[1040px] overflow-y-auto rounded-lg border border-gray-200 shadow-lg dark:border-gray-700">
           <DialogHeader className="h-full w-full">
             <ScrollArea className="h-full w-full">
               <div className="flex w-full items-center justify-between">
@@ -287,7 +297,7 @@ function IssueDetails({
                     {" "}
                     <Button
                       onClick={() => handleToggle("status")}
-                      variant="outline"
+                      variant="ghost"
                       className={`hover:${getIssueColor(issueData.status)} flex w-max items-center justify-between text-white hover:text-white ${getIssueColor(issueData.status)}`}
                     >
                       <span className="text-sm font-medium uppercase">
@@ -322,7 +332,7 @@ function IssueDetails({
                         <div className="flex flex-wrap items-center gap-1">
                           {issueData.assignees.map((assignee, index) => (
                             <div
-                              className="flex items-center gap-2 rounded-md bg-gray-200 p-1 shadow-sm"
+                              className="flex items-center gap-2 rounded-md bg-gray-100 p-1 shadow-sm"
                               key={index}
                             >
                               <Image
@@ -379,8 +389,8 @@ function IssueDetails({
                     {" "}
                     <Button
                       onClick={() => handleToggle("reporter")}
-                      variant="outline"
-                      className="flex w-max items-center justify-between gap-2 bg-gray-200 px-1 hover:bg-gray-200"
+                      variant="ghost"
+                      className="flex w-max items-center justify-between gap-2 bg-gray-100 px-1 hover:bg-gray-100"
                     >
                       {issueData.reporter && (
                         <>
@@ -414,7 +424,7 @@ function IssueDetails({
                     <Button
                       onClick={() => handleToggle("priority")}
                       variant="outline"
-                      className="flex w-max items-center justify-between gap-2 bg-gray-200 px-1 hover:bg-slate-200"
+                      className="hover:gray-100 flex w-max items-center justify-between gap-2 bg-gray-100 px-1"
                     >
                       {issueData.priority && (
                         <>
@@ -428,6 +438,47 @@ function IssueDetails({
                       )}
                     </Button>
                   </CustomSelect>
+
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xs font-bold uppercase text-gray-600">
+                      deadline
+                    </p>
+                    <div className="flex w-max flex-wrap gap-1">
+                      <Popover modal={true}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start bg-gray-100 text-left font-normal",
+                              !issueData.deadLine && "text-muted-foreground",
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {issueData.deadLine ? (
+                              format(issueData.deadLine, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={issueData.deadLine}
+                            onSelect={(selectedDate) => {
+                              if (selectedDate) {
+                                setIssueData({
+                                  ...issueData,
+                                  deadLine: selectedDate,
+                                });
+                              }
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
 
                   {/* original  estimated  (hours) */}
                   <div>

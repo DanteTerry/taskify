@@ -66,9 +66,10 @@ export interface issueDataType {
   status: "backlog" | "selected for development" | "in progress" | "done";
   id: string;
   estimatedTime: number;
-  deadLine: string;
+  deadLine: Date;
   loggedTime: number;
   remainingTime: number;
+  createdAt: string;
 }
 
 // board

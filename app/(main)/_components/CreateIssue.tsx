@@ -28,6 +28,17 @@ import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
 import { issueDataType, listType } from "@/types/type";
 import Image from "next/image";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 // Dynamically import ReactQuill to avoid server-side rendering issues
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -63,31 +74,15 @@ function CreateIssue({
     comments: [],
     status: "backlog",
     estimatedTime: 10,
-    deadLine: new Date().toLocaleDateString(),
+    deadLine: new Date(),
     loggedTime: 0,
     remainingTime: 0,
+    createdAt: new Date().toLocaleDateString(),
   });
 
-  const [collaborators, setCollaborators] = useState<
-    Collaborator[] | undefined
-  >([]);
-
-  useEffect(() => {
-    function findCollaborators() {
-      const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
-      getDoc(docRef).then((docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setCollaborators(data?.collaborators);
-        } else {
-          console.log("No such document!");
-        }
-      });
-    }
-
-    findCollaborators();
-  }, [sprintId]);
-
+  const collaborators = useSelector(
+    (state: RootState) => state.sprint.collaborators,
+  );
   // Handle change for single selection
   const handleChange = (key: string, value: string) => {
     setIssueData((prevState) => ({
@@ -110,7 +105,13 @@ function CreateIssue({
           if (list.status === "backlog") {
             return {
               ...list,
-              items: [...list.items, issueData],
+              items: [
+                ...list.items,
+                {
+                  ...issueData,
+                  deadLine: issueData.deadLine.toLocaleString(),
+                },
+              ],
             };
           }
           return list;
@@ -134,9 +135,10 @@ function CreateIssue({
           comments: [],
           status: "backlog",
           estimatedTime: 0,
-          deadLine: new Date().toLocaleDateString(),
+          deadLine: new Date(),
           loggedTime: 0,
           remainingTime: 0,
+          createdAt: new Date().toLocaleDateString(),
         });
 
         setOpen(false);
@@ -393,6 +395,49 @@ function CreateIssue({
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="flex w-full flex-col items-start gap-2">
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Deadline
+              </p>
+              <div className="mx-auto flex w-full flex-wrap gap-1">
+                <Popover modal={true}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start bg-gray-100 text-left font-normal",
+                        !issueData.deadLine && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {issueData.deadLine ? (
+                        format(issueData.deadLine, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={issueData.deadLine}
+                      onSelect={(selectedDate) => {
+                        if (selectedDate) {
+                          setIssueData({
+                            ...issueData,
+                            deadLine: selectedDate,
+                          });
+                        }
+                      }}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+
+            {/* estimated time */}
 
             <div className="flex items-center justify-end gap-5">
               <Button type="submit" className="bg-[#0052CC] hover:bg-[#154da1]">
