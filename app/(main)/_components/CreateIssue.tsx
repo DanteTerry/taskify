@@ -62,7 +62,12 @@ function CreateIssue({
     priority: "",
     comments: [],
     status: "backlog",
+    estimatedTime: 10,
+    deadLine: new Date().toLocaleDateString(),
+    loggedTime: 0,
+    remainingTime: 0,
   });
+
   const [collaborators, setCollaborators] = useState<
     Collaborator[] | undefined
   >([]);
@@ -128,6 +133,10 @@ function CreateIssue({
           priority: "",
           comments: [],
           status: "backlog",
+          estimatedTime: 0,
+          deadLine: new Date().toLocaleDateString(),
+          loggedTime: 0,
+          remainingTime: 0,
         });
 
         setOpen(false);

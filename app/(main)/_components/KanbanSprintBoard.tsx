@@ -19,10 +19,10 @@ function KanbanSprintBoard() {
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
-    // If no destination, return
+    // If no destination, return early
     if (!destination) return;
 
-    // Check if data is defined and not null
+    // Check if data is defined and is an array
     if (!data || !Array.isArray(data)) {
       console.warn("Data is undefined or not an array.");
       return;
@@ -40,7 +40,9 @@ function KanbanSprintBoard() {
     }
 
     const sourceList = data[sourceListIndex];
-    const sourceItems = Array.from(sourceList.items);
+    const sourceItems = Array.isArray(sourceList?.items)
+      ? [...sourceList.items]
+      : []; // Ensure sourceItems is an array
 
     // If the item is dropped in the same list
     if (source.droppableId === destination.droppableId) {
@@ -81,7 +83,9 @@ function KanbanSprintBoard() {
     }
 
     const destinationList = data[destinationListIndex];
-    const destinationItems = Array.from(destinationList.items);
+    const destinationItems = Array.isArray(destinationList?.items)
+      ? [...destinationList.items]
+      : []; // Ensure destinationItems is an array
 
     // Remove the item from the source list
     const [movedItem] = sourceItems.splice(source.index, 1);
@@ -141,7 +145,7 @@ function KanbanSprintBoard() {
                     />
 
                     <span className="text-sm font-bold text-gray-200">
-                      {data.items.length}
+                      {data?.items?.length}
                     </span>
                   </div>
 

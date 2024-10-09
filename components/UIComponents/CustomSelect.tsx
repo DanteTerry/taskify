@@ -2,6 +2,7 @@ import { Button } from "../ui/button";
 import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import { IssueData, ShowState } from "@/app/(main)/_components/IssueDetails";
+import { getPriorityColor } from "@/utils/sprintUtil";
 
 function CustomSelect({
   setIssueData,
@@ -102,7 +103,11 @@ function CustomSelect({
                       onClick={() => {
                         setIssueData({
                           ...issueData,
-                          assignees: [...issueData.assignees, item],
+                          assignees: issueData.assignees.some(
+                            (assignee: any) => assignee.id === item.id,
+                          )
+                            ? issueData.assignees
+                            : [...issueData.assignees, item],
                         });
                         handleClose();
                       }}
@@ -114,7 +119,7 @@ function CustomSelect({
                         <Image
                           width={24}
                           height={24}
-                          src={item.imageUrl}
+                          src={item.picture}
                           alt={item.fullName}
                           className="rounded-full"
                         />
@@ -153,7 +158,7 @@ function CustomSelect({
                         <Image
                           width={24}
                           height={24}
-                          src={item.imageUrl}
+                          src={item.picture}
                           alt={item.fullName}
                           className="rounded-full"
                         />
@@ -190,10 +195,10 @@ function CustomSelect({
                     >
                       <div className="flex items-center gap-2">
                         <span
-                          className={`h-3 w-3 rounded-full ${item.color}`}
+                          className={`h-3 w-3 rounded-full ${getPriorityColor(item)}`}
                         ></span>
-                        <span className="text-sm font-medium">
-                          {item.label}
+                        <span className="text-sm font-medium capitalize">
+                          {item}
                         </span>
                       </div>
                     </Button>

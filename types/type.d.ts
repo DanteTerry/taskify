@@ -65,6 +65,10 @@ export interface issueDataType {
   comments: string[];
   status: "backlog" | "selected for development" | "in progress" | "done";
   id: string;
+  estimatedTime: number;
+  deadLine: string;
+  loggedTime: number;
+  remainingTime: number;
 }
 
 // board
@@ -75,7 +79,6 @@ export type ItemType = {
   priority: PriorityType;
   deadLine: string | undefined;
 };
-
 
 // priority type
 export interface PriorityType {
