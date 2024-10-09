@@ -1,8 +1,6 @@
 import { Droppable } from "@hello-pangea/dnd"; // This is the correct import, ignore the spell check warning
-import { issueDataType } from "@/types/type";
 import SprintDraggableItem from "./SprintDraggableItem";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/redux/store";
+
 import { SprintOutput } from "@/lib/redux/sprintSlice";
 
 function SprintDroppableList({ data }: { data: SprintOutput }) {
@@ -21,7 +19,7 @@ function SprintDroppableList({ data }: { data: SprintOutput }) {
         >
           {/* list becomes droppable */}
           {data.items &&
-            data.items.map((item: issueDataType, index: number) => {
+            data.items.map((item: any, index: number) => {
               return (
                 <SprintDraggableItem key={item.id} item={item} index={index} />
               );

@@ -3,15 +3,11 @@ import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import { IssueData, ShowState } from "@/app/(main)/_components/IssueDetails";
 import { getPriorityColor } from "@/utils/sprintUtil";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { SprintOutput } from "@/lib/redux/sprintSlice";
+import { useParams } from "next/navigation";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { issueDataType, issueType } from "@/types/type";
 
 function CustomSelect({
   setIssueData,
@@ -35,6 +31,77 @@ function CustomSelect({
       ...prevShow,
       [type]: false,
     }));
+  };
+
+  const { sprintId } = useParams();
+
+  const handleStatusChange = async (status: string) => {
+    if (!sprintId) throw new Error("Invalid sprintId");
+
+    const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
+
+    const unsubscribe = onSnapshot(
+      docRef,
+      async (docSnap) => {
+        if (!docSnap.exists()) {
+          console.log("No such document!");
+          return;
+        }
+
+        const output = docSnap.data().output;
+        let currentOutputItemIndex: number | null = null;
+        let currentIssueItem: issueDataType | null = null;
+
+        // Find the issue in the output
+        for (let i = 0; i < output.length; i++) {
+          const itemIndex = output[i].items.findIndex(
+            (item: issueDataType) => item.id === issueData.id,
+          );
+          if (itemIndex !== -1) {
+            currentOutputItemIndex = i;
+            currentIssueItem = output[i].items[itemIndex];
+            break;
+          }
+        }
+
+        if (currentOutputItemIndex === null || !currentIssueItem) return;
+
+        // Create the updated output
+        const updatedOutput = output.map(
+          (outputItem: issueType, index: number) => {
+            if (index === currentOutputItemIndex) {
+              return {
+                ...outputItem,
+                items: outputItem.items.filter(
+                  (item) => item.id !== issueData.id,
+                ),
+              };
+            }
+            if (outputItem.status.toLowerCase() === status.toLowerCase()) {
+              return {
+                ...outputItem,
+                items: [...outputItem.items, { ...currentIssueItem, status }],
+              };
+            }
+            return outputItem;
+          },
+        );
+
+        // Unsubscribe to prevent receiving updates for this change
+        unsubscribe();
+
+        // Update the Firestore database
+        try {
+          await updateDoc(docRef, { output: updatedOutput });
+          console.log("Firestore updated successfully.");
+        } catch (error) {
+          console.error("Error updating Firestore:", error);
+        }
+      },
+      (error) => {
+        console.error("Error getting real-time updates:", error);
+      },
+    );
   };
 
   return (
@@ -77,10 +144,7 @@ function CustomSelect({
                   }
                   return (
                     <Button
-                      onClick={() => {
-                        setIssueData({ ...issueData, status: item });
-                        handleClose();
-                      }}
+                      onClick={() => handleStatusChange(item)}
                       key={index}
                       variant={"ghost"}
                       className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"

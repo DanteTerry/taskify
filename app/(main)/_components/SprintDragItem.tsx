@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { IoSparklesSharp } from "react-icons/io5";
 import IssueDetails from "./IssueDetails";
+import { SprintOutput } from "@/lib/redux/sprintSlice";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -28,7 +29,6 @@ const priorityStyles: { [key: string]: { color: string; label: string } } = {
 
 function SprintDragItem({ item }: { item: issueDataType }) {
   const [open, setOpen] = useState(false);
-  console.log(item);
   return (
     <div
       onClick={() => setOpen(true)}

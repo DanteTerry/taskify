@@ -1,9 +1,6 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { issueDataType, issueType } from "@/types/type";
-import { Dispatch, SetStateAction } from "react";
+import { issueDataType } from "@/types/type";
 import SprintDragItem from "./SprintDragItem";
-import { RootState } from "@/lib/redux/store";
-import { useSelector } from "react-redux";
 
 function SprintDraggableItem({
   item,
@@ -12,7 +9,6 @@ function SprintDraggableItem({
   item: issueDataType;
   index: number;
 }) {
-  const data = useSelector((state: RootState) => state.sprint.output);
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => (

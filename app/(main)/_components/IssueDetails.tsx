@@ -47,6 +47,7 @@ export interface IssueData {
   deadLine: Date | undefined;
   loggedTime: number;
   remainingTime: number;
+  id: string;
 }
 
 export interface ShowState {
@@ -85,6 +86,7 @@ function IssueDetails({
     deadLine: item?.deadLine ? new Date(item.deadLine) : undefined,
     loggedTime: 0,
     remainingTime: 0,
+    id: item.id,
   });
 
   const [show, setShow] = useState<ShowState>({

@@ -48,14 +48,9 @@ export type listType = {
   status?: "backlog" | "selected for development" | "in progress" | "done";
 };
 
-export interface issueType {
-  id: string;
-  items: issueDataType[];
-  status: "backlog" | "selected for development" | "in progress" | "done";
-}
-
 // sprint project types
 export interface issueDataType {
+  id: string;
   description: string;
   issueType: string;
   shortSummary: string;
@@ -64,12 +59,17 @@ export interface issueDataType {
   priority: string;
   comments: string[];
   status: "backlog" | "selected for development" | "in progress" | "done";
-  id: string;
   estimatedTime: number;
   deadLine: Date;
   loggedTime: number;
   remainingTime: number;
   createdAt: string;
+}
+
+export interface issueType {
+  id: string;
+  items: issueDataType[];
+  status: "backlog" | "selected for development" | "in progress" | "done";
 }
 
 // board
