@@ -77,7 +77,7 @@ function CreateIssue({
     deadLine: new Date(),
     loggedTime: 0,
     remainingTime: 0,
-    createdAt: new Date().toLocaleDateString(),
+    createdAt: new Date(),
   });
 
   const collaborators = useSelector(
@@ -138,7 +138,7 @@ function CreateIssue({
           deadLine: new Date(),
           loggedTime: 0,
           remainingTime: 0,
-          createdAt: new Date().toLocaleDateString(),
+          createdAt: new Date(),
         });
 
         setOpen(false);
@@ -178,7 +178,7 @@ function CreateIssue({
                 <SelectContent>
                   <SelectItem value="task">
                     <div className="flex items-center gap-2">
-                      <FaCheckCircle className="text-[#4FADE6]" />
+                      <FaCheckCircle className="text[#4FADE6-]" />
                       <span>Task</span>
                     </div>
                   </SelectItem>

@@ -1,3 +1,7 @@
+import { FaCheckCircle, FaExclamationCircle, FaBookmark } from "react-icons/fa";
+import { IoSparklesSharp } from "react-icons/io5";
+import { FaNetworkWired } from "react-icons/fa";
+
 export const coverImages = [
   {
     imageUrl: "/coverImages/galaxy.jpg",
@@ -299,5 +303,34 @@ export const priorities = [
   {
     color: "gray",
     priority: "Without",
+  },
+];
+
+// sprint issue type
+export const typeIssue = [
+  {
+    title: "task",
+    icon: FaCheckCircle,
+    textColor: "text-[#4FADE6]",
+  },
+  {
+    title: "bug",
+    icon: FaExclamationCircle,
+    textColor: "text-red-500",
+  },
+  {
+    title: "story",
+    icon: FaBookmark,
+    textColor: "text-[#65BA43]",
+  },
+  {
+    title: "improvement",
+    icon: IoSparklesSharp,
+    textColor: "text-[#FFA500]",
+  },
+  {
+    title: "epic",
+    icon: FaNetworkWired,
+    textColor: "text-[#800080]",
   },
 ];

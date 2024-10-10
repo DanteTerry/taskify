@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { issueDataType } from "@/types/type";
-import { useUser } from "@clerk/nextjs";
 import { CalendarIcon, Plus, Timer, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -18,8 +17,10 @@ import { Separator } from "@/components/ui/separator";
 import CustomSelect from "@/components/UIComponents/CustomSelect";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  formatDate,
   getIssueColor,
   getPriorityColor,
+  handleDeleteIssue,
   handleIssuePropertyChange,
 } from "@/utils/sprintUtil";
 import { useSelector } from "react-redux";
@@ -36,6 +37,8 @@ import {
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
+import SprintComment from "./SprintComment";
+import { typeIssue } from "@/constants";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -55,6 +58,17 @@ export interface IssueData {
   loggedTime: number;
   remainingTime: number;
   id: string;
+  createdAt: Date;
+  comments: {
+    id: string;
+    comment: string;
+    user: {
+      id: string;
+      fullName: string;
+      picture: string;
+      email: string;
+    };
+  }[];
 }
 
 export interface ShowState {
@@ -74,10 +88,8 @@ function IssueDetails({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentItem, setCurrentItem] = useState(item);
-  const { user } = useUser();
   const { sprintId } = useParams();
+  const [isEditing, setIsEditing] = useState(false);
 
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
@@ -95,9 +107,14 @@ function IssueDetails({
       item.deadLine instanceof Timestamp
         ? item.deadLine.toDate()
         : new Date(item.deadLine),
+    createdAt:
+      item.createdAt instanceof Timestamp
+        ? item.createdAt.toDate()
+        : new Date(item.createdAt),
     loggedTime: item.loggedTime,
     remainingTime: item.remainingTime,
     id: item.id,
+    comments: item.comments,
   });
 
   const [show, setShow] = useState<ShowState>({
@@ -107,6 +124,8 @@ function IssueDetails({
     reporter: false,
     deadline: false,
   });
+
+  const [description, setDescription] = useState(item.description);
 
   const handleToggle = (type: keyof ShowState) => {
     setShow((prevShow) => {
@@ -121,8 +140,6 @@ function IssueDetails({
     });
   };
 
-  console.log(issueData.deadLine);
-
   return (
     <div>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -131,30 +148,62 @@ function IssueDetails({
             <ScrollArea className="h-full w-full">
               <DialogTitle></DialogTitle>
               <div className="flex w-full items-center justify-between">
-                <Button
-                  variant={"ghost"}
-                  className="flex gap-2 font-semibold uppercase hover:bg-[#EBECF0]"
-                  size={"sm"}
-                >
-                  {issueTypeIcons[currentItem.issueType]}
-                  {currentItem.issueType}-{currentItem.id.slice(0, 5)}
-                </Button>
+                <Popover modal={true}>
+                  <PopoverTrigger>
+                    <Button
+                      variant={"ghost"}
+                      className="flex w-44 justify-start gap-2 font-semibold uppercase hover:bg-[#EBECF0] hover:bg-transparent"
+                      size={"sm"}
+                    >
+                      {issueTypeIcons[item.issueType]}
+                      {item.issueType}-{item.id.slice(0, 5)}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="max-w-[200px] p-0 focus:ring-0">
+                    <div className="mt-2 flex flex-col items-start gap-1 pb-2">
+                      {typeIssue.map((option, index) => (
+                        <Button
+                          onClick={() => {
+                            handleIssuePropertyChange(
+                              "issueType",
+                              option.title,
+                              sprintId as string,
+                              issueData,
+                            );
+                          }}
+                          key={index}
+                          variant={"ghost"}
+                          className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"
+                        >
+                          <div className="flex items-center gap-2">
+                            {/* Icon for the issue type */}
+                            <span className={`h-4 w-4 ${option.textColor}`}>
+                              {<option.icon />}
+                            </span>{" "}
+                            {/* Title */}
+                            <span className="text-sm font-medium capitalize">
+                              {option.title}
+                            </span>
+                          </div>
+                        </Button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
+                {/* issue type  */}
+
+                {/* delete button  */}
                 <div className="flex gap-3 text-[#3b4a64]">
                   <Button
                     className="hover:bg-[#EBECF0]"
                     variant={"ghost"}
-                    onClick={() => console.log("deleted")}
+                    onClick={() => {
+                      handleDeleteIssue(sprintId as string, issueData);
+                    }}
                     size={"icon"}
                   >
                     <Trash2 size={20} />
-                  </Button>
-                  <Button
-                    onClick={() => setOpen(false)}
-                    className="hover:bg-[#EBECF0]"
-                    variant={"ghost"}
-                    size={"icon"}
-                  >
-                    <X size={20} />
                   </Button>
                 </div>
               </div>
@@ -163,13 +212,19 @@ function IssueDetails({
               <div className="flex gap-10">
                 <div className="flex w-[600px] flex-col gap-3">
                   <textarea
-                    value={currentItem.shortSummary || ""}
-                    onChange={(e) => console.log(e.target.value)}
+                    value={item.shortSummary || ""}
+                    onChange={(e) =>
+                      handleIssuePropertyChange(
+                        "shortSummary",
+                        e.target.value,
+                        sprintId as string,
+                        issueData,
+                      )
+                    }
                     className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                     required
                     rows={
-                      currentItem?.shortSummary &&
-                      currentItem?.shortSummary?.length > 50
+                      item?.shortSummary && item?.shortSummary?.length > 50
                         ? 2
                         : 1
                     }
@@ -183,7 +238,7 @@ function IssueDetails({
                       {isEditing ? (
                         <>
                           <ReactQuill
-                            value={currentItem.description}
+                            value={description}
                             className="mt-2 bg-white dark:bg-[#1f1f1f] dark:text-white"
                             theme="snow"
                             placeholder="Describe the issue in as much detail as possible"
@@ -202,101 +257,54 @@ function IssueDetails({
                                 [{ color: [] }, { background: [] }],
                               ],
                             }}
-                            onChange={(value) =>
-                              setCurrentItem({
-                                ...currentItem,
-                                description: value,
-                              })
-                            }
+                            onChange={(value) => {
+                              setDescription(value);
+                            }}
                           />
-
-                          <div className="mt-3 flex items-center gap-5">
-                            <Button className="bg-[#0052CC]" size={"sm"}>
-                              Save
-                            </Button>
-                            <Button
-                              size={"sm"}
-                              onClick={() => setIsEditing(false)}
-                              variant={"ghost"}
-                            >
-                              Cancel
-                            </Button>
-                          </div>
                         </>
                       ) : (
                         <div
                           className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:bg-[#1f1f1f] dark:text-white"
                           onClick={() => setIsEditing(true)}
                           dangerouslySetInnerHTML={{
-                            __html: currentItem.description,
+                            __html: item.description,
                           }}
                         />
                       )}
                     </div>
                   </div>
-                  <div className="pl-4">
-                    <p className="mb-2 text-sm font-bold capitalize text-[#172B4D]">
-                      Comments
-                    </p>
-                    <div className="mt-1.5">
-                      <div className="mb-4 flex items-center gap-3">
-                        <Image
-                          width={32}
-                          height={32}
-                          src={user?.imageUrl || ""}
-                          alt="profile"
-                          className="rounded-full"
-                        />
-                        <div className="flex w-full flex-col gap-2">
-                          <textarea
-                            placeholder="Add a comment..."
-                            className="w-full resize-none rounded-md border-2 border-transparent bg-gray-100 px-3 py-2 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
-                            required
-                            rows={2}
-                          />
-                        </div>
-                      </div>
-                      <div className="ml-14 mt-2 flex items-center gap-5">
-                        <Button size={"sm"} className="bg-[#0052CC]">
-                          Save
-                        </Button>
-                        <Button
-                          onClick={() => setIsEditing(false)}
-                          variant={"ghost"}
-                          size={"sm"}
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-
-                      {/* comment template */}
-                      <div className="mt-5">
-                        <div className="mt-3 flex items-center gap-3">
-                          <Image
-                            width={32}
-                            height={32}
-                            src={user?.imageUrl || ""}
-                            alt="profile"
-                            className="rounded-full"
-                          />
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm font-bold text-[#172B4D]">
-                                {user?.fullName}
-                              </p>
-                              <p className="text-xs text-[#6B778C]">
-                                2 days ago
-                              </p>
-                            </div>
-                            <p className="text-sm text-[#172B4D]">
-                              This is a comment
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                  {isEditing && (
+                    <div className="flex items-center gap-5 pl-4">
+                      <Button
+                        onClick={() => {
+                          handleIssuePropertyChange(
+                            "description",
+                            description,
+                            sprintId as string,
+                            issueData,
+                          );
+                          setIsEditing(false);
+                        }}
+                        className="bg-[#0052CC]"
+                        size={"sm"}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        size={"sm"}
+                        onClick={() => setIsEditing(false)}
+                        variant={"ghost"}
+                      >
+                        Cancel
+                      </Button>
                     </div>
-                  </div>
+                  )}
+
+                  {/* comments */}
+                  <SprintComment item={item} issueData={issueData} />
                 </div>
+
+                {/* second div */}
                 <div className="flex w-[300px] flex-col gap-5">
                   {/* status */}
                   <CustomSelect
@@ -566,7 +574,11 @@ function IssueDetails({
                   {/* created and updated */}
                   <div className="flex flex-col gap-1 text-xs font-medium text-[#67758B]">
                     <Separator className="h-[2px]" />
-                    <p className="mt-2 capitalize">Created at 1 days ago</p>
+                    <p className="mt-2 capitalize">
+                      {formatDate(issueData.createdAt)}
+                    </p>
+
+                    {/* todo implemented updated functionality */}
                     <p className="capitalize">Updated at a days ago</p>
                   </div>
 
@@ -577,6 +589,8 @@ function IssueDetails({
           </DialogHeader>
         </DialogContent>
       </Dialog>
+
+      {/* estimate time setter */}
       <EstimatedTimeSetter
         showEstimatedTime={showEstimatedTime}
         setShowEstimatedTime={setShowEstimatedTime}

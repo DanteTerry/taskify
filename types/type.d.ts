@@ -57,13 +57,22 @@ export interface issueDataType {
   reporter: Collaborator;
   assignees: Collaborator[];
   priority: string;
-  comments: string[];
+  comments: {
+    id: string;
+    comment: string;
+    user: {
+      id: string;
+      fullName: string;
+      picture: string;
+      email: string;
+    };
+  }[];
   status: "backlog" | "selected for development" | "in progress" | "done";
   estimatedTime: number;
   deadLine: Date;
   loggedTime: number;
   remainingTime: number;
-  createdAt: string;
+  createdAt: Date;
 }
 
 export interface issueType {
@@ -85,4 +94,19 @@ export type ItemType = {
 export interface PriorityType {
   color: string;
   priority: string;
+}
+
+
+
+
+export interface CommentType {
+  id: string;
+  comment: string;
+  createdAt: Date;
+  user: {
+    id: string;
+    fullName: string;
+    picture: string;
+    email: string;
+  };
 }
