@@ -10,6 +10,11 @@ import { Timer, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { IssueData } from "./IssueDetails";
 import { Progress } from "@/components/ui/progress";
+import {
+  handleIssueMultiplePropertyChange,
+  handleIssuePropertyChange,
+} from "@/utils/sprintUtil";
+import { useParams } from "next/navigation";
 
 function EstimatedTimeSetter({
   showEstimatedTime,
@@ -22,9 +27,10 @@ function EstimatedTimeSetter({
   issueData: IssueData;
   setIssueData: Dispatch<SetStateAction<IssueData>>;
 }) {
+  const { sprintId } = useParams();
   // Update remainingTime when both loggedTime and remainingTime are 0
   useEffect(() => {
-    if (issueData.loggedTime === 0 && issueData.remainingTime === 0) {
+    if (issueData.loggedTime === 0) {
       setIssueData((prev) => ({
         ...prev,
         remainingTime: prev.estimatedTime,
@@ -32,7 +38,6 @@ function EstimatedTimeSetter({
     }
   }, [issueData.loggedTime, issueData.remainingTime, setIssueData]);
 
-  // Handlers for updating logged and remaining times
   const handleLoggedTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const loggedTime = parseInt(e.target.value) || 0;
 
@@ -41,11 +46,26 @@ function EstimatedTimeSetter({
       return;
     }
 
+    if (loggedTime < 0) {
+      alert("Logged time cannot be less than 0.");
+      return;
+    }
+
+    const remainingTime = issueData.estimatedTime - loggedTime;
+
+    // Update the local state
     setIssueData((prev) => ({
       ...prev,
       loggedTime,
-      remainingTime: prev.estimatedTime - loggedTime,
+      remainingTime,
     }));
+
+    // Update Firestore with both fields at once
+    handleIssueMultiplePropertyChange(
+      { loggedTime, remainingTime }, // Fields to update
+      sprintId as string,
+      { ...issueData, loggedTime, remainingTime },
+    );
   };
 
   const handleRemainingTimeChange = (
@@ -58,11 +78,26 @@ function EstimatedTimeSetter({
       return;
     }
 
+    if (remainingTime < 0) {
+      alert("Remaining time cannot be less than 0.");
+      return;
+    }
+
+    const loggedTime = issueData.estimatedTime - remainingTime;
+
+    // Update the local state
     setIssueData((prev) => ({
       ...prev,
       remainingTime,
-      loggedTime: prev.estimatedTime - remainingTime,
+      loggedTime,
     }));
+
+    // Update Firestore with both fields at once
+    handleIssueMultiplePropertyChange(
+      { remainingTime, loggedTime }, // Fields to update
+      sprintId as string,
+      { ...issueData, remainingTime, loggedTime },
+    );
   };
 
   return (

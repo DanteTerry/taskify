@@ -2,8 +2,10 @@ import { Button } from "../ui/button";
 import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import { IssueData, ShowState } from "@/app/(main)/_components/IssueDetails";
-import { getPriorityColor } from "@/utils/sprintUtil";
-import { SprintOutput } from "@/lib/redux/sprintSlice";
+import {
+  getPriorityColor,
+  handleIssuePropertyChange,
+} from "@/utils/sprintUtil";
 import { useParams } from "next/navigation";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
@@ -181,6 +183,12 @@ function CustomSelect({
                             ? issueData.assignees
                             : [...issueData.assignees, item],
                         });
+                        handleIssuePropertyChange(
+                          "assignees",
+                          [...issueData.assignees, item],
+                          sprintId as string,
+                          issueData,
+                        );
                         handleClose();
                       }}
                       key={index}
@@ -220,6 +228,12 @@ function CustomSelect({
                     <Button
                       onClick={() => {
                         setIssueData({ ...issueData, reporter: item });
+                        handleIssuePropertyChange(
+                          "reporter",
+                          item,
+                          sprintId as string,
+                          issueData,
+                        );
                         handleClose();
                       }}
                       key={index}
@@ -259,6 +273,12 @@ function CustomSelect({
                     <Button
                       onClick={() => {
                         setIssueData({ ...issueData, priority: item });
+                        handleIssuePropertyChange(
+                          "priority",
+                          item,
+                          sprintId as string,
+                          issueData,
+                        );
                         handleClose();
                       }}
                       key={index}

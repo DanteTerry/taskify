@@ -17,7 +17,11 @@ import ReactQuill from "react-quill";
 import { Separator } from "@/components/ui/separator";
 import CustomSelect from "@/components/UIComponents/CustomSelect";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getIssueColor, getPriorityColor } from "@/utils/sprintUtil";
+import {
+  getIssueColor,
+  getPriorityColor,
+  handleIssuePropertyChange,
+} from "@/utils/sprintUtil";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import EstimatedTimeSetter from "./EstimatedTimeSetter";
@@ -30,6 +34,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { useParams } from "next/navigation";
+import { Timestamp } from "firebase/firestore";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -71,6 +77,7 @@ function IssueDetails({
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState(item);
   const { user } = useUser();
+  const { sprintId } = useParams();
 
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
@@ -84,9 +91,12 @@ function IssueDetails({
     priority: item.priority,
     reporter: item.reporter,
     estimatedTime: item.estimatedTime,
-    deadLine: item?.deadLine ? new Date(item.deadLine) : undefined,
-    loggedTime: 0,
-    remainingTime: 0,
+    deadLine:
+      item.deadLine instanceof Timestamp
+        ? item.deadLine.toDate()
+        : new Date(item.deadLine),
+    loggedTime: item.loggedTime,
+    remainingTime: item.remainingTime,
     id: item.id,
   });
 
@@ -111,6 +121,8 @@ function IssueDetails({
     });
   };
 
+  console.log(issueData.deadLine);
+
   return (
     <div>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -131,6 +143,7 @@ function IssueDetails({
                   <Button
                     className="hover:bg-[#EBECF0]"
                     variant={"ghost"}
+                    onClick={() => console.log("deleted")}
                     size={"icon"}
                   >
                     <Trash2 size={20} />
@@ -469,13 +482,20 @@ function IssueDetails({
                         <PopoverContent className="w-full p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={issueData.deadLine}
+                            selected={issueData?.deadLine}
                             onSelect={(selectedDate) => {
                               if (selectedDate) {
                                 setIssueData({
                                   ...issueData,
                                   deadLine: selectedDate,
                                 });
+
+                                handleIssuePropertyChange(
+                                  "deadLine",
+                                  selectedDate,
+                                  sprintId as string,
+                                  issueData,
+                                );
                               }
                             }}
                             initialFocus
@@ -493,7 +513,20 @@ function IssueDetails({
                     <input
                       value={issueData.estimatedTime}
                       type="number"
-                      onChange={(e) => console.log(e.target.value)}
+                      onChange={(e) => {
+                        setIssueData({
+                          ...issueData,
+                          estimatedTime: parseInt(e.target.value),
+                        });
+
+                        console.log(typeof e.target.value);
+                        handleIssuePropertyChange(
+                          "estimatedTime",
+                          parseInt(e.target.value),
+                          sprintId as string,
+                          issueData,
+                        );
+                      }}
                       className="mt-1 w-full resize-none rounded-md border-2 border-transparent px-1 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                       required
                     />

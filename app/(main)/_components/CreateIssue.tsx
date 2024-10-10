@@ -109,7 +109,7 @@ function CreateIssue({
                 ...list.items,
                 {
                   ...issueData,
-                  deadLine: issueData.deadLine.toLocaleString(),
+                  deadLine: issueData.deadLine,
                 },
               ],
             };
