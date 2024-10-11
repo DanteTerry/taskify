@@ -1,13 +1,13 @@
 import { db } from "@/config/firebaseConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { doc, onSnapshot } from "firebase/firestore";
-import { set } from "mongoose";
 
 export interface Collaborator {
   id: string;
   fullName: string;
   email: string;
   picture: string;
+  role: "owner" | "collaborator" | "viewer";
 }
 
 interface issueDataType {
@@ -34,6 +34,7 @@ export interface SprintState {
   joinCode: string;
   docId: string;
   documentInfo: DocumentInfoType;
+  loading: boolean; // Add loading state
 }
 
 export interface DocumentInfoType {
@@ -75,6 +76,7 @@ const initialState: SprintState = {
     projectType: "sprint",
     workspaceId: "",
   },
+  loading: true,
 };
 
 export const fetchSprintDocumentOutput = createAsyncThunk(
@@ -84,6 +86,9 @@ export const fetchSprintDocumentOutput = createAsyncThunk(
 
     // Reference to the sprint document
     const docRef = doc(db, "SprintDocumentOutput", sprintId);
+
+    // Set loading state to true
+    dispatch(setLoading(true));
 
     // Listen to real-time updates from Firestore
     const unsubscribe = onSnapshot(
@@ -98,9 +103,13 @@ export const fetchSprintDocumentOutput = createAsyncThunk(
         } else {
           console.log("No such document!");
         }
+        // Set loading state to false
+        dispatch(setLoading(false));
       },
       (error) => {
         console.error("Error getting real-time updates:", error);
+        // Set loading state to false
+        dispatch(setLoading(false));
       },
     );
   },
@@ -114,6 +123,9 @@ export const fetchDocumentInfo = createAsyncThunk(
     // Reference to the sprint document
     const docRef = doc(db, "WorkSpaceDocuments", docId);
 
+    // Set loading state to true
+    dispatch(setLoading(true));
+
     // Listen to real-time updates from Firestore
     const unsubscribe = onSnapshot(
       docRef,
@@ -125,9 +137,13 @@ export const fetchDocumentInfo = createAsyncThunk(
         } else {
           console.log("No such document!");
         }
+        // Set loading state to false
+        dispatch(setLoading(false));
       },
       (error) => {
         console.error("Error getting real-time updates:", error);
+        // Set loading state to false
+        dispatch(setLoading(false));
       },
     );
   },
@@ -152,10 +168,18 @@ const sprintSlice = createSlice({
     setDocumentInfo: (state, action: PayloadAction<DocumentInfoType>) => {
       state.documentInfo = action.payload;
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
   },
 });
 
 // Export the actions and reducer
-export const { setCollaborators, setOutput, setJoinCode, setDocumentInfo } =
-  sprintSlice.actions;
+export const {
+  setCollaborators,
+  setOutput,
+  setJoinCode,
+  setDocumentInfo,
+  setLoading,
+} = sprintSlice.actions;
 export default sprintSlice.reducer;

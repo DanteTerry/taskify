@@ -12,9 +12,8 @@ import { updateJoinCode } from "@/utils/sprintUtil";
 import { Check, Copy, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
 function SprintCollaborators({
@@ -35,6 +34,27 @@ function SprintCollaborators({
   const filteredCollaborators = collaborators.filter((collaborator) =>
     collaborator.fullName.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  useEffect(() => {
+    if (joinCode === "rejected") {
+      const timer = setTimeout(() => {
+        updateJoinCode(sprintId as string, "");
+      }, 10 * 1000);
+
+      return () => clearTimeout(timer);
+    }
+
+    if (joinCode) {
+      const timer = setTimeout(
+        () => {
+          updateJoinCode(sprintId as string, "");
+        },
+        15 * 60 * 1000,
+      );
+
+      return () => clearTimeout(timer);
+    }
+  }, [joinCode, sprintId]);
 
   const handleAddCollaborator = () => {
     const uuid = uuidv4().slice(0, 8);

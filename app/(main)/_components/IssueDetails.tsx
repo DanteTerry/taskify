@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { issueDataType } from "@/types/type";
-import { CalendarIcon, Plus, Timer, Trash2, X } from "lucide-react";
+import { CalendarIcon, Plus, Timer, Trash2, User, X } from "lucide-react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -39,6 +39,7 @@ import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 import SprintComment from "./SprintComment";
 import { typeIssue } from "@/constants";
+import { useUser } from "@clerk/nextjs";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -89,6 +90,7 @@ function IssueDetails({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { sprintId } = useParams();
+  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
 
   const collaborators = useSelector(
@@ -139,6 +141,10 @@ function IssueDetails({
       };
     });
   };
+
+  const currentUserCollaborator = collaborators.find(
+    (collaborator) => collaborator.id === user?.id,
+  );
 
   return (
     <div>
@@ -199,10 +205,17 @@ function IssueDetails({
                   <Button
                     className="hover:bg-[#EBECF0]"
                     variant={"ghost"}
+                    size={"icon"}
                     onClick={() => {
+                      if (
+                        currentUserCollaborator?.role === "collaborator" ||
+                        currentUserCollaborator?.role === "viewer"
+                      ) {
+                        return;
+                      }
+
                       handleDeleteIssue(sprintId as string, issueData);
                     }}
-                    size={"icon"}
                   >
                     <Trash2 size={20} />
                   </Button>

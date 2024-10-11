@@ -111,6 +111,7 @@ function ProjectCard({
               fullName: user?.fullName,
               email: user?.primaryEmailAddress?.emailAddress,
               picture: user?.imageUrl,
+              role: "owner",
             },
           ],
         });
