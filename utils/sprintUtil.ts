@@ -4,6 +4,7 @@ import { issueDataType, issueType } from "@/types/type";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import moment from "moment";
 
+// function to get issue color
 export function getIssueColor(status: string): string {
   switch (status.toLowerCase()) {
     case "backlog":
@@ -19,6 +20,7 @@ export function getIssueColor(status: string): string {
   }
 }
 
+// function to get priority color
 export function getPriorityColor(priority: string): string {
   switch (priority.toLowerCase()) {
     case "low":
@@ -35,7 +37,6 @@ export function getPriorityColor(priority: string): string {
 }
 
 // function to handleIssuePropertyChane
-
 export const handleIssuePropertyChange = async (
   property: string,
   value: any,
@@ -94,6 +95,7 @@ export const handleIssuePropertyChange = async (
   }
 };
 
+// function to handleIssueMultiplePropertyChange
 export const handleIssueMultiplePropertyChange = async (
   updatedFields: Partial<IssueData>,
   sprintId: string,
@@ -300,5 +302,22 @@ export const handleDeleteIssue = async (
     await updateDoc(docRef, { output: updatedOutput });
   } catch (error) {
     console.error("Error updating Firestore:", error);
+  }
+};
+
+// function to modify join code
+export const updateJoinCode = async (sprintId: string, newJoinCode: string) => {
+  if (!sprintId || !newJoinCode) {
+    console.error("Invalid sprintId or joinCode");
+    return;
+  }
+
+  const docRef = doc(db, "SprintDocumentOutput", sprintId);
+
+  try {
+    // Update the joinCode in Firestore
+    await updateDoc(docRef, { joinCode: newJoinCode });
+  } catch (error) {
+    console.error("Error updating join code:", error);
   }
 };

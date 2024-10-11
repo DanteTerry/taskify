@@ -47,12 +47,16 @@ function ProjectCard({
       const documentId = uuidv4().slice(0, 8);
       await setDoc(doc(db, "WorkSpaceDocuments", documentId.toString()), {
         workspaceId: params?.workspaceId,
-        createdBy: user?.primaryEmailAddress?.emailAddress,
+        createdBy: {
+          id: user?.id,
+          fullName: user?.fullName,
+          email: user?.primaryEmailAddress?.emailAddress,
+          picture: user?.imageUrl,
+        },
         coverImage: selectedImage,
         id: documentId,
         emoji: emoji,
         documentName: documentName,
-        documentOutput: [],
         projectType: projectType,
         isPublished: false,
       });
@@ -78,6 +82,7 @@ function ProjectCard({
         await setDoc(doc(db, "SprintDocumentOutput", documentId.toString()), {
           docId: documentId,
           workspaceId: params?.workspaceId,
+          joinCode: "",
           output: [
             {
               id: uuidv4().slice(0, 8),

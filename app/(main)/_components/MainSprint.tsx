@@ -7,14 +7,22 @@ import CreateIssue, { Collaborator } from "./CreateIssue";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/lib/redux/store";
-import { fetchSprintDocumentOutput } from "@/lib/redux/sprintSlice";
+import {
+  fetchDocumentInfo,
+  fetchSprintDocumentOutput,
+} from "@/lib/redux/sprintSlice";
+import SprintCollaborators from "./SprintCollaborators";
 
 function MainSprint({
-  open,
-  setOpen,
+  openCreateIssue,
+  setOpenCreateIssue,
+  openCollaborators,
+  setOpenCollaborators,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  openCreateIssue: boolean;
+  setOpenCreateIssue: Dispatch<SetStateAction<boolean>>;
+  openCollaborators: boolean;
+  setOpenCollaborators: Dispatch<SetStateAction<boolean>>;
 }) {
   const { sprintId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
@@ -80,7 +88,14 @@ function MainSprint({
       </div>
 
       <KanbanSpritBoard />
-      <CreateIssue open={open} setOpen={setOpen} />
+      <CreateIssue
+        openCreateIssue={openCreateIssue}
+        setOpenCreateIssue={setOpenCreateIssue}
+      />
+      <SprintCollaborators
+        setOpenCollaborators={setOpenCollaborators}
+        openCollaborators={openCollaborators}
+      />
     </section>
   );
 }

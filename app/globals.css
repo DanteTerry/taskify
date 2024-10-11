@@ -123,3 +123,7 @@ body,
     animation: spin-quarter 1.2s linear infinite;
   }
 }
+
+.bg-light-gradient {
+  background: linear-gradient(to right, #e3f2fd, #d1d9ff, #f3e5f5);
+}

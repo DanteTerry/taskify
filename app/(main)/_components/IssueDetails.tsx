@@ -34,7 +34,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DialogTitle } from "@radix-ui/react-dialog";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 import SprintComment from "./SprintComment";
@@ -147,6 +147,7 @@ function IssueDetails({
           <DialogHeader className="h-full w-full">
             <ScrollArea className="h-full w-full">
               <DialogTitle></DialogTitle>
+              <DialogDescription></DialogDescription>
               <div className="flex w-full items-center justify-between">
                 <Popover modal={true}>
                   <PopoverTrigger>

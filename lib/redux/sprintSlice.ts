@@ -1,6 +1,7 @@
 import { db } from "@/config/firebaseConfig";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { doc, onSnapshot } from "firebase/firestore";
+import { set } from "mongoose";
 
 export interface Collaborator {
   id: string;
@@ -30,12 +31,50 @@ export interface SprintOutput {
 export interface SprintState {
   collaborators: Collaborator[];
   output: SprintOutput[];
+  joinCode: string;
+  docId: string;
+  documentInfo: DocumentInfoType;
+}
+
+export interface DocumentInfoType {
+  coverImage: string;
+  createdBy: {
+    id: string;
+    fullName: string;
+    email: string;
+    picture: string;
+  };
+  documentName: string;
+  documentOutput: SprintOutput[];
+  emoji: string;
+  id: string;
+  isPublished: boolean;
+  projectType: string;
+  workspaceId: string;
 }
 
 // Initial state: Collaborators and output data
 const initialState: SprintState = {
   collaborators: [],
   output: [],
+  joinCode: "",
+  docId: "",
+  documentInfo: {
+    coverImage: "",
+    createdBy: {
+      id: "",
+      fullName: "",
+      email: "",
+      picture: "",
+    },
+    documentName: "",
+    documentOutput: [],
+    emoji: "",
+    id: "",
+    isPublished: false,
+    projectType: "sprint",
+    workspaceId: "",
+  },
 };
 
 export const fetchSprintDocumentOutput = createAsyncThunk(
@@ -55,6 +94,34 @@ export const fetchSprintDocumentOutput = createAsyncThunk(
           // Dispatch actions to update store
           dispatch(setCollaborators(data.collaborators));
           dispatch(setOutput(data.output));
+          dispatch(setJoinCode(data.joinCode));
+        } else {
+          console.log("No such document!");
+        }
+      },
+      (error) => {
+        console.error("Error getting real-time updates:", error);
+      },
+    );
+  },
+);
+
+export const fetchDocumentInfo = createAsyncThunk(
+  "sprint/fetchDocumentInfo",
+  async (docId: string, { dispatch }) => {
+    if (!docId) throw new Error("Invalid docId");
+
+    // Reference to the sprint document
+    const docRef = doc(db, "WorkSpaceDocuments", docId);
+
+    // Listen to real-time updates from Firestore
+    const unsubscribe = onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          // Dispatch actions to update store
+          dispatch(setDocumentInfo(data as DocumentInfoType));
         } else {
           console.log("No such document!");
         }
@@ -79,9 +146,16 @@ const sprintSlice = createSlice({
     setOutput: (state, action: PayloadAction<SprintOutput[]>) => {
       state.output = action.payload;
     },
+    setJoinCode: (state, action: PayloadAction<string>) => {
+      state.joinCode = action.payload;
+    },
+    setDocumentInfo: (state, action: PayloadAction<DocumentInfoType>) => {
+      state.documentInfo = action.payload;
+    },
   },
 });
 
 // Export the actions and reducer
-export const { setCollaborators, setOutput } = sprintSlice.actions;
+export const { setCollaborators, setOutput, setJoinCode, setDocumentInfo } =
+  sprintSlice.actions;
 export default sprintSlice.reducer;

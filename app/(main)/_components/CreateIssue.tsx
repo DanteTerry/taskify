@@ -51,12 +51,13 @@ export interface Collaborator {
 }
 
 function CreateIssue({
-  open,
-  setOpen,
+  openCreateIssue,
+  setOpenCreateIssue,
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  openCreateIssue: boolean;
+  setOpenCreateIssue: Dispatch<SetStateAction<boolean>>;
 }) {
+  // todo fix estimated Time bug when updating in issue detail when estimated time is 0
   const { sprintId } = useParams();
   const [issueData, setIssueData] = useState<issueDataType>({
     id: uuidv4().slice(0, 8),
@@ -141,7 +142,7 @@ function CreateIssue({
           createdAt: new Date(),
         });
 
-        setOpen(false);
+        setOpenCreateIssue(false);
       } else {
         console.error("Document does not exist!");
       }
@@ -151,7 +152,10 @@ function CreateIssue({
   };
 
   return (
-    <Dialog open={open} onOpenChange={() => setOpen(false)}>
+    <Dialog
+      open={openCreateIssue}
+      onOpenChange={() => setOpenCreateIssue(false)}
+    >
       <DialogContent className="max-h-[90vh] max-w-[850px] overflow-y-auto rounded-lg border border-gray-200 shadow-lg dark:border-gray-700">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
@@ -178,7 +182,7 @@ function CreateIssue({
                 <SelectContent>
                   <SelectItem value="task">
                     <div className="flex items-center gap-2">
-                      <FaCheckCircle className="text[#4FADE6-]" />
+                      <FaCheckCircle className="text-[#4FADE6]" />
                       <span>Task</span>
                     </div>
                   </SelectItem>
@@ -447,7 +451,7 @@ function CreateIssue({
                 type="button"
                 variant={"ghost"}
                 className="text-gray-500"
-                onClick={() => setOpen(false)}
+                onClick={() => setOpenCreateIssue(false)}
               >
                 Cancel
               </Button>

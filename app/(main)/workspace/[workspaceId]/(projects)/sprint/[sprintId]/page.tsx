@@ -4,11 +4,20 @@ import SprintSidebar from "@/app/(main)/_components/SprintSidebar";
 import { useState } from "react";
 
 function SprintPage() {
-  const [open, setOpen] = useState(false);
+  const [openCreateIssue, setOpenCreateIssue] = useState(false);
+  const [openCollaborators, setOpenCollaborators] = useState(false);
   return (
     <div className="relative flex h-full w-full">
-      <SprintSidebar setOpen={setOpen} />
-      <MainSprint open={open} setOpen={setOpen} />
+      <SprintSidebar
+        setOpenCollaborators={setOpenCollaborators}
+        setOpenCreateIssue={setOpenCreateIssue}
+      />
+      <MainSprint
+        openCreateIssue={openCreateIssue}
+        setOpenCreateIssue={setOpenCreateIssue}
+        openCollaborators={openCollaborators}
+        setOpenCollaborators={setOpenCollaborators}
+      />
     </div>
   );
 }
