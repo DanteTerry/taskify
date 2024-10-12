@@ -25,7 +25,7 @@ function ProjectCard({
   projectType: string;
   params: any;
 }) {
-  const [emoji, setEmoji] = useState("");
+  const [emoji, setEmoji] = useState("😄");
   const [selectedImage, setSelectedImage] = useState("");
   const { user } = useUser();
   const id = user?.id;
@@ -59,6 +59,7 @@ function ProjectCard({
         documentName: documentName,
         projectType: projectType,
         isPublished: false,
+        teamProject: false,
       });
 
       // create a new document output for the workspace

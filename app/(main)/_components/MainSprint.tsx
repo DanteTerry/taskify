@@ -1,10 +1,10 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import KanbanSpritBoard from "./KanbanSprintBoard";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import CreateIssue, { Collaborator } from "./CreateIssue";
-import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "@/lib/redux/store";
 import {
@@ -12,31 +12,41 @@ import {
   fetchSprintDocumentOutput,
 } from "@/lib/redux/sprintSlice";
 import SprintCollaborators from "./SprintCollaborators";
+import { cn } from "@/lib/utils";
 
 function MainSprint({
   openCreateIssue,
   setOpenCreateIssue,
   openCollaborators,
   setOpenCollaborators,
+  sprintId,
+  isTeamProject,
 }: {
   openCreateIssue: boolean;
   setOpenCreateIssue: Dispatch<SetStateAction<boolean>>;
   openCollaborators: boolean;
   setOpenCollaborators: Dispatch<SetStateAction<boolean>>;
+  sprintId: string;
+  isTeamProject?: boolean;
 }) {
-  const { sprintId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-
+  console.log(sprintId);
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );
 
+  
   useEffect(() => {
     dispatch(fetchSprintDocumentOutput(sprintId as string));
   }, [dispatch, sprintId]);
 
   return (
-    <section className="ml-60 flex h-full w-full flex-grow flex-col gap-6 px-8 py-6">
+    <section
+      className={cn(
+        `flex h-full w-full flex-grow flex-col gap-6 px-8 py-6`,
+        isTeamProject ? "ml-0" : "ml-60",
+      )}
+    >
       <div className="text-xl font-medium">
         <h2>Kanban Board</h2>
       </div>
@@ -87,7 +97,7 @@ function MainSprint({
         </div>
       </div>
 
-      <KanbanSpritBoard />
+      <KanbanSpritBoard sprintId={sprintId} />
       <CreateIssue
         openCreateIssue={openCreateIssue}
         setOpenCreateIssue={setOpenCreateIssue}

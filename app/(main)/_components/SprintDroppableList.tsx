@@ -3,7 +3,13 @@ import SprintDraggableItem from "./SprintDraggableItem";
 
 import { SprintOutput } from "@/lib/redux/sprintSlice";
 
-function SprintDroppableList({ data }: { data: SprintOutput }) {
+function SprintDroppableList({
+  data,
+  sprintId,
+}: {
+  data: SprintOutput;
+  sprintId: string;
+}) {
   return (
     <Droppable droppableId={data.id.toString()}>
       {(provided, snapshot) => (
@@ -21,7 +27,12 @@ function SprintDroppableList({ data }: { data: SprintOutput }) {
           {data.items &&
             data.items.map((item: any, index: number) => {
               return (
-                <SprintDraggableItem key={item.id} item={item} index={index} />
+                <SprintDraggableItem
+                  sprintId={sprintId}
+                  key={item.id}
+                  item={item}
+                  index={index}
+                />
               );
             })}
           {provided.placeholder}

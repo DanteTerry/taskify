@@ -8,9 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { setOutput } from "@/lib/redux/sprintSlice";
 
-function KanbanSprintBoard() {
-  const { sprintId } = useParams();
-
+function KanbanSprintBoard({ sprintId }: { sprintId: string }) {
   const data = useSelector((state: RootState) => state.sprint.output);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -150,7 +148,11 @@ function KanbanSprintBoard() {
                   </div>
 
                   {/* Render droppable items */}
-                  <SprintDroppableList data={data} key={data.id} />
+                  <SprintDroppableList
+                    sprintId={sprintId}
+                    data={data}
+                    key={data.id}
+                  />
                 </div>
               </div>
             ))}

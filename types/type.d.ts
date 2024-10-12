@@ -11,13 +11,14 @@ export type DocumentOutput = {
 export type WorkspaceDocData = {
   coverImage: string;
   emoji: string | null;
-  documentOutput: DocumentOutput[]; // or any other specific structure if known
   createdBy: string;
   workspaceId: number;
   documentName: string;
   id: string;
   projectType: string;
   isPublished: boolean;
+  teamProject: boolean;
+
 };
 
 export type CreateProject = z.infer<typeof CreateProjectSchema>;

@@ -10,15 +10,12 @@ import { Timer, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { IssueData } from "./IssueDetails";
 import { Progress } from "@/components/ui/progress";
-import {
-  handleIssueMultiplePropertyChange,
-  handleIssuePropertyChange,
-} from "@/utils/sprintUtil";
-import { useParams } from "next/navigation";
+import { handleIssueMultiplePropertyChange } from "@/utils/sprintUtil";
 
 function EstimatedTimeSetter({
   showEstimatedTime,
   setShowEstimatedTime,
+  sprintId,
   issueData,
   setIssueData,
 }: {
@@ -26,8 +23,8 @@ function EstimatedTimeSetter({
   setShowEstimatedTime: Dispatch<SetStateAction<boolean>>;
   issueData: IssueData;
   setIssueData: Dispatch<SetStateAction<IssueData>>;
+  sprintId: string;
 }) {
-  const { sprintId } = useParams();
   // Update remainingTime when both loggedTime and remainingTime are 0
   useEffect(() => {
     if (issueData.loggedTime === 0) {

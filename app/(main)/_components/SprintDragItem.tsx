@@ -27,7 +27,13 @@ const priorityStyles: { [key: string]: { color: string; label: string } } = {
   urgent: { color: "bg-purple-500", label: "Urgent" },
 };
 
-function SprintDragItem({ item }: { item: issueDataType }) {
+function SprintDragItem({
+  item,
+  sprintId,
+}: {
+  item: issueDataType;
+  sprintId: string;
+}) {
   const [open, setOpen] = useState(false);
   return (
     <div
@@ -65,7 +71,12 @@ function SprintDragItem({ item }: { item: issueDataType }) {
           ))}
         </div>
       </div>
-      <IssueDetails item={item} open={open} setOpen={setOpen} />
+      <IssueDetails
+        sprintId={sprintId}
+        item={item}
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   );
 }

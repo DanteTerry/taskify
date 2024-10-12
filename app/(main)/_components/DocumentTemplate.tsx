@@ -18,7 +18,6 @@ import { toast } from "sonner";
 
 function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   const router = useRouter();
-
   const onDelete = async () => {
     const documentId = document?.id;
 
@@ -41,9 +40,15 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   return (
     <div
       onClick={() => {
-        router.push(
-          `/workspace/${document?.workspaceId}/${document.projectType}/${document?.id}`,
-        );
+        document.teamProject
+          ? router.push(
+              `/workspace/${document?.workspaceId}/teamproject/${
+                document?.id.split("-")[1]
+              }`,
+            )
+          : router.push(
+              `/workspace/${document?.workspaceId}/${document.projectType}/${document?.id}`,
+            );
       }}
       className={cn(
         `relative mt-3 cursor-pointer overflow-hidden rounded-xl border-2 font-space shadow-lg transition-all duration-300`,

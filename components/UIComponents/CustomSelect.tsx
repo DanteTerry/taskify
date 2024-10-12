@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import Image from "next/image";
 import { IssueData, ShowState } from "@/app/(main)/_components/IssueDetails";
 import {
@@ -13,6 +13,7 @@ import { issueDataType, issueType } from "@/types/type";
 
 function CustomSelect({
   setIssueData,
+  sprintId,
   type,
   option,
   issueData,
@@ -27,6 +28,7 @@ function CustomSelect({
   setIssueData: Dispatch<SetStateAction<IssueData>>;
   option: any;
   children: React.ReactNode;
+  sprintId: string;
 }) {
   const handleClose = () => {
     setShow((prevShow) => ({
@@ -34,8 +36,27 @@ function CustomSelect({
       [type]: false,
     }));
   };
+  console.log(sprintId);
 
-  const { sprintId } = useParams();
+  // todo make a function that close all the show state when click outside
+  // useEffect(() => {
+  //   const handleClickOutside = (e: MouseEvent) => {
+  //     if (e.target instanceof Element) {
+  //       if (!e.target.closest(".relative")) {
+  //         setShow((prevShow) => ({
+  //           ...prevShow,
+  //           [type]: false,
+  //         }));
+  //       }
+  //     }
+  //   };
+
+  //   document.addEventListener("click", handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener("click", handleClickOutside);
+  //   };
+  // }, [setShow, type]);
 
   const handleStatusChange = async (status: string) => {
     if (!sprintId) throw new Error("Invalid sprintId");

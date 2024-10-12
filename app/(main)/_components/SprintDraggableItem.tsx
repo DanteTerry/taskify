@@ -4,10 +4,12 @@ import SprintDragItem from "./SprintDragItem";
 
 function SprintDraggableItem({
   item,
+  sprintId,
   index,
 }: {
   item: issueDataType;
   index: number;
+  sprintId: string;
 }) {
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -17,7 +19,7 @@ function SprintDraggableItem({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <SprintDragItem item={item} />
+          <SprintDragItem sprintId={sprintId} item={item} />
         </div>
       )}
     </Draggable>

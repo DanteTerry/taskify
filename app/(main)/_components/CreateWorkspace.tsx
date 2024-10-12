@@ -67,6 +67,7 @@ function CreateWorkspace({
         createdBy: user?.primaryEmailAddress?.emailAddress,
         id: workSpaceId,
         orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+        teamWorkspace: false,
       });
 
       setLoading(false);

@@ -84,12 +84,13 @@ function IssueDetails({
   item,
   open,
   setOpen,
+  sprintId,
 }: {
   item: issueDataType;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  sprintId: string;
 }) {
-  const { sprintId } = useParams();
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -238,7 +239,7 @@ function IssueDetails({
                     className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                     required
                     rows={
-                      item?.shortSummary && item?.shortSummary?.length > 50
+                      item?.shortSummary && item?.shortSummary?.length > 52
                         ? 2
                         : 1
                     }
@@ -315,13 +316,18 @@ function IssueDetails({
                   )}
 
                   {/* comments */}
-                  <SprintComment item={item} issueData={issueData} />
+                  <SprintComment
+                    sprintId={sprintId}
+                    item={item}
+                    issueData={issueData}
+                  />
                 </div>
 
                 {/* second div */}
                 <div className="flex w-[300px] flex-col gap-5">
                   {/* status */}
                   <CustomSelect
+                    sprintId={sprintId}
                     show={show}
                     setShow={setShow}
                     issueData={issueData}
@@ -348,6 +354,7 @@ function IssueDetails({
 
                   {/* Assignees */}
                   <CustomSelect
+                    sprintId={sprintId}
                     show={show}
                     setShow={setShow}
                     issueData={issueData}
@@ -419,6 +426,7 @@ function IssueDetails({
                   {/* reporter */}
 
                   <CustomSelect
+                    sprintId={sprintId}
                     show={show}
                     setShow={setShow}
                     issueData={issueData}
@@ -453,6 +461,7 @@ function IssueDetails({
                   {/* priority */}
 
                   <CustomSelect
+                    sprintId={sprintId}
                     show={show}
                     setShow={setShow}
                     issueData={issueData}
@@ -593,7 +602,7 @@ function IssueDetails({
                     </p>
 
                     {/* todo implemented updated functionality */}
-                    <p className="capitalize">Updated at a days ago</p>
+                    {/* <p className="capitalize">Updated at a days ago</p> */}
                   </div>
 
                   {/* testing select component */}
@@ -610,6 +619,7 @@ function IssueDetails({
         setShowEstimatedTime={setShowEstimatedTime}
         issueData={issueData}
         setIssueData={setIssueData}
+        sprintId={sprintId}
       />
     </div>
   );

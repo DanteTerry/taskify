@@ -13,39 +13,40 @@ import SingleComment from "./SingleComment";
 function SprintComment({
   issueData,
   item,
+  sprintId,
 }: {
   issueData: IssueData;
   item: issueDataType;
+  sprintId: string;
 }) {
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [comment, setComment] = useState("");
-  const { sprintId } = useParams();
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   // this useEffect is used to listen to the keypress event and open the comment box
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      const activeElement = document.activeElement;
-      if (
-        (event.key === "m" || event.key === "M") &&
-        activeElement !== textAreaRef.current &&
-        activeElement?.tagName !== "INPUT" &&
-        activeElement?.tagName !== "TEXTAREA"
-      ) {
-        event.preventDefault();
-        setIsEditing(true);
-        textAreaRef.current?.focus();
-        setComment("");
-      }
-    };
+    useEffect(() => {
+      const handleKeyPress = (event: KeyboardEvent) => {
+        const activeElement = document.activeElement;
+        if (
+          (event.key === "m" || event.key === "M") &&
+          activeElement !== textAreaRef.current &&
+          activeElement?.tagName !== "INPUT" &&
+          activeElement?.tagName !== "TEXTAREA"
+        ) {
+          event.preventDefault();
+          setIsEditing(true);
+          textAreaRef.current?.focus();
+          setComment("");
+        }
+      };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
+      window.addEventListener("keydown", handleKeyPress);
+      return () => {
+        window.removeEventListener("keydown", handleKeyPress);
+      };
+    }, []);
 
   const saveComment = async () => {
     if (user?.id && comment.length === 0) {
@@ -130,6 +131,7 @@ function SprintComment({
 
         {item?.comments?.map((comment) => (
           <SingleComment
+            sprintId={sprintId}
             issueData={issueData}
             key={comment.id}
             comment={comment as CommentType}

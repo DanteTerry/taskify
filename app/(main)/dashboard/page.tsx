@@ -119,6 +119,31 @@ function Dashboard() {
     saveUser();
   }, [user]);
 
+  useEffect(() => {
+    async function createTeamWorkspace() {
+      try {
+        if (user) {
+          const id = user?.id;
+          await setDoc(doc(db, "WorkSpaces", id), {
+            workspaceName: "Team Workspace",
+            emoji: "👨‍💻",
+            coverImage:
+              "https://utfs.io/f/wp7wZZqvVF0Ikwcmq8pMGiXQoJkLxg2rSzqbCA1Nha75wRjU",
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+            id: id,
+            orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+            teamWorkspace: true,
+          });
+        }
+      } catch (error: any) {
+        toast(error.message);
+      }
+    }
+
+    createTeamWorkspace();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
     <section
       className={cn(

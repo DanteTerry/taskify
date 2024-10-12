@@ -10,14 +10,15 @@ import { useParams } from "next/navigation";
 function SingleComment({
   comment,
   issueData,
+  sprintId,
 }: {
   comment: CommentType;
   issueData: IssueData;
+  sprintId: string;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedComment] = useState(comment.comment);
   const { user } = useUser();
-  const { sprintId } = useParams();
 
   const handleEditClick = () => {
     setIsEditing(true);

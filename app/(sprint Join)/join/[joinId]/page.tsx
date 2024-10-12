@@ -8,10 +8,10 @@ import {
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { updateJoinCode } from "@/utils/sprintUtil";
 import { useUser } from "@clerk/nextjs";
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
 import { CircleCheck, CircleX, Loader } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ function JoinPage() {
   const [accepted, setAccepted] = useState(false);
   const [rejected, setRejected] = useState(false);
   const { user } = useUser();
+  const router = useRouter();
 
   const { joinId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
@@ -59,6 +60,27 @@ function JoinPage() {
       toast.success("You have successfully joined the project!");
     } catch (error) {
       console.error("Error accepting invite: ", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+
+    try {
+      await setDoc(doc(db, "WorkSpaceDocuments", documentId), {
+        workspaceId: user?.id,
+        createdBy: {
+          id: user?.id,
+          fullName: user?.fullName,
+          email: user?.primaryEmailAddress?.emailAddress,
+          picture: user?.imageUrl,
+        },
+        coverImage: documentInfo.coverImage,
+        id: documentId,
+        emoji: documentInfo.emoji,
+        documentName: documentInfo.documentName,
+        projectType: documentInfo.projectType,
+        isPublished: false,
+        teamProject: true,
+      });
+    } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }
   };
@@ -122,7 +144,7 @@ function JoinPage() {
           <div className="mt-3 flex justify-center">
             <button
               className="rounded bg-blue-600 px-4 py-2 font-semibold text-white shadow-lg transition-all duration-200 hover:bg-blue-700 focus:outline-none"
-              onClick={() => window.history.back()}
+              onClick={() => router.push(`/`)}
             >
               Go to Dashboard
             </button>
@@ -180,7 +202,11 @@ function JoinPage() {
           <div className="mt-4 flex justify-center">
             <button
               className="rounded bg-blue-600 px-4 py-2 font-semibold text-white shadow-lg transition-all duration-200 hover:bg-blue-700 focus:outline-none"
-              onClick={() => window.history.back()}
+              onClick={() =>
+                router.push(
+                  `/workspace/${user?.id}/teamproject/${documentInfo?.id}`,
+                )
+              }
             >
               Go to Project
             </button>
@@ -211,7 +237,11 @@ function JoinPage() {
           <div className="mt-3 flex justify-center">
             <button
               className="rounded bg-blue-600 px-4 py-2 font-semibold text-white shadow-lg transition-all duration-200 hover:bg-blue-700 focus:outline-none"
-              onClick={() => window.history.back()}
+              onClick={() =>
+                router.push(
+                  `/workspace/${user?.id}/teamproject/${documentInfo?.id}`,
+                )
+              }
             >
               Go to Project
             </button>
