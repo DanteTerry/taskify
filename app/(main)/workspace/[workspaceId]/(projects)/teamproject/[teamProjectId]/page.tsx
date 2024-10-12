@@ -3,33 +3,67 @@ import MainSprint from "@/app/(main)/_components/MainSprint";
 import { fetchSprintDocumentOutput } from "@/lib/redux/sprintSlice";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { useUser } from "@clerk/nextjs";
+import { Loader } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaLock } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 
 function TeamProject() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const { teamProjectId: projectId } = useParams();
   const router = useRouter();
+  const [loading, setLoading] = useState(true); // overall loading state
   const [openCreateIssue, setOpenCreateIssue] = useState(false);
   const [openCollaborators, setOpenCollaborators] = useState(false);
   const [isCollaborator, setIsCollaborator] = useState(false);
+  const [collaboratorCheckComplete, setCollaboratorCheckComplete] =
+    useState(false); // check complete flag
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );
   const dispatch = useDispatch<AppDispatch>();
   const teamProjectId = projectId as string;
+
+  // Fetch the project data
   useEffect(() => {
-    dispatch(fetchSprintDocumentOutput(teamProjectId as string));
+    if (teamProjectId) {
+      dispatch(fetchSprintDocumentOutput(teamProjectId))
+        .then(() => setLoading(false)) // Stop loading after project data is fetched
+        .catch((error) => {
+          console.error("Error fetching project:", error);
+          setLoading(false); // Stop loading even if there's an error
+        });
+    }
   }, [dispatch, teamProjectId]);
 
+  // Check if the user is a collaborator
   useEffect(() => {
-    setIsCollaborator(
-      collaborators.some((collaborator) => collaborator.id === user?.id),
-    );
-  }, [collaborators, user]);
+    if (isLoaded && user && collaborators.length > 0) {
+      // Wait until user and collaborator data is available
+      const isUserCollaborator = collaborators.some(
+        (collaborator) => collaborator.id === user?.id,
+      );
+      setIsCollaborator(isUserCollaborator);
+      setCollaboratorCheckComplete(true); // Mark the collaborator check as complete
+    }
+  }, [collaborators, user, isLoaded]);
 
+  // Wait until both the project loading and collaborator check are complete before rendering anything
+  if (loading || !collaboratorCheckComplete || !isLoaded) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-gray-100 dark:bg-[#1F1F1F]">
+        <div className="flex flex-col items-center justify-center gap-4 text-center">
+          <Loader className="h-16 w-16 animate-spin rounded-full" />
+          <p className="animate-pulse text-lg font-semibold text-gray-700 dark:text-gray-300">
+            Loading document, please wait...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Once loading is done and collaborator check is complete, show "Access Denied" if the user is not a collaborator
   if (!isCollaborator) {
     return (
       <div className="flex h-full flex-col items-center justify-center bg-gray-50">
@@ -56,6 +90,7 @@ function TeamProject() {
     );
   }
 
+  // If the user is a collaborator and all checks are complete, render the project content
   return (
     <div className="flex flex-col gap-2">
       <MainSprint
@@ -69,4 +104,5 @@ function TeamProject() {
     </div>
   );
 }
+
 export default TeamProject;

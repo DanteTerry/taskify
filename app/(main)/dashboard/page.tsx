@@ -63,7 +63,7 @@ function Dashboard() {
   useEffect(() => {
     user && getWorkspace();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgId, user]);
+  }, []);
 
   // Helper function to delete all documents in a specified collection based on workspaceId
   const deleteDocumentsByWorkspaceId = async (
