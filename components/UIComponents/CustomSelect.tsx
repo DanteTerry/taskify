@@ -127,10 +127,10 @@ function CustomSelect({
   };
 
   return (
-    <div className="relative flex flex-col gap-1">
+    <div className="relative flex flex-col gap-1 md:pl-4">
       <label
         htmlFor="select"
-        className="text-xs font-bold uppercase text-gray-600"
+        className="text-left text-xs font-bold uppercase text-gray-600"
       >
         {type}
       </label>

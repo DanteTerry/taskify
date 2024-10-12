@@ -26,27 +26,27 @@ function SprintComment({
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   // this useEffect is used to listen to the keypress event and open the comment box
-    useEffect(() => {
-      const handleKeyPress = (event: KeyboardEvent) => {
-        const activeElement = document.activeElement;
-        if (
-          (event.key === "m" || event.key === "M") &&
-          activeElement !== textAreaRef.current &&
-          activeElement?.tagName !== "INPUT" &&
-          activeElement?.tagName !== "TEXTAREA"
-        ) {
-          event.preventDefault();
-          setIsEditing(true);
-          textAreaRef.current?.focus();
-          setComment("");
-        }
-      };
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      const activeElement = document.activeElement;
+      if (
+        (event.key === "m" || event.key === "M") &&
+        activeElement !== textAreaRef.current &&
+        activeElement?.tagName !== "INPUT" &&
+        activeElement?.tagName !== "TEXTAREA"
+      ) {
+        event.preventDefault();
+        setIsEditing(true);
+        textAreaRef.current?.focus();
+        setComment("");
+      }
+    };
 
-      window.addEventListener("keydown", handleKeyPress);
-      return () => {
-        window.removeEventListener("keydown", handleKeyPress);
-      };
-    }, []);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
 
   const saveComment = async () => {
     if (user?.id && comment.length === 0) {
@@ -77,8 +77,8 @@ function SprintComment({
   };
 
   return (
-    <div className="pl-4">
-      <p className="mb-2 text-sm font-bold capitalize text-[#172B4D]">
+    <div>
+      <p className="mb-2 text-left text-sm font-bold capitalize text-[#172B4D]">
         Comments
       </p>
       <div className="mt-1.5">
@@ -101,7 +101,7 @@ function SprintComment({
               onFocus={() => setIsEditing(true)}
             />
             {!isEditing && (
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 hidden text-left text-xs text-gray-500 md:block">
                 <span className="font-semibold text-gray-700">Pro tip:</span>{" "}
                 Press{" "}
                 <span className="rounded bg-gray-200 px-1 py-0.5 text-gray-800">

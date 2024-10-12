@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { issueDataType } from "@/types/type";
-import { CalendarIcon, Plus, Timer, Trash2, User, X } from "lucide-react";
+import { CalendarIcon, Plus, Timer, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -148,19 +148,19 @@ function IssueDetails({
   );
 
   return (
-    <div>
+    <>
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className="h-[92vh] max-w-[1040px] overflow-y-auto rounded-lg border border-gray-200 shadow-lg dark:border-gray-700">
+        <DialogContent className="h-[100vh] max-w-full overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 sm:max-w-max md:h-[90vh] md:rounded-lg">
           <DialogHeader className="h-full w-full">
             <ScrollArea className="h-full w-full">
               <DialogTitle></DialogTitle>
               <DialogDescription></DialogDescription>
-              <div className="flex w-full items-center justify-between">
+              <div className="flex w-full items-center justify-between sm:flex-row">
                 <Popover modal={true}>
                   <PopoverTrigger>
                     <Button
                       variant={"ghost"}
-                      className="flex w-44 justify-start gap-2 font-semibold uppercase hover:bg-[#EBECF0] hover:bg-transparent"
+                      className="flex w-full justify-start gap-2 pl-0 font-semibold uppercase hover:bg-[#EBECF0] hover:bg-transparent sm:w-44"
                       size={"sm"}
                     >
                       {issueTypeIcons[item.issueType]}
@@ -202,7 +202,7 @@ function IssueDetails({
                 {/* issue type  */}
 
                 {/* delete button  */}
-                <div className="flex gap-3 text-[#3b4a64]">
+                <div className="mt-2 flex gap-3 text-[#3b4a64] sm:mt-0">
                   <Button
                     className="hover:bg-[#EBECF0]"
                     variant={"ghost"}
@@ -224,8 +224,8 @@ function IssueDetails({
               </div>
 
               {/* title */}
-              <div className="flex gap-10">
-                <div className="flex w-[600px] flex-col gap-3">
+              <div className="flex flex-col gap-10 lg:flex-row">
+                <div className="flex w-full flex-col gap-3 sm:w-[550px]">
                   <textarea
                     value={item.shortSummary || ""}
                     onChange={(e) =>
@@ -236,7 +236,7 @@ function IssueDetails({
                         issueData,
                       )
                     }
-                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                     required
                     rows={
                       item?.shortSummary && item?.shortSummary?.length > 52
@@ -245,11 +245,11 @@ function IssueDetails({
                     }
                   />
 
-                  <div className="flex flex-col pl-4">
-                    <p className="text-sm font-bold capitalize text-[#172B4D]">
+                  <div className="flex flex-col">
+                    <p className="text-left text-sm font-bold capitalize text-[#172B4D]">
                       Description
                     </p>
-                    <div className="max-h-[500px] overflow-auto">
+                    <div className="flex max-h-[500px] justify-start overflow-auto">
                       {isEditing ? (
                         <>
                           <ReactQuill
@@ -289,7 +289,7 @@ function IssueDetails({
                     </div>
                   </div>
                   {isEditing && (
-                    <div className="flex items-center gap-5 pl-4">
+                    <div className="flex items-center gap-5 md:pl-4">
                       <Button
                         onClick={() => {
                           handleIssuePropertyChange(
@@ -324,7 +324,7 @@ function IssueDetails({
                 </div>
 
                 {/* second div */}
-                <div className="flex w-[300px] flex-col gap-5">
+                <div className="flex w-full flex-col gap-5 sm:w-[300px]">
                   {/* status */}
                   <CustomSelect
                     sprintId={sprintId}
@@ -488,8 +488,8 @@ function IssueDetails({
                     </Button>
                   </CustomSelect>
 
-                  <div className="flex flex-col gap-1">
-                    <p className="text-xs font-bold uppercase text-gray-600">
+                  <div className="flex flex-col gap-1 md:pl-4">
+                    <p className="text-left text-xs font-bold uppercase text-gray-600">
                       deadline
                     </p>
                     <div className="flex w-max flex-wrap gap-1">
@@ -537,8 +537,8 @@ function IssueDetails({
                   </div>
 
                   {/* original  estimated  (hours) */}
-                  <div>
-                    <p className="text-xs font-bold uppercase text-gray-600">
+                  <div className="md:pl-4">
+                    <p className="text-left text-xs font-bold uppercase text-gray-600">
                       original estimated (hours)
                     </p>
                     <input
@@ -564,8 +564,8 @@ function IssueDetails({
                   </div>
 
                   {/* time tracking  */}
-                  <div className="flex cursor-pointer flex-col rounded-md p-1 hover:bg-gray-100">
-                    <p className="text-xs font-bold uppercase text-gray-600">
+                  <div className="flex cursor-pointer flex-col rounded-md p-1 hover:bg-gray-100 md:pl-4">
+                    <p className="text-left text-xs font-bold uppercase text-gray-600">
                       Time tracking
                     </p>
 
@@ -621,7 +621,7 @@ function IssueDetails({
         setIssueData={setIssueData}
         sprintId={sprintId}
       />
-    </div>
+    </>
   );
 }
 

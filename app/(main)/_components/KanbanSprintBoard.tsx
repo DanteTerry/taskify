@@ -125,12 +125,12 @@ function KanbanSprintBoard({ sprintId }: { sprintId: string }) {
   return (
     <div className="h-full w-full">
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {data &&
             data.map((data, index) => (
               <div
                 key={data.id}
-                className="mr-3 flex-shrink-0 rounded-md bg-gray-100 p-2 dark:bg-[#161616] md:max-w-80"
+                className="mr-3 w-full rounded-md bg-gray-100 p-2 dark:bg-[#161616] md:max-w-80"
               >
                 <div className="list-body">
                   <div className="flex items-center justify-between p-1">
@@ -142,7 +142,7 @@ function KanbanSprintBoard({ sprintId }: { sprintId: string }) {
                       defaultValue={data.status}
                     />
 
-                    <span className="text-sm font-bold text-gray-200">
+                    <span className="text-sm font-bold text-gray-400 dark:text-gray-200">
                       {data?.items?.length}
                     </span>
                   </div>

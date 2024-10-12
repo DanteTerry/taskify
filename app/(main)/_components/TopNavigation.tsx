@@ -62,10 +62,13 @@ function TopNavigation({
         />
       </div>
       <div className="flex items-center gap-3">
-        <Publish
-          documentId={params.documentId as string}
-          documentInfo={documentInfo}
-        />
+        {documentInfo?.projectType === "page" && (
+          <Publish
+            documentId={params.documentId as string}
+            documentInfo={documentInfo}
+          />
+        )}
+
         {user?.primaryEmailAddress?.emailAddress ? (
           <UserButton />
         ) : (

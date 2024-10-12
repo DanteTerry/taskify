@@ -38,7 +38,7 @@ function SprintDragItem({
   return (
     <div
       onClick={() => setOpen(true)}
-      className="flex max-w-sm transform flex-col gap-2 overflow-hidden rounded-lg bg-white p-4 shadow-lg transition-transform hover:scale-[101%]"
+      className="flex h-full max-w-sm transform flex-col gap-3 overflow-hidden rounded-lg bg-white p-4 shadow-lg transition-transform hover:scale-[101%]"
     >
       <p className="text-sm font-medium text-gray-800">{item.shortSummary}</p>
 
