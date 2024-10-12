@@ -96,6 +96,7 @@ function SideNavigation({
           <Button
             size={"icon"}
             variant={"ghost"}
+            className="hover:bg-gray-600/50"
             onClick={() => setIsOpen((prev) => !prev)}
           >
             <Menu size={20} className="text-[#f1f1f1]" />

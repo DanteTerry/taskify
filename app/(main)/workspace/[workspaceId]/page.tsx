@@ -165,18 +165,26 @@ function WorkSpacePage({ params }: { params: any }) {
 
           {/* <ProjectCard /> */}
           <Dialog open={open} onOpenChange={() => setOpen(false)}>
-            <DialogContent className={cn(`w-[350px] rounded-lg bg-[#161616]`)}>
+            <DialogContent
+              className={cn(
+                "w-[350px] rounded-lg bg-white pl-5 shadow-lg dark:bg-[#1f1f1f]",
+              )}
+            >
               <DialogHeader>
-                <DialogTitle>
+                <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {projectType === "board"
                     ? "Board"
                     : projectType === "page"
                       ? "Page"
-                      : "sprint"}{" "}
+                      : "Sprint"}{" "}
                   Project
                 </DialogTitle>
-                <ProjectCard params={params} projectType={projectType} />
-                <DialogDescription></DialogDescription>
+                <DialogDescription className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Fill in the details for your new project.
+                </DialogDescription>
+                <div className="">
+                  <ProjectCard params={params} projectType={projectType} />
+                </div>
               </DialogHeader>
             </DialogContent>
           </Dialog>

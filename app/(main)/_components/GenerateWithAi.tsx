@@ -54,7 +54,7 @@ function GenerateWithAi({
     <div className="fixed bottom-8 right-5 flex h-20 w-20 items-center justify-center overflow-hidden">
       <div className="relative">
         <Popover>
-          <PopoverTrigger className="flex transform items-center justify-between rounded-md bg-black/80 p-2 shadow-lg hover:bg-black">
+          <PopoverTrigger className="flex transform items-center justify-between rounded-md bg-black/80 p-2 shadow-lg hover:bg-black dark:bg-white/80 dark:hover:bg-white">
             <video
               src="/ai-loader.mp4"
               className="h-10 w-10 rounded-full object-cover"
@@ -66,8 +66,8 @@ function GenerateWithAi({
           </PopoverTrigger>
 
           <PopoverContent className="absolute -right-8 bottom-16 p-0">
-            <Card className="w-72 transform rounded-lg bg-[#1F1F1F] text-white shadow-xl">
-              <CardHeader className="border-b border-gray-700 p-4">
+            <Card className="w-72 transform rounded-lg bg-white text-black shadow-xl dark:bg-[#1F1F1F] dark:text-white">
+              <CardHeader className="border-b border-gray-300 p-4 dark:border-gray-700">
                 <h3 className="text-lg font-semibold">
                   Generate Template with AI
                 </h3>
@@ -77,15 +77,15 @@ function GenerateWithAi({
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   placeholder="Describe your template..."
-                  className="mb-4 border-gray-700 bg-[#292929] text-gray-200 focus:ring-2 focus:ring-blue-500"
+                  className="mb-4 border-gray-300 bg-gray-100 text-gray-800 focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-[#292929] dark:text-gray-200"
                 />
               </CardContent>
-              <CardFooter className="flex justify-between border-t border-gray-700 p-4">
+              <CardFooter className="flex justify-between border-t border-gray-300 p-4 dark:border-gray-700">
                 <Button
                   disabled={!userInput || loading}
                   onClick={() => generateWithAi()}
                   variant="secondary"
-                  className="w-full bg-indigo-500 transition duration-200 hover:bg-indigo-600"
+                  className="duration-20 w-full bg-indigo-500 text-white transition hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700"
                 >
                   {loading ? (
                     <Loader2Icon className="animate-spin" />
