@@ -66,8 +66,10 @@ export default function RootLayout({
       >
         <ClerkProvider>
           <GlobalStateProvider>
-            {children}
-            <Toaster />
+            <DarkModeProvider>
+              {children}
+              <Toaster />
+            </DarkModeProvider>
           </GlobalStateProvider>
         </ClerkProvider>
       </body>

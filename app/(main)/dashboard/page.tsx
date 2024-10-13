@@ -28,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { WorkspaceDocData } from "@/types/type";
 
 function Dashboard() {
   const { user } = useUser();
@@ -41,6 +42,7 @@ function Dashboard() {
   const [selectedWorkspace, setSelectedWorkspace] = useState<
     DocumentData | undefined
   >();
+  const [documents, setDocuments] = useState<WorkspaceDocData[]>();
 
   const getWorkspace = () => {
     setIsLoading(true);
@@ -144,6 +146,26 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+  useEffect(() => {
+    // Create a query to get documents where 'workspaceId' matches the passed workspaceId
+    const q = query(
+      collection(db, "WorkSpaceDocuments"),
+      where("workspaceName", "==", user?.id),
+    );
+
+    // Set up a real-time listener
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() }) as WorkspaceDocData,
+      );
+
+      setDocuments(docs);
+    });
+
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
+  }, [user?.id]);
+
   return (
     <section
       className={cn(
@@ -203,36 +225,38 @@ function Dashboard() {
                       </h2>
                     </div>
 
-                    <Popover>
-                      <PopoverTrigger>
-                        <Ellipsis size={20} />
-                      </PopoverTrigger>
-                      <PopoverContent className="flex w-max flex-col p-1">
-                        <Button
-                          className="rounded-sm"
-                          variant={"ghost"}
-                          size={"sm"}
-                          onClick={() => {
-                            setSelectedWorkspace(workSpace);
-                            setAction("update");
-                            setIsOpen(true);
-                          }}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          className="rounded-sm"
-                          variant={"ghost"}
-                          size={"sm"}
-                          onClick={() => {
-                            setSelectedWorkspace(workSpace);
-                            setIsDeleteDialogOpen(true); // Open delete confirmation dialog
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
+                    {workSpace?.id !== user?.id && (
+                      <Popover>
+                        <PopoverTrigger>
+                          <Ellipsis size={20} />
+                        </PopoverTrigger>
+                        <PopoverContent className="flex w-max flex-col p-1">
+                          <Button
+                            className="rounded-sm"
+                            variant={"ghost"}
+                            size={"sm"}
+                            onClick={() => {
+                              setSelectedWorkspace(workSpace);
+                              setAction("update");
+                              setIsOpen(true);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            className="rounded-sm"
+                            variant={"ghost"}
+                            size={"sm"}
+                            onClick={() => {
+                              setSelectedWorkspace(workSpace);
+                              setIsDeleteDialogOpen(true); // Open delete confirmation dialog
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </PopoverContent>
+                      </Popover>
+                    )}
                   </div>
                 </div>
               ))

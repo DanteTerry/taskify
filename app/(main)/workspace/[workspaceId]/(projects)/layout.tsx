@@ -1,22 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SideNavigation from "../../../_components/SideNavigation";
 import TopNavigation from "../../../_components/TopNavigation";
-import { setDarkMode } from "@/lib/redux/darkModeSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/lib/redux/store";
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      dispatch(setDarkMode(true));
-    }
-  }, [dispatch]);
 
   return (
     <div className="relative flex h-screen w-full overflow-hidden dark:bg-[#0D0D10]">

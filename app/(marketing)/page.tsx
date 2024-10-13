@@ -5,26 +5,11 @@ import HeroSec from "./_components/HeroSec";
 import NavBar from "./_components/NavBar";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store";
-import { useEffect } from "react";
-import { setDarkMode } from "@/lib/redux/darkModeSlice";
 
 export default function Marketing() {
   const { user, isLoaded } = useUser();
 
   const router = useRouter();
-
-  const dispatch = useDispatch<AppDispatch>();
-  const { darkMode } = useSelector((state: RootState) => state.darkMode);
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark") {
-      document.documentElement.classList.add("dark");
-      dispatch(setDarkMode(true));
-    }
-  }, [dispatch]);
 
   if (isLoaded && user?.primaryEmailAddress?.emailAddress) {
     router.push("/dashboard");
