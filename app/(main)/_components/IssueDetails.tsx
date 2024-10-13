@@ -40,6 +40,7 @@ import { Timestamp } from "firebase/firestore";
 import SprintComment from "./SprintComment";
 import { typeIssue } from "@/constants";
 import { useUser } from "@clerk/nextjs";
+import { current } from "@reduxjs/toolkit";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -171,6 +172,7 @@ function IssueDetails({
                     <div className="mt-2 flex flex-col items-start gap-1 pb-2">
                       {typeIssue.map((option, index) => (
                         <Button
+                          disabled={currentUserCollaborator?.role === "viewer"}
                           onClick={() => {
                             handleIssuePropertyChange(
                               "issueType",
@@ -204,7 +206,13 @@ function IssueDetails({
                 {/* delete button  */}
                 <div className="mt-2 flex gap-3 text-[#3b4a64] sm:mt-0">
                   <Button
-                    className="hover:bg-[#EBECF0]"
+                    className={cn(
+                      `hover:bg-[#EBECF0]`,
+                      currentUserCollaborator?.role === "collaborator" ||
+                        currentUserCollaborator?.role === "viewer"
+                        ? "hidden"
+                        : "",
+                    )}
                     variant={"ghost"}
                     size={"icon"}
                     onClick={() => {
@@ -227,6 +235,7 @@ function IssueDetails({
               <div className="flex flex-col gap-10 lg:flex-row">
                 <div className="flex w-full flex-col gap-3 sm:w-[550px]">
                   <textarea
+                    disabled={currentUserCollaborator?.role === "viewer"}
                     value={item.shortSummary || ""}
                     onChange={(e) =>
                       handleIssuePropertyChange(
@@ -236,7 +245,7 @@ function IssueDetails({
                         issueData,
                       )
                     }
-                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-none dark:border-gray-600 dark:bg-[#1f1f1f] dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-500"
+                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent bg-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-none dark:border-gray-600 dark:bg-[#1f1f1f] dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-500"
                     required
                     rows={
                       item?.shortSummary && item?.shortSummary?.length > 52
@@ -280,7 +289,12 @@ function IssueDetails({
                       ) : (
                         <div
                           className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:border-none dark:bg-[#1f1f1f] dark:bg-transparent dark:text-white"
-                          onClick={() => setIsEditing(true)}
+                          onClick={() => {
+                            if (currentUserCollaborator?.role === "viewer") {
+                              return;
+                            }
+                            setIsEditing(true);
+                          }}
                           dangerouslySetInnerHTML={{
                             __html: item.description,
                           }}
@@ -342,7 +356,12 @@ function IssueDetails({
                   >
                     {" "}
                     <Button
-                      onClick={() => handleToggle("status")}
+                      onClick={() => {
+                        if (currentUserCollaborator?.role === "viewer") {
+                          return;
+                        }
+                        handleToggle("status");
+                      }}
                       variant="ghost"
                       className={`hover:${getIssueColor(issueData.status)} flex w-max items-center justify-between text-white hover:text-white ${getIssueColor(issueData.status)}`}
                     >
@@ -365,7 +384,12 @@ function IssueDetails({
                     <div className="">
                       {issueData?.assignees?.length === 0 && (
                         <Button
-                          onClick={() => handleToggle("assignees")}
+                          onClick={() => {
+                            if (currentUserCollaborator?.role === "viewer") {
+                              return;
+                            }
+                            handleToggle("assignees");
+                          }}
                           variant="ghost"
                           className="flex w-max items-center justify-between px-2 dark:bg-[#262626]"
                         >
@@ -398,6 +422,11 @@ function IssueDetails({
                               <button
                                 className="p-0.5 text-gray-500 hover:text-red-400 dark:text-white hover:dark:text-red-500"
                                 onClick={() => {
+                                  if (
+                                    currentUserCollaborator?.role === "viewer"
+                                  ) {
+                                    return;
+                                  }
                                   setIssueData((prevIssueData) => ({
                                     ...prevIssueData,
                                     assignees: prevIssueData.assignees.filter(
@@ -412,7 +441,15 @@ function IssueDetails({
                           ))}
 
                           <Button
-                            onClick={() => handleToggle("assignees")}
+                            disabled={
+                              currentUserCollaborator?.role === "viewer"
+                            }
+                            onClick={() => {
+                              if (currentUserCollaborator?.role === "viewer") {
+                                return;
+                              }
+                              handleToggle("assignees");
+                            }}
                             variant="ghost"
                             className="flex w-max items-center justify-between px-2 text-gray-500 hover:text-blue-500 dark:text-white"
                           >
@@ -436,7 +473,12 @@ function IssueDetails({
                   >
                     {" "}
                     <Button
-                      onClick={() => handleToggle("reporter")}
+                      onClick={() => {
+                        if (currentUserCollaborator?.role === "viewer") {
+                          return;
+                        }
+                        handleToggle("reporter");
+                      }}
                       variant="ghost"
                       className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
                     >
@@ -471,7 +513,12 @@ function IssueDetails({
                   >
                     {" "}
                     <Button
-                      onClick={() => handleToggle("priority")}
+                      onClick={() => {
+                        if (currentUserCollaborator?.role === "viewer") {
+                          return;
+                        }
+                        handleToggle("priority");
+                      }}
                       variant="outline"
                       className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
                     >
@@ -496,6 +543,9 @@ function IssueDetails({
                       <Popover modal={true}>
                         <PopoverTrigger asChild>
                           <Button
+                            disabled={
+                              currentUserCollaborator?.role === "viewer"
+                            }
                             variant={"outline"}
                             className={cn(
                               "w-full justify-start bg-gray-100 text-left font-normal dark:bg-[#262626]",
@@ -515,6 +565,9 @@ function IssueDetails({
                             mode="single"
                             selected={issueData?.deadLine}
                             onSelect={(selectedDate) => {
+                              if (currentUserCollaborator?.role === "viewer") {
+                                return;
+                              }
                               if (selectedDate) {
                                 setIssueData({
                                   ...issueData,
@@ -542,6 +595,7 @@ function IssueDetails({
                       original estimated (hours)
                     </p>
                     <input
+                      disabled={currentUserCollaborator?.role === "viewer"}
                       value={issueData.estimatedTime}
                       type="number"
                       onChange={(e) => {
@@ -569,7 +623,12 @@ function IssueDetails({
                     </p>
 
                     <div
-                      onClick={() => setShowEstimatedTime(true)}
+                      onClick={() => {
+                        if (currentUserCollaborator?.role === "viewer") {
+                          return;
+                        }
+                        setShowEstimatedTime(true);
+                      }}
                       className="mt-2 flex cursor-pointer items-center gap-1.5 text-gray-700"
                     >
                       <Timer size={32} className="dark:text-gray-100" />

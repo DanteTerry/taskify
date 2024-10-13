@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { handleIssuePropertyChange } from "@/utils/sprintUtil";
-import { useParams } from "next/navigation";
 import { IssueData } from "./IssueDetails";
 import { v4 as uuidv4 } from "uuid";
 import { CommentType, issueDataType } from "@/types/type";
@@ -78,7 +77,7 @@ function SprintComment({
 
   return (
     <div>
-      <p className="mb-2 text-left text-sm font-bold capitalize text-[#172B4D] dark:text-[#538be0]">
+      <p className="text-left text-sm font-bold capitalize text-[#0052CC] dark:text-[#538be0]">
         Comments
       </p>
       <div className="mt-1.5">
