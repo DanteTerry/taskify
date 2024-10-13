@@ -91,11 +91,9 @@ function Editor({
           }}
           style={{
             width: "100%",
-            backgroundColor: "white",
-            color: "black",
           }}
           formattingToolbar={true}
-          theme={"light"}
+          theme={"dark"}
           emojiPicker={true}
           tableHandles={true}
           editable={editable}

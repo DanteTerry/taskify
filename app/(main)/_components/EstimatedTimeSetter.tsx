@@ -99,7 +99,7 @@ function EstimatedTimeSetter({
 
   return (
     <Dialog open={showEstimatedTime} onOpenChange={setShowEstimatedTime}>
-      <DialogContent className="max-w-[400px] rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+      <DialogContent className="max-w-[400px] rounded-lg bg-white p-6 shadow-lg dark:bg-[#1f1f1f]">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -114,7 +114,7 @@ function EstimatedTimeSetter({
             </Button>
           </div>
 
-          <div className="mt-4 flex flex-col rounded-md bg-gray-100 p-4 dark:bg-gray-700">
+          <div className="mt-4 flex flex-col rounded-md bg-gray-100 p-4 dark:bg-[#1f1f1f]">
             <div className="flex items-center gap-2">
               <Timer size={35} className="text-blue-500" />
               <div className="flex w-full flex-col gap-2">
@@ -145,7 +145,7 @@ function EstimatedTimeSetter({
               type="number"
               value={issueData.loggedTime}
               onChange={handleLoggedTimeChange}
-              className="w-full rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-transparent dark:text-gray-100"
               placeholder="Logged Time"
             />
             {/* Input for remaining time */}
@@ -153,7 +153,7 @@ function EstimatedTimeSetter({
               type="number"
               value={issueData.remainingTime}
               onChange={handleRemainingTimeChange}
-              className="w-full rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+              className="w-full rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-transparent dark:text-gray-100"
               placeholder="Remaining Time"
             />
           </div>

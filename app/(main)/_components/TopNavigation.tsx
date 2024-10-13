@@ -54,13 +54,14 @@ function TopNavigation({
             <Menu size={20} className="text-[#f1f1f1]" />
           </Button>
         )}
-        <p className="text-white">{documentInfo?.documentName}</p>
       </div>
-      <div className="hidden justify-self-center md:block">
-        <OrganizationSwitcher
+      <div className="justify-self-center md:block">
+        <p className="text-white">{documentInfo?.documentName}</p>
+
+        {/* <OrganizationSwitcher
           afterCreateOrganizationUrl={"/dashboard"}
           afterLeaveOrganizationUrl={"/dashboard"}
-        />
+        /> */}
       </div>
       <div className="flex items-center gap-3">
         {documentInfo?.projectType === "page" && (

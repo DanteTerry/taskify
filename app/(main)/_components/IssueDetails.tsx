@@ -236,7 +236,7 @@ function IssueDetails({
                         issueData,
                       )
                     }
-                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-none dark:border-gray-600 dark:bg-[#1f1f1f] dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-500"
                     required
                     rows={
                       item?.shortSummary && item?.shortSummary?.length > 52
@@ -246,7 +246,7 @@ function IssueDetails({
                   />
 
                   <div className="flex flex-col">
-                    <p className="text-left text-sm font-bold capitalize text-[#172B4D]">
+                    <p className="text-left text-sm font-bold capitalize text-[#0052CC] dark:text-[#538be0]">
                       Description
                     </p>
                     <div className="flex max-h-[500px] justify-start overflow-auto">
@@ -254,10 +254,10 @@ function IssueDetails({
                         <>
                           <ReactQuill
                             value={description}
-                            className="mt-2 bg-white dark:bg-[#1f1f1f] dark:text-white"
+                            className="mt-2 bg-white dark:bg-transparent dark:text-white"
                             theme="snow"
                             placeholder="Describe the issue in as much detail as possible"
-                            style={{ height: "auto" }} // Allow dynamic height
+                            style={{ height: "auto" }}
                             modules={{
                               toolbar: [
                                 [
@@ -279,7 +279,7 @@ function IssueDetails({
                         </>
                       ) : (
                         <div
-                          className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:bg-[#1f1f1f] dark:text-white"
+                          className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:border-none dark:bg-[#1f1f1f] dark:bg-transparent dark:text-white"
                           onClick={() => setIsEditing(true)}
                           dangerouslySetInnerHTML={{
                             __html: item.description,
@@ -300,7 +300,7 @@ function IssueDetails({
                           );
                           setIsEditing(false);
                         }}
-                        className="bg-[#0052CC]"
+                        className="bg-[#0052CC] text-white"
                         size={"sm"}
                       >
                         Save
@@ -367,7 +367,7 @@ function IssueDetails({
                         <Button
                           onClick={() => handleToggle("assignees")}
                           variant="ghost"
-                          className="flex w-max items-center justify-between px-2"
+                          className="flex w-max items-center justify-between px-2 dark:bg-[#262626]"
                         >
                           <span className="text-sm font-medium">
                             {"Unassigned"}
@@ -379,7 +379,7 @@ function IssueDetails({
                         <div className="flex flex-wrap items-center gap-1">
                           {issueData.assignees.map((assignee, index) => (
                             <div
-                              className="flex items-center gap-2 rounded-md bg-gray-100 p-1 shadow-sm"
+                              className="flex items-center gap-2 rounded-md bg-gray-100 px-1 py-2 shadow-sm dark:bg-[#262626] dark:text-white"
                               key={index}
                             >
                               <Image
@@ -391,12 +391,12 @@ function IssueDetails({
                                 className="rounded-full"
                               />
 
-                              <span className="text-xs font-medium text-gray-700">
+                              <span className="text-xs font-medium text-gray-700 dark:text-white">
                                 {assignee.fullName}
                               </span>
 
                               <button
-                                className="p-0.5 text-gray-500 hover:text-red-500"
+                                className="p-0.5 text-gray-500 hover:text-red-400 dark:text-white hover:dark:text-red-500"
                                 onClick={() => {
                                   setIssueData((prevIssueData) => ({
                                     ...prevIssueData,
@@ -414,7 +414,7 @@ function IssueDetails({
                           <Button
                             onClick={() => handleToggle("assignees")}
                             variant="ghost"
-                            className="flex w-max items-center justify-between px-2 text-gray-500 hover:text-blue-500"
+                            className="flex w-max items-center justify-between px-2 text-gray-500 hover:text-blue-500 dark:text-white"
                           >
                             <Plus size={20} />
                           </Button>
@@ -438,7 +438,7 @@ function IssueDetails({
                     <Button
                       onClick={() => handleToggle("reporter")}
                       variant="ghost"
-                      className="flex w-max items-center justify-between gap-2 bg-gray-100 px-1 hover:bg-gray-100"
+                      className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
                     >
                       {issueData.reporter && (
                         <>
@@ -450,7 +450,7 @@ function IssueDetails({
                             className="rounded-full"
                           />
 
-                          <span className="text-xs font-medium text-gray-700">
+                          <span className="text-xs font-medium text-gray-700 dark:text-white">
                             {issueData.reporter.fullName}
                           </span>
                         </>
@@ -473,14 +473,14 @@ function IssueDetails({
                     <Button
                       onClick={() => handleToggle("priority")}
                       variant="outline"
-                      className="hover:gray-100 flex w-max items-center justify-between gap-2 bg-gray-100 px-1"
+                      className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
                     >
                       {issueData.priority && (
                         <>
                           <span
                             className={`h-3 w-3 rounded-full ${getPriorityColor(issueData.priority)}`}
                           ></span>
-                          <span className="text-xs font-medium uppercase text-gray-700">
+                          <span className="text-xs font-medium uppercase text-gray-700 dark:text-white">
                             {issueData.priority}
                           </span>
                         </>
@@ -498,7 +498,7 @@ function IssueDetails({
                           <Button
                             variant={"outline"}
                             className={cn(
-                              "w-full justify-start bg-gray-100 text-left font-normal",
+                              "w-full justify-start bg-gray-100 text-left font-normal dark:bg-[#262626]",
                               !issueData.deadLine && "text-muted-foreground",
                             )}
                           >
@@ -550,7 +550,6 @@ function IssueDetails({
                           estimatedTime: parseInt(e.target.value),
                         });
 
-                        console.log(typeof e.target.value);
                         handleIssuePropertyChange(
                           "estimatedTime",
                           parseInt(e.target.value),
@@ -558,13 +557,13 @@ function IssueDetails({
                           issueData,
                         );
                       }}
-                      className="mt-1 w-full resize-none rounded-md border-2 border-transparent px-1 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                      className="mt-1 w-full resize-none rounded-md border-2 border-transparent px-1 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-[#262626] dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
                       required
                     />
                   </div>
 
                   {/* time tracking  */}
-                  <div className="flex cursor-pointer flex-col rounded-md p-1 hover:bg-gray-100 md:pl-4">
+                  <div className="flex cursor-pointer flex-col rounded-md p-1 hover:bg-gray-100 dark:hover:bg-transparent md:pl-4">
                     <p className="text-left text-xs font-bold uppercase text-gray-600">
                       Time tracking
                     </p>
@@ -573,7 +572,7 @@ function IssueDetails({
                       onClick={() => setShowEstimatedTime(true)}
                       className="mt-2 flex cursor-pointer items-center gap-1.5 text-gray-700"
                     >
-                      <Timer size={32} />
+                      <Timer size={32} className="dark:text-gray-100" />
 
                       <div className="flex w-full flex-col gap-1">
                         <Progress
@@ -581,10 +580,10 @@ function IssueDetails({
                           max={issueData.estimatedTime}
                         />
                         <div className="flex justify-between">
-                          <p className="text-xs">
+                          <p className="text-xs dark:text-gray-100">
                             {issueData.loggedTime}h logged
                           </p>{" "}
-                          <p className="text-xs">
+                          <p className="text-xs dark:text-gray-100">
                             {issueData.remainingTime}h remaining
                           </p>
                         </div>
@@ -597,7 +596,7 @@ function IssueDetails({
                   {/* created and updated */}
                   <div className="flex flex-col gap-1 text-xs font-medium text-[#67758B]">
                     <Separator className="h-[2px]" />
-                    <p className="mt-2 capitalize">
+                    <p className="mt-2 capitalize dark:text-gray-100">
                       {formatDate(issueData.createdAt)}
                     </p>
 

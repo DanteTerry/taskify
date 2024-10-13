@@ -130,7 +130,7 @@ function CustomSelect({
     <div className="relative flex flex-col gap-1 md:pl-4">
       <label
         htmlFor="select"
-        className="text-left text-xs font-bold uppercase text-gray-600"
+        className="text-left text-xs font-bold uppercase text-gray-600 dark:text-gray-300"
       >
         {type}
       </label>
@@ -138,11 +138,11 @@ function CustomSelect({
       {show[type as keyof ShowState] && (
         <>
           {type === "status" && (
-            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm">
+            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
               <input
                 placeholder="Search"
                 type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
                 required
               />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
@@ -169,7 +169,7 @@ function CustomSelect({
                       onClick={() => handleStatusChange(item)}
                       key={index}
                       variant={"ghost"}
-                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"
+                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
                     >
                       <div
                         className={`w-max rounded-md px-2 py-1 text-xs uppercase ${className}`}
@@ -184,11 +184,11 @@ function CustomSelect({
           )}
 
           {type === "assignees" && (
-            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm">
+            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
               <input
                 placeholder="Search"
                 type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
                 required
               />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
@@ -214,7 +214,7 @@ function CustomSelect({
                       }}
                       key={index}
                       variant={"ghost"}
-                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"
+                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
                     >
                       <div className="flex items-center gap-2">
                         <Image
@@ -224,7 +224,7 @@ function CustomSelect({
                           alt={item.fullName}
                           className="rounded-full"
                         />
-                        <span className="text-xs font-medium">
+                        <span className="text-xs font-medium dark:text-gray-200">
                           {item.fullName}
                         </span>
                       </div>
@@ -236,11 +236,11 @@ function CustomSelect({
           )}
 
           {type === "reporter" && (
-            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm">
+            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
               <input
                 placeholder="Search"
                 type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
                 required
               />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
@@ -259,7 +259,7 @@ function CustomSelect({
                       }}
                       key={index}
                       variant={"ghost"}
-                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"
+                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
                     >
                       <div className="flex items-center gap-2">
                         <Image
@@ -269,7 +269,7 @@ function CustomSelect({
                           alt={item.fullName}
                           className="rounded-full"
                         />
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-medium dark:text-gray-200">
                           {item.fullName}
                         </span>
                       </div>
@@ -281,11 +281,11 @@ function CustomSelect({
           )}
 
           {type === "priority" && (
-            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm">
+            <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
               <input
                 placeholder="Search"
                 type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
                 required
               />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
@@ -304,13 +304,13 @@ function CustomSelect({
                       }}
                       key={index}
                       variant={"ghost"}
-                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"
+                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
                     >
                       <div className="flex items-center gap-2">
                         <span
                           className={`h-3 w-3 rounded-full ${getPriorityColor(item)}`}
                         ></span>
-                        <span className="text-sm font-medium capitalize">
+                        <span className="text-sm font-medium capitalize dark:text-gray-200">
                           {item}
                         </span>
                       </div>

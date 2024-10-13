@@ -180,7 +180,7 @@ function CreateIssue({
                 >
                   <SelectTrigger
                     value={issueData.issueType}
-                    className="mt-2 w-full rounded-md border bg-gray-100 focus:ring-0 dark:border-gray-600 dark:bg-[#1f1f1f]"
+                    className="mt-2 w-full rounded-md border border-input bg-gray-100 focus:ring-0 dark:bg-[#1f1f1f] dark:bg-transparent"
                   >
                     <SelectValue placeholder="Select issue type" />
                   </SelectTrigger>
@@ -230,7 +230,7 @@ function CreateIssue({
                   type="text"
                   value={issueData.shortSummary || ""}
                   onChange={(e) => handleChange("shortSummary", e.target.value)}
-                  className="mt-2 w-full rounded-md border-2 bg-gray-100 px-3 py-2 text-sm font-medium text-gray-800 outline-none placeholder:text-xs focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                  className="mt-2 w-full rounded-md border border-input bg-gray-100 px-3 py-2 text-sm font-medium text-gray-800 outline-none placeholder:text-xs focus:border-[#4FADE6] focus:bg-transparent dark:bg-[#1f1f1f] dark:bg-transparent dark:text-gray-200 dark:placeholder:text-white"
                   placeholder="Enter short summary"
                   required
                 />
@@ -250,7 +250,7 @@ function CreateIssue({
                   <ReactQuill
                     value={issueData.description}
                     onChange={(value) => handleChange("description", value)}
-                    className="my-2 bg-white dark:bg-[#1f1f1f] dark:text-white"
+                    className="my-2 border border-input bg-white text-black dark:bg-[#1f1f1f] dark:bg-transparent dark:text-white"
                     theme="snow"
                     defaultValue={issueData.description}
                     placeholder="Describe the issue in as much detail as possible"
@@ -288,7 +288,7 @@ function CreateIssue({
                     }
                   }}
                 >
-                  <SelectTrigger className="mt-2 w-full rounded-md border bg-gray-100 focus:ring-0 dark:border-gray-600 dark:bg-[#1f1f1f]">
+                  <SelectTrigger className="mt-2 w-full rounded-md border border-input bg-gray-100 focus:ring-0 dark:bg-[#1f1f1f] dark:bg-transparent">
                     <SelectValue placeholder="Select reporter" />
                   </SelectTrigger>
                   <SelectContent>
@@ -335,7 +335,7 @@ function CreateIssue({
                     }
                   }}
                 >
-                  <SelectTrigger className="mt-2 w-full rounded-md border bg-gray-100 focus:ring-0 dark:border-gray-600 dark:bg-[#1f1f1f]">
+                  <SelectTrigger className="mt-2 w-full rounded-md border border-input bg-gray-100 focus:ring-0 dark:bg-[#1f1f1f] dark:bg-transparent">
                     <SelectValue placeholder="Select assignees" />
                   </SelectTrigger>
                   <SelectContent>
@@ -376,7 +376,7 @@ function CreateIssue({
                   onValueChange={(value) => handleChange("priority", value)}
                   required
                 >
-                  <SelectTrigger className="mt-2 w-full rounded-md border bg-gray-100 focus:ring-0 dark:border-gray-600 dark:bg-[#1f1f1f]">
+                  <SelectTrigger className="mt-2 w-full rounded-md border border-input bg-gray-100 focus:ring-0 dark:bg-[#1f1f1f] dark:bg-transparent">
                     <SelectValue placeholder="Select priority" />
                   </SelectTrigger>
                   <SelectContent>
@@ -418,7 +418,7 @@ function CreateIssue({
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-full justify-start bg-gray-100 text-left font-normal",
+                          "w-full justify-start bg-gray-100 text-left font-normal dark:bg-transparent",
                           !issueData.deadLine && "text-muted-foreground",
                         )}
                       >
@@ -454,7 +454,7 @@ function CreateIssue({
               <div className="flex items-center justify-end gap-5">
                 <Button
                   type="submit"
-                  className="bg-[#0052CC] hover:bg-[#154da1]"
+                  className="bg-[#0052CC] text-white hover:bg-[#154da1]"
                 >
                   Create Issue
                 </Button>

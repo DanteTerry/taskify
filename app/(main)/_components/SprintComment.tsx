@@ -78,7 +78,7 @@ function SprintComment({
 
   return (
     <div>
-      <p className="mb-2 text-left text-sm font-bold capitalize text-[#172B4D]">
+      <p className="mb-2 text-left text-sm font-bold capitalize text-[#172B4D] dark:text-[#538be0]">
         Comments
       </p>
       <div className="mt-1.5">
@@ -96,13 +96,15 @@ function SprintComment({
               onChange={(e) => setComment(e.target.value)}
               placeholder="Add a comment..."
               ref={textAreaRef}
-              className="w-full resize-none rounded-md border-2 px-3 py-2 text-sm text-[#172B4D] outline-none placeholder:text-xs focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+              className="w-full resize-none rounded-md border-2 px-3 py-2 text-sm text-[#172B4D] outline-none placeholder:text-xs focus:border-[#4FADE6] focus:bg-transparent dark:border-gray-600 dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-500"
               rows={isEditing ? comment.split("\n").length + 1 : 1}
               onFocus={() => setIsEditing(true)}
             />
             {!isEditing && (
               <p className="mt-1 hidden text-left text-xs text-gray-500 md:block">
-                <span className="font-semibold text-gray-700">Pro tip:</span>{" "}
+                <span className="font-semibold text-gray-700 dark:text-gray-100">
+                  Pro tip:
+                </span>{" "}
                 Press{" "}
                 <span className="rounded bg-gray-200 px-1 py-0.5 text-gray-800">
                   M
