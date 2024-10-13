@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
-import sprintSlice from "./sprintSlice"; // Ensure this path is correct
+import sprintSlice from "./sprintSlice"; 
+import darkModeSlice from "./darkModeSlice";
 
 const rootReducer = combineReducers({
   sprint: sprintSlice,
+  darkMode: darkModeSlice,
 });
 
 // Configure store

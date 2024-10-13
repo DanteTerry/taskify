@@ -32,7 +32,6 @@ function MainSprint({
   isTeamProject?: boolean;
 }) {
   const dispatch = useDispatch<AppDispatch>();
-  console.log(sprintId);
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );

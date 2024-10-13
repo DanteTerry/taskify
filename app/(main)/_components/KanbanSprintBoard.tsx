@@ -7,14 +7,26 @@ import SprintDroppableList from "./SprintDroppableList";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { setOutput } from "@/lib/redux/sprintSlice";
+import { useUser } from "@clerk/nextjs";
 
 function KanbanSprintBoard({ sprintId }: { sprintId: string }) {
+  const { user } = useUser();
+
   const data = useSelector((state: RootState) => state.sprint.output);
+  const collaborators = useSelector(
+    (state: RootState) => state.sprint.collaborators,
+  );
+
+  const currentUserCollaborator = collaborators.find(
+    (collaborator) => collaborator.id === user?.id,
+  );
 
   const dispatch = useDispatch<AppDispatch>();
 
   // Handle dragging and dropping items between lists
   const onDragEnd = async (result: DropResult) => {
+    if (currentUserCollaborator?.role === "viewer") return;
+
     const { source, destination } = result;
 
     // If no destination, return early

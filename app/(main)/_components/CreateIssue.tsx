@@ -257,7 +257,7 @@ function CreateIssue({
                     style={{ height: "auto" }} // Set height to auto for dynamic growth
                     modules={{
                       toolbar: [
-                        [{ header: "1" }, { header: "2" }, { font: [] }],
+                        [{ header: "1" }, { header: "2" }],
                         [{ list: "ordered" }, { list: "bullet" }],
                         ["bold", "italic", "underline", "strike"],
                         [{ align: [] }],

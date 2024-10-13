@@ -10,6 +10,7 @@ import { WorkspaceDocData } from "@/types/type";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { toast } from "sonner";
+import DarkModeToggleBtn from "@/app/(marketing)/_components/DarkModeToggleBtn";
 
 function TopNavigation({
   setIsOpen,
@@ -24,9 +25,15 @@ function TopNavigation({
     WorkspaceDocData | undefined
   >();
 
+  const documentId =
+    (params.documentId as string) ||
+    (params.sprintId as string) ||
+    (params.boardId as string) ||
+    (params.teamProjectId as string);
+
   useEffect(() => {
-    if (params.documentId) {
-      const docRef = doc(db, "WorkSpaceDocuments", params.documentId as string);
+    if (documentId) {
+      const docRef = doc(db, "WorkSpaceDocuments", documentId);
 
       const unsubscribe = onSnapshot(docRef, (docSnap) => {
         if (docSnap.exists()) {
@@ -38,7 +45,7 @@ function TopNavigation({
 
       return () => unsubscribe();
     }
-  }, [params?.documentId]);
+  }, [documentId]);
 
   return (
     <div className="flex h-14 w-full items-center justify-between bg-[#283D3B] px-4 py-3 dark:bg-[#161616]">
@@ -57,13 +64,9 @@ function TopNavigation({
       </div>
       <div className="justify-self-center md:block">
         <p className="text-white">{documentInfo?.documentName}</p>
-
-        {/* <OrganizationSwitcher
-          afterCreateOrganizationUrl={"/dashboard"}
-          afterLeaveOrganizationUrl={"/dashboard"}
-        /> */}
       </div>
       <div className="flex items-center gap-3">
+        <DarkModeToggleBtn />
         {documentInfo?.projectType === "page" && (
           <Publish
             documentId={params.documentId as string}

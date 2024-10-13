@@ -258,7 +258,7 @@ function IssueDetails({
                     <p className="text-left text-sm font-bold capitalize text-[#0052CC] dark:text-[#538be0]">
                       Description
                     </p>
-                    <div className="flex max-h-[500px] justify-start overflow-auto">
+                    <div className="flex justify-start">
                       {isEditing ? (
                         <>
                           <ReactQuill
@@ -269,11 +269,7 @@ function IssueDetails({
                             style={{ height: "auto" }}
                             modules={{
                               toolbar: [
-                                [
-                                  { header: "1" },
-                                  { header: "2" },
-                                  { font: [] },
-                                ],
+                                [{ header: "1" }, { header: "2" }],
                                 [{ list: "ordered" }, { list: "bullet" }],
                                 ["bold", "italic", "strike"],
                                 [{ align: [] }],
@@ -303,7 +299,7 @@ function IssueDetails({
                     </div>
                   </div>
                   {isEditing && (
-                    <div className="flex items-center gap-5 md:pl-4">
+                    <div className="mt-24 flex items-center gap-5 md:pl-4">
                       <Button
                         onClick={() => {
                           handleIssuePropertyChange(

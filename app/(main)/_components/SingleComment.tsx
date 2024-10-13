@@ -5,7 +5,6 @@ import { useUser } from "@clerk/nextjs";
 import { CommentType } from "@/types/type";
 import { IssueData } from "./IssueDetails";
 import { handleCommentChange } from "@/utils/sprintUtil";
-import { useParams } from "next/navigation";
 
 function SingleComment({
   comment,
@@ -62,7 +61,7 @@ function SingleComment({
         />
         <div className="flex w-full flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-bold text-[#172B4D]">
+            <p className="text-sm font-bold capitalize text-[#172B4D]">
               {comment.user.fullName}
             </p>
             <p className="text-xs text-[#6B778C]">2 days ago</p>
