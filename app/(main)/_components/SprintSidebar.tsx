@@ -17,11 +17,11 @@ function SprintSidebar({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   setOpenCollaborators: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { user } = useUser();
   const [isCollaborator, setIsCollaborator] = useState(false);
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );
-  const { user } = useUser();
 
   useEffect(() => {
     setIsCollaborator(

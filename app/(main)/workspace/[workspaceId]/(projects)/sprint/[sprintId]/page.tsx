@@ -5,11 +5,10 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 
 function SprintPage() {
+  const { sprintId } = useParams();
   const [openCreateIssue, setOpenCreateIssue] = useState(false);
   const [openCollaborators, setOpenCollaborators] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
-  const { sprintId } = useParams();
 
   return (
     <div className="relative flex h-full w-full">

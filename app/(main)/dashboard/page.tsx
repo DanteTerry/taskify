@@ -28,10 +28,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { WorkspaceDocData } from "@/types/type";
 
 function Dashboard() {
-  const { user } = useUser();
+  const { user, isLoaded: isUserLoaded, isSignedIn } = useUser();
   const { orgId } = useAuth();
   const [workSpacesList, setWorkSpacesList] = useState<DocumentData[]>([]);
   const router = useRouter();
@@ -42,11 +41,13 @@ function Dashboard() {
   const [selectedWorkspace, setSelectedWorkspace] = useState<
     DocumentData | undefined
   >();
-  const [documents, setDocuments] = useState<WorkspaceDocData[]>();
 
   const getWorkspace = () => {
+    if (!user || !isUserLoaded || !isSignedIn) return; // Check that user data is available and loaded
+
     setIsLoading(true);
     setWorkSpacesList([]);
+
     const q = query(
       collection(db, "WorkSpaces"),
       where(
@@ -55,6 +56,7 @@ function Dashboard() {
         orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
       ),
     );
+
     onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
       setWorkSpacesList(docs);
@@ -62,10 +64,13 @@ function Dashboard() {
     });
   };
 
+  // Run when the user data is fully loaded and user is signed in
   useEffect(() => {
-    user && getWorkspace();
+    if (isUserLoaded && isSignedIn) {
+      getWorkspace();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isUserLoaded, isSignedIn, user]); // Include dependencies to re-run when user is loaded
 
   // Helper function to delete all documents in a specified collection based on workspaceId
   const deleteDocumentsByWorkspaceId = async (
@@ -146,26 +151,6 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  useEffect(() => {
-    // Create a query to get documents where 'workspaceId' matches the passed workspaceId
-    const q = query(
-      collection(db, "WorkSpaceDocuments"),
-      where("workspaceName", "==", user?.id),
-    );
-
-    // Set up a real-time listener
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() }) as WorkspaceDocData,
-      );
-
-      setDocuments(docs);
-    });
-
-    // Cleanup the listener on component unmount
-    return () => unsubscribe();
-  }, [user?.id]);
-
   return (
     <section
       className={cn(
@@ -206,11 +191,11 @@ function Dashboard() {
             ) : (
               workSpacesList.map((workSpace) => (
                 <div
+                  onClick={() => router.push(`/workspace/${workSpace.id}`)}
                   key={workSpace.id}
-                  className="relative rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
+                  className="relative cursor-pointer rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
                 >
                   <Image
-                    onClick={() => router.push(`/workspace/${workSpace.id}`)}
                     src={workSpace?.coverImage}
                     width={400}
                     height={200}
@@ -227,7 +212,7 @@ function Dashboard() {
 
                     {workSpace?.id !== user?.id && (
                       <Popover>
-                        <PopoverTrigger>
+                        <PopoverTrigger onClick={(e) => e.stopPropagation()}>
                           <Ellipsis size={20} />
                         </PopoverTrigger>
                         <PopoverContent className="flex w-max flex-col p-1">
