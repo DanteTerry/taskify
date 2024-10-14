@@ -59,7 +59,7 @@ function SprintDragItem({
           {item.assignees.map((assignee, index) => (
             <div
               key={index}
-              className="h-[24px] w-[24px] overflow-hidden rounded-full border-2 border-white"
+              className={`h-[24px] w-[24px] overflow-hidden rounded-full border-2 border-white ${index !== 0 ? "ml-[-10px]" : ""}`}
             >
               <Image
                 src={assignee.picture}

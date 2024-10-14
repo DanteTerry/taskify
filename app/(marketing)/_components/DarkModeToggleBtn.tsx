@@ -29,7 +29,7 @@ function DarkModeToggleBtn({ className }: { className?: string }) {
       className={cn(`hover:bg-transparent`, className)}
       onClick={toggleDarkMode}
     >
-      {darkMode ? (
+      {!darkMode ? (
         <SunMoon
           className={cn("text-black dark:text-white", className)}
           size={25}

@@ -28,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import DarkModeToggleBtn from "@/app/(marketing)/_components/DarkModeToggleBtn";
 
 function Dashboard() {
   const { user, isLoaded: isUserLoaded, isSignedIn } = useUser();
@@ -129,7 +130,7 @@ function Dashboard() {
   return (
     <section
       className={cn(
-        `flex w-full flex-col justify-between bg-[#fafafa] px-4 py-2 dark:bg-[#1f1f1f] md:h-screen md:px-2 md:pt-16 lg:px-0`,
+        `relative flex w-full flex-col justify-between bg-[#fafafa] px-4 py-2 dark:bg-[#1f1f1f] md:h-screen md:px-2 md:pt-16 lg:px-0`,
         workSpacesList.length < 3 ? "h-screen" : "h-max",
       )}
     >
@@ -175,7 +176,7 @@ function Dashboard() {
                     width={400}
                     height={200}
                     alt="cover image"
-                    className="h-[100px] cursor-pointer rounded-t-2xl object-cover"
+                    className="h-[100px] w-full cursor-pointer rounded-t-2xl object-cover"
                   />
                   <div className="flex items-center justify-between rounded-b-xl p-4 font-space">
                     <div className="flex gap-3">

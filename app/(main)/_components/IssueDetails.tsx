@@ -207,7 +207,7 @@ function IssueDetails({
                 <div className="mt-2 flex gap-3 text-[#3b4a64] sm:mt-0">
                   <Button
                     className={cn(
-                      `hover:bg-[#EBECF0]`,
+                      `text-red-400 hover:bg-[#EBECF0] hover:text-red-500`,
                       currentUserCollaborator?.role === "collaborator" ||
                         currentUserCollaborator?.role === "viewer"
                         ? "hidden"

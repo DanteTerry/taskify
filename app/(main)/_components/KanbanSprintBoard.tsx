@@ -6,13 +6,19 @@ import { useParams } from "next/navigation";
 import SprintDroppableList from "./SprintDroppableList";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/redux/store";
-import { setOutput } from "@/lib/redux/sprintSlice";
+import { setOutput, SprintOutput } from "@/lib/redux/sprintSlice";
 import { useUser } from "@clerk/nextjs";
+import { issueType } from "@/types/type";
 
-function KanbanSprintBoard({ sprintId }: { sprintId: string }) {
+function KanbanSprintBoard({
+  sprintId,
+  data,
+}: {
+  sprintId: string;
+  data: SprintOutput[];
+}) {
   const { user } = useUser();
 
-  const data = useSelector((state: RootState) => state.sprint.output);
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );

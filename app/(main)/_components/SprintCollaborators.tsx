@@ -76,7 +76,7 @@ function SprintCollaborators({
 
   return (
     <Dialog open={openCollaborators} onOpenChange={setOpenCollaborators}>
-      <DialogContent className="h-full overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 md:max-h-[90vh] md:rounded-lg">
+      <DialogContent className="flex h-full flex-col overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 md:max-h-[90vh] md:rounded-lg">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
             Collaborators
@@ -93,7 +93,7 @@ function SprintCollaborators({
             onChange={(e) => setSearchTerm(e.target.value)}
             className="mb-4 w-full rounded-lg border border-gray-300 bg-gray-50 p-2 transition-colors duration-200 focus:border-[#283D3B]/40 focus:outline-none focus:ring-2 focus:ring-[#283D3B]/40"
           />
-          <ScrollArea className="h-[235px] w-full rounded-md border p-2 px-4">
+          <ScrollArea className="h-max w-full rounded-md border p-2 px-4">
             {filteredCollaborators.map((collaborator) => (
               <div
                 key={collaborator.id}
@@ -108,7 +108,7 @@ function SprintCollaborators({
                     className="mr-4 h-12 w-12 rounded-full border border-gray-200 shadow-sm"
                   />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    <h3 className="text-lg font-semibold capitalize text-gray-800 dark:text-gray-200">
                       {collaborator.fullName}
                     </h3>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -132,7 +132,7 @@ function SprintCollaborators({
         {!joinCode && (
           <button
             onClick={handleAddCollaborator}
-            className="mt-2 w-full rounded-lg bg-[#283D3B] px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-[#213432] focus:outline-none"
+            className="mt-2 flex w-full justify-start rounded-lg bg-[#283D3B] px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-[#213432] focus:outline-none"
           >
             Add Collaborator
           </button>

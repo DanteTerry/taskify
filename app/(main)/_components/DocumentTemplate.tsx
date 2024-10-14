@@ -66,7 +66,7 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
           alt="cover image"
           width={400}
           height={200}
-          className="h-[100px] object-cover"
+          className="h-[100px] w-full object-cover"
         />
       ) : (
         <Skeleton />
