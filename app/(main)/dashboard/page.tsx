@@ -126,31 +126,6 @@ function Dashboard() {
     saveUser();
   }, [user]);
 
-  useEffect(() => {
-    async function createTeamWorkspace() {
-      try {
-        if (user) {
-          const id = user?.id;
-          await setDoc(doc(db, "WorkSpaces", id), {
-            workspaceName: "Team Workspace",
-            emoji: "👨‍💻",
-            coverImage:
-              "https://utfs.io/f/wp7wZZqvVF0Ikwcmq8pMGiXQoJkLxg2rSzqbCA1Nha75wRjU",
-            createdBy: user?.primaryEmailAddress?.emailAddress,
-            id: id,
-            orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
-            teamWorkspace: true,
-          });
-        }
-      } catch (error: any) {
-        toast(error.message);
-      }
-    }
-
-    createTeamWorkspace();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
   return (
     <section
       className={cn(
@@ -193,7 +168,7 @@ function Dashboard() {
                 <div
                   onClick={() => router.push(`/workspace/${workSpace.id}`)}
                   key={workSpace.id}
-                  className="relative cursor-pointer rounded-xl border shadow-md transition-all duration-300 hover:bg-black/10"
+                  className="relative cursor-pointer rounded-xl border-2 shadow-md transition-all duration-300 hover:bg-black/10"
                 >
                   <Image
                     src={workSpace?.coverImage}
@@ -220,7 +195,9 @@ function Dashboard() {
                             className="rounded-sm"
                             variant={"ghost"}
                             size={"sm"}
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
+
                               setSelectedWorkspace(workSpace);
                               setAction("update");
                               setIsOpen(true);
@@ -232,7 +209,9 @@ function Dashboard() {
                             className="rounded-sm"
                             variant={"ghost"}
                             size={"sm"}
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
+
                               setSelectedWorkspace(workSpace);
                               setIsDeleteDialogOpen(true); // Open delete confirmation dialog
                             }}

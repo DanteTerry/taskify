@@ -27,7 +27,6 @@ function NavBar() {
         <Link href={"/"}>Home</Link>
         <Link href={"/"}>Features</Link>
         <Link href={"/"}>Reviews</Link>
-        <Link href={"/"}>Pricing</Link>
         <Link href={"/"}>About</Link>
       </div>
       <div className="flex items-center gap-3">

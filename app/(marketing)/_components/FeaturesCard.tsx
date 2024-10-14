@@ -1,22 +1,17 @@
 import { cn } from "@/lib/utils";
-import { CheckCheckIcon, ClipboardCheck } from "lucide-react";
-import Image from "next/image";
+import { ClipboardCheck } from "lucide-react";
 import React from "react";
 
 function FeaturesCard({
   title,
   description,
   className,
-  src,
   bgColor,
-  shade,
 }: {
   title: string;
   description: string;
   className?: string;
-  src: string;
   bgColor?: string;
-  shade?: string;
 }) {
   return (
     <div
@@ -40,21 +35,6 @@ function FeaturesCard({
           </div>
         </div>
       </div>
-      <div className="flex bg-transparent">
-        <Image
-          src={src}
-          alt={"task progress image"}
-          width={250}
-          height={100}
-          className="w-5/6 rounded-bl-xl rounded-tl-xl sm:w-4/6 md:w-5/6"
-        />
-      </div>
-
-      <div
-        className={cn(
-          `absolute -bottom-3 -left-3 -z-50 flex h-full w-[150px] -rotate-6 flex-col gap-4 rounded-2xl bg-gray-300/10 p-1 dark:bg-black/5`,
-        )}
-      ></div>
     </div>
   );
 }

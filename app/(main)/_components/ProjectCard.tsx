@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { CoverImages, getRandomEmoji, spaceCoverImages } from "@/constants";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -20,9 +20,11 @@ const images = CoverImages.sort(() => Math.random() - 0.5).slice(0, 12);
 
 function ProjectCard({
   projectType,
+  setOpen,
   params,
 }: {
   projectType: string;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   params: any;
 }) {
   const [emoji, setEmoji] = useState("😄");
@@ -122,6 +124,8 @@ function ProjectCard({
       router.replace(
         `/workspace/${params?.workspaceId}/${projectType}/${documentId}`,
       );
+
+      setOpen(false);
     } catch (error: any) {
       toast(error.message);
     }

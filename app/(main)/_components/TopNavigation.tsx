@@ -66,7 +66,7 @@ function TopNavigation({
         <p className="text-white">{documentInfo?.documentName}</p>
       </div>
       <div className="flex items-center gap-3">
-        <DarkModeToggleBtn />
+        <DarkModeToggleBtn className="text-white" />
         {documentInfo?.projectType === "page" && (
           <Publish
             documentId={params.documentId as string}

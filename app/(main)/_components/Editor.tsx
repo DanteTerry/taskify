@@ -8,6 +8,8 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { sanitizeImageBlocks } from "@/utils/blockNoteUtil";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 function Editor({
   params,
@@ -58,7 +60,7 @@ function Editor({
     }
   };
 
-  console.log("AI Generated Output: ", documentOutput);
+  const darkMode = useSelector((state: RootState) => state.darkMode.darkMode);
 
   useEffect(() => {
     getDocument();
@@ -93,7 +95,7 @@ function Editor({
             width: "100%",
           }}
           formattingToolbar={true}
-          theme={"dark"}
+          theme={darkMode ? "dark" : "light"}
           emojiPicker={true}
           tableHandles={true}
           editable={editable}

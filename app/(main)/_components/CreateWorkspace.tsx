@@ -114,7 +114,7 @@ function CreateWorkspace({
     <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
       <DialogContent className="max-w-[600px] rounded-lg shadow-lg">
         <DialogHeader className="bg-gradient-to-r rounded-t-lg from-indigo-500 to-purple-600 p-3 text-center text-white">
-          <DialogTitle className="text-2xl font-bold">
+          <DialogTitle className="text-2xl font-bold text-black dark:text-white">
             {action === "add" ? "Create Workspace" : "Update Workspace"}
           </DialogTitle>
         </DialogHeader>

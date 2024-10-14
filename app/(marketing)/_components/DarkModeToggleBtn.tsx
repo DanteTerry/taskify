@@ -2,11 +2,12 @@
 
 import { setDarkMode } from "@/lib/redux/darkModeSlice";
 import { AppDispatch, RootState } from "@/lib/redux/store";
+import { cn } from "@/lib/utils";
 import { Sun, SunMoon } from "lucide-react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-function DarkModeToggleBtn() {
+function DarkModeToggleBtn({ className }: { className?: string }) {
   const dispatch = useDispatch<AppDispatch>();
   const { darkMode } = useSelector((state: RootState) => state.darkMode);
 
@@ -24,11 +25,20 @@ function DarkModeToggleBtn() {
   };
 
   return (
-    <button className="hover:bg-transparent" onClick={toggleDarkMode}>
+    <button
+      className={cn(`hover:bg-transparent`, className)}
+      onClick={toggleDarkMode}
+    >
       {darkMode ? (
-        <SunMoon className="text-white" size={25} />
+        <SunMoon
+          className={cn("text-black dark:text-white", className)}
+          size={25}
+        />
       ) : (
-        <Sun size={25} className="text-white" />
+        <Sun
+          size={25}
+          className={cn("text-black dark:text-white", className)}
+        />
       )}
     </button>
   );

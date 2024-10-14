@@ -5,6 +5,7 @@ import HeroSec from "./_components/HeroSec";
 import NavBar from "./_components/NavBar";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Marketing() {
   const { user, isLoaded } = useUser();
@@ -34,12 +35,14 @@ export default function Marketing() {
 
   // Render your marketing page if user is not logged in
   return (
-    <div className="flex flex-col selection:min-h-full">
-      <NavBar />
-      <div className="flex flex-1 flex-col items-center justify-center gap-y-8 text-center md:justify-center">
-        <HeroSec />
-        <Features />
-      </div>
+    <div className="flex h-full flex-col">
+      <ScrollArea className="h-full w-full">
+        <NavBar />
+        <div className="flex flex-1 flex-col items-center justify-center gap-y-8 text-center md:justify-center">
+          <HeroSec />
+          <Features />
+        </div>
+      </ScrollArea>
     </div>
   );
 }

@@ -10,8 +10,7 @@ function HeroStartButton() {
       <SignedOut>
         <Button
           onClick={() => router.push("/sign-up")}
-          variant={"secondary"}
-          className="mt-4 rounded-full bg-white font-space text-base text-black transition-all duration-300 hover:bg-gray-300 sm:px-8 sm:py-6 sm:text-lg md:text-xl"
+          className="mt-4 rounded-full bg-black font-space text-base text-white transition-all duration-300 dark:bg-white dark:text-black sm:px-8 sm:py-6 sm:text-lg md:text-xl"
         >
           Get Started
         </Button>
@@ -20,8 +19,7 @@ function HeroStartButton() {
       <SignedIn>
         <Button
           onClick={() => router.push("/dashboard")}
-          variant={"secondary"}
-          className="mt-4 rounded-full bg-white font-space text-base text-black transition-all duration-300 hover:bg-gray-300 sm:px-8 sm:py-6 sm:text-lg md:text-xl"
+          className="mt-4 rounded-full bg-black font-space text-base transition-all duration-300 dark:bg-white dark:text-black sm:px-8 sm:py-6 sm:text-lg md:text-xl"
         >
           Get Started
         </Button>

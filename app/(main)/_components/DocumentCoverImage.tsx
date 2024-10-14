@@ -40,14 +40,14 @@ function DocumentCoverImage({
         className={cn(`h-[485px] rounded-xl md:max-w-[540px]`)} // Add padding top equal to the header height
       >
         {/* header of selector  */}
-        <DialogHeader className="bg-[#0a0a0a]">
+        <DialogHeader className="dark:bg-[#0a0a0a]">
           <div className="flex w-full items-center gap-1">
             {coverImageOptions.map((option) => (
               <Button
                 key={option.value}
                 className={cn(
                   `text-muted-foreground`,
-                  chooseFrom === option.value ? "text-white" : "",
+                  chooseFrom === option.value ? "dark:text-white" : "",
                 )}
                 variant={"ghost"}
                 size={"default"}
@@ -70,16 +70,19 @@ function DocumentCoverImage({
                   setSelectedCover(res[0].url);
                   setIsDialogOpen(false);
                 }}
-                className={
-                  "border border-slate-300/50 shadow-none ut-button:bg-black/70 ut-allowed-content:hidden ut-label:text-white dark:border-slate-400/5 dark:bg-[#252525]"
-                }
+                className={cn(
+                  "border-2 shadow-none ut-button:bg-black/70 ut-allowed-content:hidden",
+                  "ut-label:text-black dark:ut-label:text-white",
+                  "border-slate-300 dark:border-slate-400/5",
+                  "bg-white dark:bg-[#252525]",
+                )}
               />
 
-              <p className="mt-5 text-xs font-medium text-white/30">
+              <p className="mt-5 text-xs font-medium text-black/30 dark:text-white/30">
                 Images wider than 1500 pixels work best.
               </p>
 
-              <p className="mt-1 text-xs text-white/30">
+              <p className="mt-1 text-xs text-black/30 dark:text-white/30">
                 The maximum size per file is 4 MB
               </p>
             </div>
@@ -92,7 +95,7 @@ function DocumentCoverImage({
                 id="text"
                 type="url"
                 onChange={(e) => setCoverLink(e.target.value)}
-                className="mt-5 w-full rounded-lg px-3 py-3 text-black/90 outline-none focus:ring-2 dark:border-none dark:bg-[#17181B] dark:text-white dark:placeholder:text-[#80868B]"
+                className="mt-5 w-full rounded-lg bg-white px-3 py-3 text-black text-black/90 outline-none placeholder:text-gray-500 focus:ring-2 dark:border-none dark:bg-[#17181B] dark:text-white dark:placeholder:text-[#80868B]"
                 placeholder="Paste a link to an image"
                 value={coverLink}
               />

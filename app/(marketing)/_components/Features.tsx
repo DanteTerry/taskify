@@ -25,29 +25,23 @@ function Features() {
 
         <div className="mx-auto mt-5 flex flex-wrap items-center justify-center gap-5 px-8 sm:w-3/4 md:px-0 lg:gap-10">
           <FeaturesCard
-            title={"Task Progress"}
-            description={" Track Task Progress and Stay on Target."}
+            title={"Task Tracking"}
+            description={"Track and Manage Your Tasks with Ease."}
             className="border-[#199719]/50 bg-[#199719]/20"
-            src="/appImages/task_progress.svg"
             bgColor="bg-[#199719]/50"
-            shade="bg-[#199719]/5"
           />
 
           <FeaturesCard
-            title={"Plan Calender"}
-            description={" Seamlessly Plan and Manage Your Calendar."}
+            title={"Create Docs"}
+            description={"Create and Share Docs with Your Team."}
             className="border-[#975BEC]/20 bg-[#975BEC]/20"
-            src="/appImages/plan_calender.svg"
             bgColor="bg-[#975BEC]/50 "
-            shade="bg-[#975BEC]/5"
           />
           <FeaturesCard
             title={"Collaboration"}
             description={" Efficient Collaboration for Maximum Impact."}
             className="border-[#1ABCFE]/20 bg-[#1ABCFE]/20"
-            src="/appImages/collaboration.svg"
             bgColor="bg-[#1ABCFE]/50"
-            shade="bg-[#1ABCFE]/5"
           />
         </div>
       </div>

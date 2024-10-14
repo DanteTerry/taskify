@@ -7,7 +7,7 @@ import {
 } from "@/lib/redux/sprintSlice";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { updateJoinCode } from "@/utils/sprintUtil";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
 import { CircleCheck, CircleX, Loader } from "lucide-react";
 import Image from "next/image";
@@ -20,6 +20,8 @@ function JoinPage() {
   const [accepted, setAccepted] = useState(false);
   const [rejected, setRejected] = useState(false);
   const { user } = useUser();
+  const { orgId } = useAuth();
+
   const router = useRouter();
 
   const { joinId } = useParams();
@@ -61,6 +63,24 @@ function JoinPage() {
     } catch (error) {
       console.error("Error accepting invite: ", error);
       toast.error("Something went wrong. Please try again.");
+    }
+
+    try {
+      if (user) {
+        const id = user?.id;
+        await setDoc(doc(db, "WorkSpaces", id), {
+          workspaceName: "Team Workspace",
+          emoji: "👨‍💻",
+          coverImage:
+            "https://utfs.io/f/wp7wZZqvVF0Ikwcmq8pMGiXQoJkLxg2rSzqbCA1Nha75wRjU",
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+          id: id,
+          orgId: orgId ? orgId : user?.primaryEmailAddress?.emailAddress,
+          teamWorkspace: true,
+        });
+      }
+    } catch (error: any) {
+      toast(error.message);
     }
 
     try {

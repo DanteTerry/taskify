@@ -183,7 +183,11 @@ function WorkSpacePage({ params }: { params: any }) {
                   Fill in the details for your new project.
                 </DialogDescription>
                 <div className="">
-                  <ProjectCard params={params} projectType={projectType} />
+                  <ProjectCard
+                    setOpen={setOpen}
+                    params={params}
+                    projectType={projectType}
+                  />
                 </div>
               </DialogHeader>
             </DialogContent>

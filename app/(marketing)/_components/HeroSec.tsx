@@ -65,20 +65,6 @@ export default function HeroSec() {
           sizes={"100%"}
         />
       </div>
-      <Image
-        src={"/appImages/headerSide.svg"}
-        alt="hero side image"
-        width={120}
-        height={80}
-        className="absolute right-0 top-24 hidden lg:flex"
-      />
-      {/* <Image
-        src={"/appImages/headerSideLeft.svg"}
-        alt="hero side image"
-        width={120}
-        height={80}
-        className="absolute hidden lg:flex left-0 top-40"
-      /> */}
     </header>
   );
 }
