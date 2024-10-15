@@ -61,7 +61,7 @@ function SingleComment({
         />
         <div className="flex w-full flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-bold capitalize text-[#172B4D]">
+            <p className="text-sm font-bold capitalize text-[#172B4D] dark:text-[#538be0]">
               {comment.user.fullName}
             </p>
             <p className="text-xs text-[#6B778C]">2 days ago</p>
@@ -96,7 +96,9 @@ function SingleComment({
               </div>
             </div>
           ) : (
-            <p className="text-sm text-[#172B4D]">{comment.comment}</p>
+            <p className="text-left text-sm text-[#172B4D] dark:text-white">
+              {comment.comment}
+            </p>
           )}
           {!isEditing && user?.id === comment.user.id && (
             <div className="flex gap-2">

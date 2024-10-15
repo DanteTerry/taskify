@@ -49,19 +49,11 @@ export default function HeroSec() {
 
       <div className="mt-14 w-full rounded-xl md:mt-10 md:w-3/4">
         <Image
-          src={"/appImages/header.png"}
-          alt="taskify image"
-          width={0}
-          height={0}
-          className="flex w-full rounded-3xl md:hidden"
-          sizes={"100%"}
-        />
-        <Image
           src={"/appImages/header_product.jpg"}
           alt="taskify image"
           width={0}
           height={0}
-          className="hidden w-full rounded-3xl md:flex"
+          className="w-full rounded-3xl md:flex"
           sizes={"100%"}
         />
       </div>

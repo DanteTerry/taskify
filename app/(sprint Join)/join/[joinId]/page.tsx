@@ -217,7 +217,7 @@ function JoinPage() {
               alt="user image"
               className="mb-3 rounded-full"
             />
-            <p className="text-lg font-semibold text-gray-800">
+            <p className="text-lg font-semibold capitalize text-gray-800">
               Collaborator: {user?.fullName}
             </p>
             <p className="mt-1 text-sm text-gray-500">

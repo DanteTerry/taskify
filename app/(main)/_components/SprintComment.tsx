@@ -115,7 +115,11 @@ function SprintComment({
         </div>
         {isEditing && (
           <div className="ml-12 mt-2 flex items-center gap-3">
-            <Button onClick={saveComment} size={"sm"} className="bg-[#0052CC]">
+            <Button
+              onClick={saveComment}
+              size={"sm"}
+              className="bg-[#0052CC] text-white"
+            >
               Save
             </Button>
             <Button

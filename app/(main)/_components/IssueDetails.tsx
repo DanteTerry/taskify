@@ -417,7 +417,7 @@ function IssueDetails({
                                 className="p-0.5 text-gray-500 hover:text-red-400 dark:text-white hover:dark:text-red-500"
                                 onClick={() => {
                                   if (
-                                    currentUserCollaborator?.role === "viewer"
+                                    currentUserCollaborator?.role !== "owner"
                                   ) {
                                     return;
                                   }
@@ -446,11 +446,9 @@ function IssueDetails({
                           ))}
 
                           <Button
-                            disabled={
-                              currentUserCollaborator?.role === "viewer"
-                            }
+                            disabled={currentUserCollaborator?.role !== "owner"}
                             onClick={() => {
-                              if (currentUserCollaborator?.role === "viewer") {
+                              if (currentUserCollaborator?.role !== "owner") {
                                 return;
                               }
                               handleToggle("assignees");
@@ -479,7 +477,7 @@ function IssueDetails({
                     {" "}
                     <Button
                       onClick={() => {
-                        if (currentUserCollaborator?.role === "viewer") {
+                        if (currentUserCollaborator?.role !== "owner") {
                           return;
                         }
                         handleToggle("reporter");
@@ -548,9 +546,6 @@ function IssueDetails({
                       <Popover modal={true}>
                         <PopoverTrigger asChild>
                           <Button
-                            disabled={
-                              currentUserCollaborator?.role === "viewer"
-                            }
                             variant={"outline"}
                             className={cn(
                               "w-full justify-start bg-gray-100 text-left font-normal dark:bg-[#262626]",
@@ -570,7 +565,7 @@ function IssueDetails({
                             mode="single"
                             selected={issueData?.deadLine}
                             onSelect={(selectedDate) => {
-                              if (currentUserCollaborator?.role === "viewer") {
+                              if (currentUserCollaborator?.role !== "owner") {
                                 return;
                               }
                               if (selectedDate) {
