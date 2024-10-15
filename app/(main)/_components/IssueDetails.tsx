@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { issueDataType } from "@/types/type";
-import { CalendarIcon, Plus, Timer, Trash2 } from "lucide-react";
+import { CalendarIcon, Plus, Timer, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
@@ -147,543 +147,538 @@ function IssueDetails({
   );
 
   return (
-    <>
-      <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className="h-[100vh] max-w-full overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 sm:max-w-max md:h-[90vh] md:rounded-lg">
-          <DialogHeader className="h-full w-full">
-            <ScrollArea className="h-full w-full">
-              <DialogTitle></DialogTitle>
-              <DialogDescription></DialogDescription>
-              <div className="flex w-full items-center justify-between sm:flex-row">
-                <Popover modal={true}>
-                  <PopoverTrigger>
-                    <Button
-                      variant={"ghost"}
-                      className="flex w-full justify-start gap-2 pl-0 font-semibold uppercase hover:bg-[#EBECF0] hover:bg-transparent sm:w-44"
-                      size={"sm"}
-                    >
-                      {issueTypeIcons[item.issueType]}
-                      {item.issueType}-{item.id.slice(0, 5)}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="max-w-[200px] p-0 focus:ring-0">
-                    <div className="mt-2 flex flex-col items-start gap-1 pb-2">
-                      {typeIssue.map((option, index) => (
-                        <Button
-                          disabled={currentUserCollaborator?.role === "viewer"}
-                          onClick={() => {
-                            handleIssuePropertyChange(
-                              "issueType",
-                              option.title,
-                              sprintId as string,
-                              issueData,
-                            );
-                          }}
-                          key={index}
-                          variant={"ghost"}
-                          className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] hover:text-black"
-                        >
-                          <div className="flex items-center gap-2">
-                            {/* Icon for the issue type */}
-                            <span className={`h-4 w-4 ${option.textColor}`}>
-                              {<option.icon />}
-                            </span>{" "}
-                            {/* Title */}
-                            <span className="text-sm font-medium capitalize">
-                              {option.title}
-                            </span>
-                          </div>
-                        </Button>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-
-                {/* issue type  */}
-
-                {/* delete button  */}
-                <div className="mt-2 flex gap-3 text-[#3b4a64] sm:mt-0">
+    <Dialog open={open} onOpenChange={() => setOpen(false)}>
+      <DialogContent className="h-[100vh] max-w-full overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 sm:max-w-max md:h-[90vh] md:rounded-lg">
+        <DialogHeader className="h-full w-full">
+          <ScrollArea className="h-full w-full">
+            <DialogTitle></DialogTitle>
+            <DialogDescription></DialogDescription>
+            <div className="flex w-full items-center justify-between sm:flex-row">
+              <Popover modal={true}>
+                <PopoverTrigger>
                   <Button
-                    className={cn(
-                      `text-red-400 hover:bg-[#EBECF0] hover:text-red-500`,
-                      currentUserCollaborator?.role === "collaborator" ||
-                        currentUserCollaborator?.role === "viewer"
-                        ? "hidden"
-                        : "",
-                    )}
                     variant={"ghost"}
-                    size={"icon"}
-                    onClick={() => {
-                      if (
-                        currentUserCollaborator?.role === "collaborator" ||
-                        currentUserCollaborator?.role === "viewer"
-                      ) {
-                        return;
-                      }
-
-                      handleDeleteIssue(sprintId as string, issueData);
-                    }}
+                    className="flex w-full justify-start gap-2 pl-0 font-semibold uppercase hover:bg-[#EBECF0] hover:bg-transparent sm:w-44"
+                    size={"sm"}
                   >
-                    <Trash2 size={20} />
+                    {issueTypeIcons[item.issueType]}
+                    {item.issueType}-{item.id.slice(0, 5)}
                   </Button>
-                </div>
-              </div>
-
-              {/* title */}
-              <div className="flex flex-col gap-10 lg:flex-row">
-                <div className="flex w-full flex-col gap-3 sm:w-[550px]">
-                  <textarea
-                    disabled={currentUserCollaborator?.role === "viewer"}
-                    value={item.shortSummary || ""}
-                    onChange={(e) =>
-                      handleIssuePropertyChange(
-                        "shortSummary",
-                        e.target.value,
-                        sprintId as string,
-                        issueData,
-                      )
-                    }
-                    className="mt-2 w-full resize-none rounded-md border-2 border-transparent bg-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-none dark:border-gray-600 dark:bg-[#1f1f1f] dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-500"
-                    required
-                    rows={
-                      item?.shortSummary && item?.shortSummary?.length > 52
-                        ? 2
-                        : 1
-                    }
-                  />
-
-                  <div className="flex flex-col">
-                    <p className="text-left text-sm font-bold capitalize text-[#0052CC] dark:text-[#538be0]">
-                      Description
-                    </p>
-                    <div className="flex justify-start">
-                      {isEditing ? (
-                        <>
-                          <ReactQuill
-                            value={description}
-                            className="mt-2 bg-white dark:bg-transparent dark:text-white"
-                            theme="snow"
-                            placeholder="Describe the issue in as much detail as possible"
-                            style={{ height: "auto" }}
-                            modules={{
-                              toolbar: [
-                                [{ header: "1" }, { header: "2" }],
-                                [{ list: "ordered" }, { list: "bullet" }],
-                                ["bold", "italic", "strike"],
-                                [{ align: [] }],
-                                ["link", "image"],
-                                [{ color: [] }, { background: [] }],
-                              ],
-                            }}
-                            onChange={(value) => {
-                              setDescription(value);
-                            }}
-                          />
-                        </>
-                      ) : (
-                        <div
-                          className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:border-none dark:bg-[#1f1f1f] dark:bg-transparent dark:text-white"
-                          onClick={() => {
-                            if (currentUserCollaborator?.role === "viewer") {
-                              return;
-                            }
-                            setIsEditing(true);
-                          }}
-                          dangerouslySetInnerHTML={{
-                            __html: item.description,
-                          }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                  {isEditing && (
-                    <div className="mt-24 flex items-center gap-5 md:pl-4">
+                </PopoverTrigger>
+                <PopoverContent className="max-w-[200px] p-0 focus:ring-0">
+                  <div className="mt-2 flex flex-col items-start gap-1 pb-2">
+                    {typeIssue.map((option, index) => (
                       <Button
+                        disabled={currentUserCollaborator?.role === "viewer"}
                         onClick={() => {
                           handleIssuePropertyChange(
-                            "description",
-                            description,
+                            "issueType",
+                            option.title,
                             sprintId as string,
                             issueData,
                           );
-                          setIsEditing(false);
                         }}
-                        className="bg-[#0052CC] text-white"
-                        size={"sm"}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        size={"sm"}
-                        onClick={() => setIsEditing(false)}
+                        key={index}
                         variant={"ghost"}
+                        className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] hover:text-black"
                       >
-                        Cancel
+                        <div className="flex items-center gap-2">
+                          {/* Icon for the issue type */}
+                          <span className={`h-4 w-4 ${option.textColor}`}>
+                            {<option.icon />}
+                          </span>{" "}
+                          {/* Title */}
+                          <span className="text-sm font-medium capitalize">
+                            {option.title}
+                          </span>
+                        </div>
                       </Button>
-                    </div>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+              {/* issue type  */}
+
+              {/* delete button  */}
+              <div className="mt-2 flex gap-3 text-[#3b4a64] sm:mt-0">
+                <Button
+                  className={cn(
+                    `text-red-400 hover:bg-[#EBECF0] hover:text-red-500`,
+                    currentUserCollaborator?.role === "collaborator" ||
+                      currentUserCollaborator?.role === "viewer"
+                      ? "hidden"
+                      : "",
                   )}
+                  variant={"ghost"}
+                  size={"icon"}
+                  onClick={() => {
+                    if (
+                      currentUserCollaborator?.role === "collaborator" ||
+                      currentUserCollaborator?.role === "viewer"
+                    ) {
+                      return;
+                    }
 
-                  {/* comments */}
-                  <SprintComment
-                    sprintId={sprintId}
-                    item={item}
-                    issueData={issueData}
-                  />
+                    handleDeleteIssue(sprintId as string, issueData);
+                  }}
+                >
+                  <Trash2 size={20} />
+                </Button>
+              </div>
+            </div>
+
+            {/* title */}
+            <div className="flex flex-col gap-10 lg:flex-row">
+              <div className="flex w-full flex-col gap-3 sm:w-[550px]">
+                <textarea
+                  disabled={currentUserCollaborator?.role === "viewer"}
+                  value={item.shortSummary || ""}
+                  onChange={(e) =>
+                    handleIssuePropertyChange(
+                      "shortSummary",
+                      e.target.value,
+                      sprintId as string,
+                      issueData,
+                    )
+                  }
+                  className="mt-2 w-full resize-none rounded-md border-2 border-transparent bg-transparent px-3 py-2 pl-0 text-xl font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-none dark:border-gray-600 dark:bg-[#1f1f1f] dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-500"
+                  required
+                  rows={
+                    item?.shortSummary && item?.shortSummary?.length > 52
+                      ? 2
+                      : 1
+                  }
+                />
+
+                <div className="flex flex-col">
+                  <p className="text-left text-sm font-bold capitalize text-[#0052CC] dark:text-[#538be0]">
+                    Description
+                  </p>
+                  <div className="flex justify-start">
+                    {isEditing ? (
+                      <div className="w-full">
+                        <ReactQuill
+                          value={description}
+                          className="mt-2 bg-white dark:bg-transparent dark:text-white"
+                          theme="snow"
+                          placeholder="Describe the issue in as much detail as possible"
+                          style={{ height: "auto" }}
+                          modules={{
+                            toolbar: [
+                              [{ header: "1" }, { header: "2" }],
+                              [{ list: "ordered" }, { list: "bullet" }],
+                              ["bold", "italic", "strike"],
+                              [{ align: [] }],
+                              ["link", "image"],
+                              [{ color: [] }, { background: [] }],
+                            ],
+                          }}
+                          onChange={(value) => {
+                            setDescription(value);
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:border-none dark:bg-[#1f1f1f] dark:bg-transparent dark:text-white"
+                        onClick={() => {
+                          if (currentUserCollaborator?.role === "viewer") {
+                            return;
+                          }
+                          setIsEditing(true);
+                        }}
+                        dangerouslySetInnerHTML={{
+                          __html: item.description,
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
-
-                {/* second div */}
-                <div className="flex w-full flex-col gap-5 sm:w-[300px]">
-                  {/* status */}
-                  <CustomSelect
-                    sprintId={sprintId}
-                    show={show}
-                    setShow={setShow}
-                    issueData={issueData}
-                    setIssueData={setIssueData}
-                    type="status"
-                    option={[
-                      "backlog",
-                      "selected for development",
-                      "in progress",
-                      "done",
-                    ]}
-                  >
-                    {" "}
+                {isEditing && (
+                  <div className="flex items-center gap-5 md:pl-4">
                     <Button
                       onClick={() => {
-                        if (currentUserCollaborator?.role === "viewer") {
-                          return;
-                        }
-                        handleToggle("status");
+                        handleIssuePropertyChange(
+                          "description",
+                          description,
+                          sprintId as string,
+                          issueData,
+                        );
+                        setIsEditing(false);
                       }}
-                      variant="ghost"
-                      className={`hover:${getIssueColor(issueData.status)} flex w-max items-center justify-between text-white hover:text-white ${getIssueColor(issueData.status)}`}
+                      className="bg-[#0052CC] text-white"
+                      size={"sm"}
                     >
-                      <span className="text-sm font-medium uppercase">
-                        {issueData.status}
-                      </span>
+                      Save
                     </Button>
-                  </CustomSelect>
+                    <Button
+                      size={"sm"}
+                      onClick={() => setIsEditing(false)}
+                      variant={"ghost"}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
 
-                  {/* Assignees */}
-                  <CustomSelect
-                    sprintId={sprintId}
-                    show={show}
-                    setShow={setShow}
-                    issueData={issueData}
-                    setIssueData={setIssueData}
-                    type="assignees"
-                    option={[...collaborators]}
+                {/* comments */}
+                <SprintComment
+                  sprintId={sprintId}
+                  item={item}
+                  issueData={issueData}
+                />
+              </div>
+
+              {/* second div */}
+              <div className="flex w-full flex-col gap-5 sm:w-[300px]">
+                {/* status */}
+                <CustomSelect
+                  sprintId={sprintId}
+                  show={show}
+                  setShow={setShow}
+                  issueData={issueData}
+                  setIssueData={setIssueData}
+                  type="status"
+                  option={[
+                    "backlog",
+                    "selected for development",
+                    "in progress",
+                    "done",
+                  ]}
+                >
+                  {" "}
+                  <Button
+                    onClick={() => {
+                      if (currentUserCollaborator?.role === "viewer") {
+                        return;
+                      }
+                      handleToggle("status");
+                    }}
+                    variant="ghost"
+                    className={`hover:${getIssueColor(issueData.status)} flex w-max items-center justify-between text-white hover:text-white ${getIssueColor(issueData.status)}`}
                   >
-                    <div className="">
-                      {issueData?.assignees?.length === 0 && (
+                    <span className="text-sm font-medium uppercase">
+                      {issueData.status}
+                    </span>
+                  </Button>
+                </CustomSelect>
+
+                {/* Assignees */}
+                <CustomSelect
+                  sprintId={sprintId}
+                  show={show}
+                  setShow={setShow}
+                  issueData={issueData}
+                  setIssueData={setIssueData}
+                  type="assignees"
+                  option={[...collaborators]}
+                >
+                  <div className="">
+                    {issueData?.assignees?.length === 0 && (
+                      <Button
+                        onClick={() => {
+                          if (currentUserCollaborator?.role === "viewer") {
+                            return;
+                          }
+                          handleToggle("assignees");
+                        }}
+                        variant="ghost"
+                        className="flex w-max items-center justify-between px-2 dark:bg-[#262626]"
+                      >
+                        <span className="text-sm font-medium">
+                          {"Unassigned"}
+                        </span>
+                      </Button>
+                    )}
+
+                    {issueData?.assignees?.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1">
+                        {issueData.assignees.map((assignee, index) => (
+                          <div
+                            className="flex items-center gap-2 rounded-md bg-gray-100 px-1 py-2 shadow-sm dark:bg-[#262626] dark:text-white"
+                            key={index}
+                          >
+                            <Image
+                              key={index}
+                              width={24}
+                              height={24}
+                              src={assignee.picture}
+                              alt="profile"
+                              className="rounded-full"
+                            />
+
+                            <span className="text-xs font-medium text-gray-700 dark:text-white">
+                              {assignee.fullName}
+                            </span>
+
+                            <button
+                              className="p-0.5 text-gray-500 hover:text-red-400 dark:text-white hover:dark:text-red-500"
+                              onClick={() => {
+                                if (currentUserCollaborator?.role !== "owner") {
+                                  return;
+                                }
+
+                                const updatedAssignees =
+                                  issueData.assignees.filter(
+                                    (_, i) => i !== index,
+                                  );
+
+                                setIssueData((prevIssueData) => ({
+                                  ...prevIssueData,
+                                  assignees: updatedAssignees,
+                                }));
+
+                                handleIssuePropertyChange(
+                                  "assignees",
+                                  updatedAssignees,
+                                  sprintId as string,
+                                  issueData,
+                                );
+                              }}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ))}
+
                         <Button
+                          disabled={currentUserCollaborator?.role !== "owner"}
                           onClick={() => {
-                            if (currentUserCollaborator?.role === "viewer") {
+                            if (currentUserCollaborator?.role !== "owner") {
                               return;
                             }
                             handleToggle("assignees");
                           }}
                           variant="ghost"
-                          className="flex w-max items-center justify-between px-2 dark:bg-[#262626]"
+                          className="flex w-max items-center justify-between px-2 text-gray-500 hover:text-blue-500 dark:text-white"
                         >
-                          <span className="text-sm font-medium">
-                            {"Unassigned"}
-                          </span>
+                          <Plus size={20} />
                         </Button>
-                      )}
-
-                      {issueData?.assignees?.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-1">
-                          {issueData.assignees.map((assignee, index) => (
-                            <div
-                              className="flex items-center gap-2 rounded-md bg-gray-100 px-1 py-2 shadow-sm dark:bg-[#262626] dark:text-white"
-                              key={index}
-                            >
-                              <Image
-                                key={index}
-                                width={24}
-                                height={24}
-                                src={assignee.picture}
-                                alt="profile"
-                                className="rounded-full"
-                              />
-
-                              <span className="text-xs font-medium text-gray-700 dark:text-white">
-                                {assignee.fullName}
-                              </span>
-
-                              <button
-                                className="p-0.5 text-gray-500 hover:text-red-400 dark:text-white hover:dark:text-red-500"
-                                onClick={() => {
-                                  if (
-                                    currentUserCollaborator?.role !== "owner"
-                                  ) {
-                                    return;
-                                  }
-
-                                  const updatedAssignees =
-                                    issueData.assignees.filter(
-                                      (_, i) => i !== index,
-                                    );
-
-                                  setIssueData((prevIssueData) => ({
-                                    ...prevIssueData,
-                                    assignees: updatedAssignees,
-                                  }));
-
-                                  handleIssuePropertyChange(
-                                    "assignees",
-                                    updatedAssignees,
-                                    sprintId as string,
-                                    issueData,
-                                  );
-                                }}
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            </div>
-                          ))}
-
-                          <Button
-                            disabled={currentUserCollaborator?.role !== "owner"}
-                            onClick={() => {
-                              if (currentUserCollaborator?.role !== "owner") {
-                                return;
-                              }
-                              handleToggle("assignees");
-                            }}
-                            variant="ghost"
-                            className="flex w-max items-center justify-between px-2 text-gray-500 hover:text-blue-500 dark:text-white"
-                          >
-                            <Plus size={20} />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </CustomSelect>
-
-                  {/* reporter */}
-
-                  <CustomSelect
-                    sprintId={sprintId}
-                    show={show}
-                    setShow={setShow}
-                    issueData={issueData}
-                    setIssueData={setIssueData}
-                    type="reporter"
-                    option={[...collaborators]}
-                  >
-                    {" "}
-                    <Button
-                      onClick={() => {
-                        if (currentUserCollaborator?.role !== "owner") {
-                          return;
-                        }
-                        handleToggle("reporter");
-                      }}
-                      variant="ghost"
-                      className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
-                    >
-                      {issueData.reporter && (
-                        <>
-                          <Image
-                            width={24}
-                            height={24}
-                            src={issueData.reporter.picture}
-                            alt="profile"
-                            className="rounded-full"
-                          />
-
-                          <span className="text-xs font-medium text-gray-700 dark:text-white">
-                            {issueData.reporter.fullName}
-                          </span>
-                        </>
-                      )}
-                    </Button>
-                  </CustomSelect>
-
-                  {/* priority */}
-
-                  <CustomSelect
-                    sprintId={sprintId}
-                    show={show}
-                    setShow={setShow}
-                    issueData={issueData}
-                    setIssueData={setIssueData}
-                    type="priority"
-                    option={["low", "medium", "high", "urgent"]}
-                  >
-                    {" "}
-                    <Button
-                      onClick={() => {
-                        if (currentUserCollaborator?.role === "viewer") {
-                          return;
-                        }
-                        handleToggle("priority");
-                      }}
-                      variant="outline"
-                      className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
-                    >
-                      {issueData.priority && (
-                        <>
-                          <span
-                            className={`h-3 w-3 rounded-full ${getPriorityColor(issueData.priority)}`}
-                          ></span>
-                          <span className="text-xs font-medium uppercase text-gray-700 dark:text-white">
-                            {issueData.priority}
-                          </span>
-                        </>
-                      )}
-                    </Button>
-                  </CustomSelect>
-
-                  <div className="flex flex-col gap-1 md:pl-4">
-                    <p className="text-left text-xs font-bold uppercase text-gray-600">
-                      deadline
-                    </p>
-                    <div className="flex w-max flex-wrap gap-1">
-                      <Popover modal={true}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start bg-gray-100 text-left font-normal dark:bg-[#262626]",
-                              !issueData.deadLine && "text-muted-foreground",
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {issueData.deadLine ? (
-                              format(issueData.deadLine, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-full p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={issueData?.deadLine}
-                            onSelect={(selectedDate) => {
-                              if (currentUserCollaborator?.role !== "owner") {
-                                return;
-                              }
-                              if (selectedDate) {
-                                setIssueData({
-                                  ...issueData,
-                                  deadLine: selectedDate,
-                                });
-
-                                handleIssuePropertyChange(
-                                  "deadLine",
-                                  selectedDate,
-                                  sprintId as string,
-                                  issueData,
-                                );
-                              }
-                            }}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
+                      </div>
+                    )}
                   </div>
+                </CustomSelect>
 
-                  {/* original  estimated  (hours) */}
-                  <div className="md:pl-4">
-                    <p className="text-left text-xs font-bold uppercase text-gray-600">
-                      original estimated (hours)
-                    </p>
-                    <input
-                      disabled={currentUserCollaborator?.role === "viewer"}
-                      value={issueData.estimatedTime}
-                      type="number"
-                      onChange={(e) => {
-                        setIssueData({
-                          ...issueData,
-                          estimatedTime:
-                            parseInt(e.target.value) < 0
-                              ? 0
-                              : parseInt(e.target.value),
-                        });
+                {/* reporter */}
 
-                        handleIssuePropertyChange(
-                          "estimatedTime",
-                          parseInt(e.target.value),
-                          sprintId as string,
-                          issueData,
-                        );
-                      }}
-                      className="mt-1 w-full resize-none rounded-md border-2 border-transparent px-1 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-[#262626] dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
-                      required
-                    />
-                  </div>
-
-                  {/* time tracking  */}
-                  <div className="flex cursor-pointer flex-col rounded-md p-1 hover:bg-gray-100 dark:hover:bg-transparent md:pl-4">
-                    <p className="text-left text-xs font-bold uppercase text-gray-600">
-                      Time tracking
-                    </p>
-
-                    <div
-                      onClick={() => {
-                        if (currentUserCollaborator?.role === "viewer") {
-                          return;
-                        }
-                        setShowEstimatedTime(true);
-                      }}
-                      className="mt-2 flex cursor-pointer items-center gap-1.5 text-gray-700"
-                    >
-                      <Timer size={32} className="dark:text-gray-100" />
-
-                      <div className="flex w-full flex-col gap-1">
-                        <Progress
-                          value={issueData.loggedTime}
-                          max={issueData.estimatedTime}
+                <CustomSelect
+                  sprintId={sprintId}
+                  show={show}
+                  setShow={setShow}
+                  issueData={issueData}
+                  setIssueData={setIssueData}
+                  type="reporter"
+                  option={[...collaborators]}
+                >
+                  {" "}
+                  <Button
+                    onClick={() => {
+                      if (currentUserCollaborator?.role !== "owner") {
+                        return;
+                      }
+                      handleToggle("reporter");
+                    }}
+                    variant="ghost"
+                    className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
+                  >
+                    {issueData.reporter && (
+                      <>
+                        <Image
+                          width={24}
+                          height={24}
+                          src={issueData.reporter.picture}
+                          alt="profile"
+                          className="rounded-full"
                         />
-                        <div className="flex justify-between">
-                          <p className="text-xs dark:text-gray-100">
-                            {issueData.loggedTime}h logged
-                          </p>{" "}
-                          <p className="text-xs dark:text-gray-100">
-                            {issueData.remainingTime}h remaining
-                          </p>
-                        </div>
+
+                        <span className="text-xs font-medium text-gray-700 dark:text-white">
+                          {issueData.reporter.fullName}
+                        </span>
+                      </>
+                    )}
+                  </Button>
+                </CustomSelect>
+
+                {/* priority */}
+
+                <CustomSelect
+                  sprintId={sprintId}
+                  show={show}
+                  setShow={setShow}
+                  issueData={issueData}
+                  setIssueData={setIssueData}
+                  type="priority"
+                  option={["low", "medium", "high", "urgent"]}
+                >
+                  {" "}
+                  <Button
+                    onClick={() => {
+                      if (currentUserCollaborator?.role === "viewer") {
+                        return;
+                      }
+                      handleToggle("priority");
+                    }}
+                    variant="outline"
+                    className="flex w-max items-center justify-between gap-2 bg-gray-100 px-2 hover:bg-gray-100 dark:bg-[#262626]"
+                  >
+                    {issueData.priority && (
+                      <>
+                        <span
+                          className={`h-3 w-3 rounded-full ${getPriorityColor(issueData.priority)}`}
+                        ></span>
+                        <span className="text-xs font-medium uppercase text-gray-700 dark:text-white">
+                          {issueData.priority}
+                        </span>
+                      </>
+                    )}
+                  </Button>
+                </CustomSelect>
+
+                <div className="flex flex-col gap-1 md:pl-4">
+                  <p className="text-left text-xs font-bold uppercase text-gray-600">
+                    deadline
+                  </p>
+                  <div className="flex w-max flex-wrap gap-1">
+                    <Popover modal={true}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start bg-gray-100 text-left font-normal dark:bg-[#262626]",
+                            !issueData.deadLine && "text-muted-foreground",
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {issueData.deadLine ? (
+                            format(issueData.deadLine, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={issueData?.deadLine}
+                          onSelect={(selectedDate) => {
+                            if (currentUserCollaborator?.role !== "owner") {
+                              return;
+                            }
+                            if (selectedDate) {
+                              setIssueData({
+                                ...issueData,
+                                deadLine: selectedDate,
+                              });
+
+                              handleIssuePropertyChange(
+                                "deadLine",
+                                selectedDate,
+                                sprintId as string,
+                                issueData,
+                              );
+                            }
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+
+                {/* original  estimated  (hours) */}
+                <div className="md:pl-4">
+                  <p className="text-left text-xs font-bold uppercase text-gray-600">
+                    original estimated (hours)
+                  </p>
+                  <input
+                    disabled={currentUserCollaborator?.role === "viewer"}
+                    value={issueData.estimatedTime}
+                    type="number"
+                    onChange={(e) => {
+                      setIssueData({
+                        ...issueData,
+                        estimatedTime:
+                          parseInt(e.target.value) < 0
+                            ? 0
+                            : parseInt(e.target.value),
+                      });
+
+                      handleIssuePropertyChange(
+                        "estimatedTime",
+                        parseInt(e.target.value),
+                        sprintId as string,
+                        issueData,
+                      );
+                    }}
+                    className="mt-1 w-full resize-none rounded-md border-2 border-transparent px-1 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-xs hover:bg-gray-100 focus:border-[#4FADE6] focus:bg-transparent dark:border-[#262626] dark:bg-[#1f1f1f] dark:text-gray-200 dark:placeholder:text-gray-500"
+                    required
+                  />
+                </div>
+
+                {/* time tracking  */}
+                <div className="flex cursor-pointer flex-col rounded-md p-1 hover:bg-gray-100 dark:hover:bg-transparent md:pl-4">
+                  <p className="text-left text-xs font-bold uppercase text-gray-600">
+                    Time tracking
+                  </p>
+
+                  <div
+                    onClick={() => {
+                      if (currentUserCollaborator?.role === "viewer") {
+                        return;
+                      }
+                      setShowEstimatedTime(true);
+                    }}
+                    className="mt-2 flex cursor-pointer items-center gap-1.5 text-gray-700"
+                  >
+                    <Timer size={32} className="dark:text-gray-100" />
+
+                    <div className="flex w-full flex-col gap-1">
+                      <Progress
+                        value={issueData.loggedTime}
+                        max={issueData.estimatedTime}
+                      />
+                      <div className="flex justify-between">
+                        <p className="text-xs dark:text-gray-100">
+                          {issueData.loggedTime}h logged
+                        </p>{" "}
+                        <p className="text-xs dark:text-gray-100">
+                          {issueData.remainingTime}h remaining
+                        </p>
                       </div>
                     </div>
                   </div>
-
-                  {/* separator */}
-
-                  {/* created and updated */}
-                  <div className="flex flex-col gap-1 text-xs font-medium text-[#67758B]">
-                    <Separator className="h-[2px]" />
-                    <p className="mt-2 capitalize dark:text-gray-100">
-                      {formatDate(issueData.createdAt)}
-                    </p>
-
-                    {/* todo implemented updated functionality */}
-                    {/* <p className="capitalize">Updated at a days ago</p> */}
-                  </div>
-
-                  {/* testing select component */}
                 </div>
-              </div>
-            </ScrollArea>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
 
-      {/* estimate time setter */}
-      <EstimatedTimeSetter
-        showEstimatedTime={showEstimatedTime}
-        setShowEstimatedTime={setShowEstimatedTime}
-        issueData={issueData}
-        item={item}
-        setIssueData={setIssueData}
-        sprintId={sprintId}
-      />
-    </>
+                {/* separator */}
+
+                {/* created and updated */}
+                <div className="flex flex-col gap-1 text-xs font-medium text-[#67758B]">
+                  <Separator className="h-[2px]" />
+                  <p className="mt-2 capitalize dark:text-gray-100">
+                    {formatDate(issueData.createdAt)}
+                  </p>
+
+                  {/* todo implemented updated functionality */}
+                  {/* <p className="capitalize">Updated at a days ago</p> */}
+                </div>
+
+                {/* testing select component */}
+              </div>
+            </div>
+          </ScrollArea>
+        </DialogHeader>
+        {/* estimate time setter */}
+        <EstimatedTimeSetter
+          showEstimatedTime={showEstimatedTime}
+          setShowEstimatedTime={setShowEstimatedTime}
+          issueData={issueData}
+          item={item}
+          setIssueData={setIssueData}
+          sprintId={sprintId}
+        />
+      </DialogContent>
+    </Dialog>
   );
 }
 

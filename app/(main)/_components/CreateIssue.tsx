@@ -33,7 +33,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -160,9 +160,20 @@ function CreateIssue({
       <DialogContent className="max-w-full overflow-y-auto rounded-none border border-gray-200 py-5 shadow-lg dark:border-gray-700 lg:max-h-[90vh] lg:max-w-[850px] lg:overflow-y-auto lg:rounded-lg">
         <DialogHeader>
           <ScrollArea className="h-[95vh] w-full py-5">
-            <DialogTitle className="text-left text-2xl font-semibold text-gray-800 dark:text-gray-200">
-              Create Issue
-            </DialogTitle>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-left text-2xl font-semibold text-gray-800 dark:text-gray-200">
+                Create Issue
+              </DialogTitle>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="flex sm:hidden"
+                onClick={() => setOpenCreateIssue(false)}
+              >
+                <X className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" />
+              </Button>
+            </div>
             <DialogDescription></DialogDescription>
 
             <form

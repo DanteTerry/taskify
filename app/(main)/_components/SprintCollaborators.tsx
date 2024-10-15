@@ -9,7 +9,7 @@ import {
 import { useOrigin } from "@/hooks/use-origin";
 import { RootState } from "@/lib/redux/store";
 import { updateCollaborators, updateJoinCode } from "@/utils/sprintUtil";
-import { Check, Copy, Trash2 } from "lucide-react";
+import { Check, Copy, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -100,11 +100,21 @@ function SprintCollaborators({
 
   return (
     <Dialog open={openCollaborators} onOpenChange={setOpenCollaborators}>
-      <DialogContent className="flex h-full flex-col justify-center overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 md:h-max md:max-h-[90vh] md:rounded-lg">
+      <DialogContent className="flex h-full w-full flex-col justify-center overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 sm:h-max md:max-h-[90vh] md:rounded-lg">
         <DialogHeader>
-          <DialogTitle className="text-left text-2xl font-bold text-gray-800 dark:text-gray-200">
-            Collaborators
-          </DialogTitle>
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-left text-2xl font-bold text-gray-800 dark:text-gray-200">
+              Collaborators
+            </DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="flex sm:hidden"
+              onClick={() => setOpenCollaborators(false)}
+            >
+              <X className="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100" />
+            </Button>
+          </div>
           <DialogDescription className="text-left text-gray-600 dark:text-gray-400">
             Manage and search for collaborators in this Project.
           </DialogDescription>
