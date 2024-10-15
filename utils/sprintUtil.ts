@@ -306,7 +306,10 @@ export const handleDeleteIssue = async (
 };
 
 // function to modify join code
-export const updateJoinCode = async (sprintId: string, newJoinCode: string) => {
+export const updateJoinCode = async (
+  sprintId: string,
+  newJoinCode: { role: string; joinCode: string },
+) => {
   if (!sprintId) {
     console.error("Invalid sprintId or joinCode");
     return;
@@ -316,7 +319,7 @@ export const updateJoinCode = async (sprintId: string, newJoinCode: string) => {
 
   try {
     // Update the joinCode in Firestore
-    await updateDoc(docRef, { joinCode: newJoinCode });
+    await updateDoc(docRef, { join: newJoinCode });
   } catch (error) {
     console.error("Error updating join code:", error);
   }

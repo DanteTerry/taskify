@@ -3,7 +3,6 @@ import { db } from "@/config/firebaseConfig";
 import {
   fetchDocumentInfo,
   fetchSprintDocumentOutput,
-  setCollaborators,
 } from "@/lib/redux/sprintSlice";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { updateJoinCode } from "@/utils/sprintUtil";
@@ -27,7 +26,7 @@ function JoinPage() {
   const { joinId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { documentInfo, collaborators, loading, joinCode } = useSelector(
+  const { documentInfo, collaborators, loading, join } = useSelector(
     (state: RootState) => state.sprint,
   );
 
@@ -46,7 +45,7 @@ function JoinPage() {
       fullName: user.fullName || "",
       email: user.primaryEmailAddress?.emailAddress || "",
       picture: user.imageUrl || "",
-      role: "collaborator",
+      role: join.role || "collaborator",
     };
 
     try {
@@ -106,7 +105,10 @@ function JoinPage() {
   };
 
   const handleReject = () => {
-    updateJoinCode(documentId.split("-")[1], "rejected");
+    updateJoinCode(documentId.split("-")[1], {
+      role: "",
+      joinCode: "rejected",
+    });
     setRejected(true);
     setAccepted(false);
   };
@@ -144,7 +146,7 @@ function JoinPage() {
     );
   }
 
-  if (joinCode === "rejected") {
+  if (join.joinCode === "rejected") {
     return (
       <div
         style={{
@@ -174,7 +176,10 @@ function JoinPage() {
     );
   }
 
-  if (!joinCode || joinCode.split("-")[0] !== documentId.split("-")[0]) {
+  if (
+    !join.joinCode ||
+    join.joinCode.split("-")[0] !== documentId.split("-")[0]
+  ) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-gray-100">
         <div className="text-center">

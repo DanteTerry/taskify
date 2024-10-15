@@ -31,7 +31,10 @@ export interface SprintOutput {
 export interface SprintState {
   collaborators: Collaborator[];
   output: SprintOutput[];
-  joinCode: string;
+  join: {
+    role: string;
+    joinCode: string;
+  };
   docId: string;
   documentInfo: DocumentInfoType;
   loading: boolean; // Add loading state
@@ -58,7 +61,10 @@ export interface DocumentInfoType {
 const initialState: SprintState = {
   collaborators: [],
   output: [],
-  joinCode: "",
+  join: {
+    role: "",
+    joinCode: "",
+  },
   docId: "",
   documentInfo: {
     coverImage: "",
@@ -99,7 +105,7 @@ export const fetchSprintDocumentOutput = createAsyncThunk(
           // Dispatch actions to update store
           dispatch(setCollaborators(data.collaborators));
           dispatch(setOutput(data.output));
-          dispatch(setJoinCode(data.joinCode));
+          dispatch(setJoin(data.join));
         } else {
           console.log("No such document!");
         }
@@ -162,8 +168,11 @@ const sprintSlice = createSlice({
     setOutput: (state, action: PayloadAction<SprintOutput[]>) => {
       state.output = action.payload;
     },
-    setJoinCode: (state, action: PayloadAction<string>) => {
-      state.joinCode = action.payload;
+    setJoin: (
+      state,
+      action: PayloadAction<{ role: string; joinCode: string }>,
+    ) => {
+      state.join = action.payload;
     },
     setDocumentInfo: (state, action: PayloadAction<DocumentInfoType>) => {
       state.documentInfo = action.payload;
@@ -178,7 +187,7 @@ const sprintSlice = createSlice({
 export const {
   setCollaborators,
   setOutput,
-  setJoinCode,
+  setJoin,
   setDocumentInfo,
   setLoading,
 } = sprintSlice.actions;

@@ -52,7 +52,7 @@ function WorkSpacePage({ params }: { params: any }) {
   }, [workspaceId]);
 
   return (
-    <div className="relative flex h-max w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] sm:h-full md:h-screen md:px-2 md:pt-16 lg:px-0">
+    <div className="relative flex h-max w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:h-screen lg:px-0">
       <div className="mx-auto h-full w-full px-3 py-6 dark:dark:bg-[#1f1f1f] md:w-full lg:w-3/4 lg:px-0">
         <div className="mx-auto flex h-full w-full flex-col items-center text-black dark:text-white">
           <div className="relative flex w-full items-center justify-center py-4">

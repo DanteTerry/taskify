@@ -16,6 +16,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function SprintCollaborators({
   openCollaborators,
@@ -29,41 +36,50 @@ function SprintCollaborators({
   const collaborators = useSelector(
     (state: RootState) => state.sprint.collaborators,
   );
-  const joinCode = useSelector((state: RootState) => state.sprint.joinCode);
+  const join = useSelector((state: RootState) => state.sprint.join);
+  console.log(join);
   const [searchTerm, setSearchTerm] = useState("");
   const [copied, setCopied] = useState(false);
   const filteredCollaborators = collaborators.filter((collaborator) =>
     collaborator.fullName.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
+  const [role, setRole] = useState("");
+
   useEffect(() => {
-    if (joinCode === "rejected") {
+    if (join.joinCode === "rejected") {
       const timer = setTimeout(() => {
-        updateJoinCode(sprintId as string, "");
+        updateJoinCode(sprintId as string, { role: "", joinCode: "" });
       }, 10 * 1000);
 
       return () => clearTimeout(timer);
     }
 
-    if (joinCode) {
+    if (join.joinCode) {
       const timer = setTimeout(
         () => {
-          updateJoinCode(sprintId as string, "");
+          updateJoinCode(sprintId as string, { role: "", joinCode: "" });
         },
         15 * 60 * 1000,
       );
 
       return () => clearTimeout(timer);
     }
-  }, [joinCode, sprintId]);
+  }, [join.joinCode, sprintId]);
 
   const handleAddCollaborator = () => {
     const uuid = uuidv4().slice(0, 8);
     const joinCode = `${uuid}-${sprintId}`;
-    updateJoinCode(sprintId as string, joinCode);
+
+    const join = {
+      role,
+      joinCode,
+    };
+
+    updateJoinCode(sprintId as string, join);
   };
 
-  const url = `${origin}/join/${joinCode}`;
+  const url = `${origin}/join/${join.joinCode}`;
 
   const onCopy = () => {
     navigator.clipboard.writeText(url);
@@ -76,12 +92,12 @@ function SprintCollaborators({
 
   return (
     <Dialog open={openCollaborators} onOpenChange={setOpenCollaborators}>
-      <DialogContent className="flex h-full flex-col overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 md:max-h-[90vh] md:rounded-lg">
+      <DialogContent className="flex h-full flex-col justify-center overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 md:h-max md:max-h-[90vh] md:rounded-lg">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+          <DialogTitle className="text-left text-2xl font-bold text-gray-800 dark:text-gray-200">
             Collaborators
           </DialogTitle>
-          <DialogDescription className="text-gray-600 dark:text-gray-400">
+          <DialogDescription className="text-left text-gray-600 dark:text-gray-400">
             Manage and search for collaborators in this Project.
           </DialogDescription>
         </DialogHeader>
@@ -129,7 +145,7 @@ function SprintCollaborators({
             ))}
           </ScrollArea>
         </div>
-        {!joinCode && (
+        {!join.joinCode && (
           <button
             onClick={handleAddCollaborator}
             className="mt-2 flex w-full justify-start rounded-lg bg-[#283D3B] px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-[#213432] focus:outline-none"
@@ -137,7 +153,7 @@ function SprintCollaborators({
             Add Collaborator
           </button>
         )}
-        {joinCode && (
+        {join.joinCode && (
           <div className="mt-4 flex flex-col items-center justify-between rounded-lg border border-gray-300 p-4 shadow-sm transition-shadow duration-200">
             <div className="mb-4 text-center">
               <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
@@ -147,19 +163,42 @@ function SprintCollaborators({
                 Share this code to join.
               </p>
             </div>
-            <div className="flex w-full items-center">
-              <input
-                className="h-10 w-full flex-1 truncate rounded-l-md border bg-muted px-3 text-sm"
-                value={url}
-                disabled
-              />
-              <Button onClick={onCopy} className="h-10 rounded-l-none">
-                {copied ? (
-                  <Check className="h-5 w-5" />
-                ) : (
-                  <Copy className="h-5 w-5" />
-                )}
-              </Button>
+            <div className="flex w-full flex-col items-center gap-3">
+              <Select
+                defaultValue="collaborator"
+                required
+                onValueChange={(value) => setRole(value)}
+              >
+                <SelectTrigger className="mt-2 w-full rounded-md border border-input bg-gray-100 focus:ring-0 dark:bg-[#1f1f1f] dark:bg-transparent">
+                  <SelectValue placeholder="Select Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="collaborator">
+                    <div className="flex items-center gap-2">
+                      <span>Collaborator</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="viewer">
+                    <div className="flex items-center gap-2">
+                      <span>Viewer</span>
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="flex w-full items-center">
+                <input
+                  className="h-10 w-full flex-1 truncate rounded-l-md border bg-muted px-3 text-sm"
+                  value={url}
+                  disabled
+                />
+                <Button onClick={onCopy} className="h-10 rounded-l-none">
+                  {copied ? (
+                    <Check className="h-5 w-5" />
+                  ) : (
+                    <Copy className="h-5 w-5" />
+                  )}
+                </Button>
+              </div>
             </div>
             <Button
               onClick={handleAddCollaborator}
