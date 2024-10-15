@@ -601,7 +601,10 @@ function IssueDetails({
                       onChange={(e) => {
                         setIssueData({
                           ...issueData,
-                          estimatedTime: parseInt(e.target.value),
+                          estimatedTime:
+                            parseInt(e.target.value) < 0
+                              ? 0
+                              : parseInt(e.target.value),
                         });
 
                         handleIssuePropertyChange(

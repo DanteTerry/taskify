@@ -43,6 +43,14 @@ function EstimatedTimeSetter({
     setIssueData,
   ]);
 
+  useEffect(() => {
+    const remainingTime = item.estimatedTime - issueData.loggedTime;
+    setIssueData((prev) => ({
+      ...prev,
+      remainingTime,
+    }));
+  }, [item.estimatedTime, issueData.loggedTime, setIssueData]);
+
   const handleLoggedTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const loggedTime = parseInt(e.target.value) || 0;
 
