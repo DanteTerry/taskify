@@ -293,23 +293,27 @@ function CreateIssue({
                   </SelectTrigger>
                   <SelectContent>
                     {collaborators?.length &&
-                      collaborators.map((collaborator) => (
-                        <SelectItem
-                          key={collaborator.id}
-                          value={collaborator?.fullName}
-                        >
-                          <div className="flex items-center gap-2">
-                            <Image
-                              width={24}
-                              height={24}
-                              src={collaborator?.picture}
-                              alt={collaborator?.fullName}
-                              className="h-6 w-6 rounded-full"
-                            />
-                            <span>{collaborator?.fullName}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
+                      collaborators
+                        .filter(
+                          (collaborator) => collaborator.role !== "viewer",
+                        )
+                        .map((collaborator) => (
+                          <SelectItem
+                            key={collaborator.id}
+                            value={collaborator?.fullName}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Image
+                                width={24}
+                                height={24}
+                                src={collaborator?.picture}
+                                alt={collaborator?.fullName}
+                                className="h-6 w-6 rounded-full"
+                              />
+                              <span>{collaborator?.fullName}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
                   </SelectContent>
                 </Select>
                 <p className="mt-1 text-left text-xs text-gray-500">
@@ -340,23 +344,27 @@ function CreateIssue({
                   </SelectTrigger>
                   <SelectContent>
                     {collaborators?.length &&
-                      collaborators.map((collaborator) => (
-                        <SelectItem
-                          key={collaborator.id}
-                          value={collaborator?.fullName}
-                        >
-                          <div className="flex items-center gap-2">
-                            <Image
-                              width={24}
-                              height={24}
-                              src={collaborator?.picture}
-                              alt={collaborator?.fullName}
-                              className="h-6 w-6 rounded-full"
-                            />
-                            <span>{collaborator?.fullName}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
+                      collaborators
+                        .filter(
+                          (collaborator) => collaborator.role !== "viewer",
+                        )
+                        .map((collaborator) => (
+                          <SelectItem
+                            key={collaborator.id}
+                            value={collaborator?.fullName}
+                          >
+                            <div className="flex items-center gap-2">
+                              <Image
+                                width={24}
+                                height={24}
+                                src={collaborator?.picture}
+                                alt={collaborator?.fullName}
+                                className="h-6 w-6 rounded-full"
+                              />
+                              <span>{collaborator?.fullName}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
                   </SelectContent>
                 </Select>
                 <p className="mt-1 text-left text-xs text-gray-500">

@@ -107,7 +107,7 @@ function EstimatedTimeSetter({
 
     // Update Firestore with both fields at once
     handleIssueMultiplePropertyChange(
-      { remainingTime, loggedTime }, // Fields to update
+      { remainingTime, loggedTime },
       sprintId as string,
       { ...issueData, remainingTime, loggedTime },
     );

@@ -9,6 +9,7 @@ import {
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { issueDataType, issueType } from "@/types/type";
+import { Collaborator } from "@/lib/redux/sprintSlice";
 
 function CustomSelect({
   setIssueData,
@@ -35,22 +36,25 @@ function CustomSelect({
       [type]: false,
     }));
   };
-  console.log(sprintId);
 
-  // todo make a function that close all the show state when click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (e.target instanceof Element) {
         const selectElement = document.querySelector(".relative");
         const buttonElements = document.querySelectorAll("button");
+        const inputElements = document.querySelectorAll("input");
         const isButtonClick = Array.from(buttonElements).some((button) =>
           button.contains(e.target as Node),
+        );
+        const isInputClick = Array.from(inputElements).some((input) =>
+          input.contains(e.target as Node),
         );
 
         if (
           selectElement &&
           !selectElement.contains(e.target) &&
-          !isButtonClick
+          !isButtonClick &&
+          !isInputClick
         ) {
           setShow((prevShow) => ({
             ...prevShow,
@@ -148,12 +152,12 @@ function CustomSelect({
         <>
           {type === "status" && (
             <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
-              <input
+              {/* <input
                 placeholder="Search"
                 type="text"
                 className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
                 required
-              />
+              /> */}
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
                 {option.map((item: any, index: number) => {
                   let className;
@@ -194,112 +198,104 @@ function CustomSelect({
 
           {type === "assignees" && (
             <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
-              <input
-                placeholder="Search"
-                type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
-                required
-              />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
-                {option.map((item: any, index: number) => {
-                  return (
-                    <Button
-                      onClick={() => {
-                        const updatedAssignees = issueData.assignees.some(
-                          (assignee: any) => assignee.id === item.id,
-                        )
-                          ? issueData.assignees
-                          : [...issueData.assignees, item];
+                {option
+                  .filter(
+                    (collaborator: Collaborator) =>
+                      collaborator.role !== "viewer",
+                  )
+                  .map((item: Collaborator, index: number) => {
+                    return (
+                      <Button
+                        onClick={() => {
+                          const updatedAssignees = issueData.assignees.some(
+                            (assignee: any) => assignee.id === item.id,
+                          )
+                            ? issueData.assignees
+                            : [...issueData.assignees, item];
 
-                        setIssueData({
-                          ...issueData,
-                          assignees: updatedAssignees,
-                        });
+                          setIssueData({
+                            ...issueData,
+                            assignees: updatedAssignees,
+                          });
 
-                        handleIssuePropertyChange(
-                          "assignees",
-                          updatedAssignees,
-                          sprintId as string,
-                          issueData,
-                        );
-                        handleClose();
-                      }}
-                      key={index}
-                      variant={"ghost"}
-                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Image
-                          width={24}
-                          height={24}
-                          src={item.picture}
-                          alt={item.fullName}
-                          className="rounded-full"
-                        />
-                        <span className="text-xs font-medium dark:text-gray-200">
-                          {item.fullName}
-                        </span>
-                      </div>
-                    </Button>
-                  );
-                })}
+                          handleIssuePropertyChange(
+                            "assignees",
+                            updatedAssignees,
+                            sprintId as string,
+                            issueData,
+                          );
+                          handleClose();
+                        }}
+                        key={index}
+                        variant={"ghost"}
+                        className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Image
+                            width={24}
+                            height={24}
+                            src={item.picture}
+                            alt={item.fullName}
+                            className="rounded-full"
+                          />
+                          <span className="text-xs font-medium dark:text-gray-200">
+                            {item.fullName}
+                          </span>
+                        </div>
+                      </Button>
+                    );
+                  })}
               </div>
             </div>
           )}
 
           {type === "reporter" && (
             <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
-              <input
-                placeholder="Search"
-                type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
-                required
-              />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
-                {option.map((item: any, index: number) => {
-                  return (
-                    <Button
-                      onClick={() => {
-                        setIssueData({ ...issueData, reporter: item });
-                        handleIssuePropertyChange(
-                          "reporter",
-                          item,
-                          sprintId as string,
-                          issueData,
-                        );
-                        handleClose();
-                      }}
-                      key={index}
-                      variant={"ghost"}
-                      className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Image
-                          width={24}
-                          height={24}
-                          src={item.picture}
-                          alt={item.fullName}
-                          className="rounded-full"
-                        />
-                        <span className="text-sm font-medium dark:text-gray-200">
-                          {item.fullName}
-                        </span>
-                      </div>
-                    </Button>
-                  );
-                })}
+                {option
+                  .filter(
+                    (collaborator: Collaborator) =>
+                      collaborator.role !== "viewer",
+                  )
+                  .map((item: Collaborator, index: number) => {
+                    return (
+                      <Button
+                        onClick={() => {
+                          setIssueData({ ...issueData, reporter: item });
+                          handleIssuePropertyChange(
+                            "reporter",
+                            item,
+                            sprintId as string,
+                            issueData,
+                          );
+                          handleClose();
+                        }}
+                        key={index}
+                        variant={"ghost"}
+                        className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] dark:hover:bg-gray-700"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Image
+                            width={24}
+                            height={24}
+                            src={item.picture}
+                            alt={item.fullName}
+                            className="rounded-full"
+                          />
+                          <span className="text-sm font-medium dark:text-gray-200">
+                            {item.fullName}
+                          </span>
+                        </div>
+                      </Button>
+                    );
+                  })}
               </div>
             </div>
           )}
 
           {type === "priority" && (
             <div className="absolute top-16 z-10 w-3/4 border border-gray-200 bg-white shadow-sm dark:border-gray-600 dark:bg-[#262626]">
-              <input
-                placeholder="Search"
-                type="text"
-                className="mt-1 w-full border-none px-3 py-1 text-sm font-medium text-[#172B4D] outline-none placeholder:text-sm dark:bg-transparent dark:text-gray-200 dark:placeholder:text-gray-100"
-                required
-              />
               <div className="mt-2 flex flex-col items-start gap-1 pb-2">
                 {option.map((item: any, index: number) => {
                   return (

@@ -181,7 +181,7 @@ function IssueDetails({
                           }}
                           key={index}
                           variant={"ghost"}
-                          className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE]"
+                          className="flex w-full justify-start rounded-none px-2 hover:bg-[#D2E5FE] hover:text-black"
                         >
                           <div className="flex items-center gap-2">
                             {/* Icon for the issue type */}
