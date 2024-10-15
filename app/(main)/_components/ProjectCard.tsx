@@ -68,6 +68,7 @@ function ProjectCard({
       if (projectType === "page") {
         await setDoc(doc(db, "PageDocumentOutput", documentId.toString()), {
           docId: documentId,
+          editors: [],
           workspaceId: params?.workspaceId,
           output: [],
         });

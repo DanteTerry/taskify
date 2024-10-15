@@ -16,11 +16,13 @@ function Editor({
   editable,
   documentOutput,
   setDocumentOutput,
+  setEditors,
 }: {
   params: {
     workspaceId: string;
     documentId: string;
   };
+  setEditors?: Dispatch<SetStateAction<string[]>>;
   editable: boolean;
   setDocumentOutput: Dispatch<SetStateAction<PartialBlock[]>>;
   documentOutput: PartialBlock[];
@@ -36,6 +38,7 @@ function Editor({
     const docRef = doc(db, "PageDocumentOutput", params?.documentId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
+      setEditors && setEditors(docSnap.data()?.editors);
       const output = docSnap.data()?.output;
       if (Array.isArray(output) && output.length > 0) {
         setDocumentOutput(output);

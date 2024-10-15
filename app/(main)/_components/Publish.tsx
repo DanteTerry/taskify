@@ -7,10 +7,10 @@ import {
 } from "@/components/ui/popover";
 import { db } from "@/config/firebaseConfig";
 import { useOrigin } from "@/hooks/use-origin";
-import { WorkspaceDocData } from "@/types/type";
-import { doc, updateDoc } from "firebase/firestore";
-import { Check, Copy, Globe } from "lucide-react";
-import { useState } from "react";
+import { DocumentOutput, WorkspaceDocData } from "@/types/type";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { Check, Copy, Globe, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 function Publish({
@@ -24,9 +24,26 @@ function Publish({
 
   const [copied, setCopied] = useState(false);
 
+  const [editorEmail, setEditorEmail] = useState("");
+  const [documentOutput, setDocumentOutput] = useState<DocumentOutput>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const url = `${origin}/preview/${documentId}`;
+
+  // getting document output
+  useEffect(() => {
+    const docRef = doc(db, "PageDocumentOutput", documentId);
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setDocumentOutput(data as DocumentOutput);
+      } else {
+        console.log("No such document!");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [documentId]);
 
   const onPublish = async () => {
     try {
@@ -80,6 +97,40 @@ function Publish({
     }, 1000);
   };
 
+  const updateEditors = async (newEditors: string[], action: string) => {
+    try {
+      setIsSubmitting(true);
+      const docRef = doc(db, "PageDocumentOutput", documentId);
+      const updateEditorsPromise = updateDoc(docRef, {
+        editors: newEditors,
+      });
+
+      await toast.promise(updateEditorsPromise, {
+        loading: `${action} editor...`,
+        success: `Editor ${action.toLowerCase()}ed`,
+        error: `Failed to ${action.toLowerCase()} editor`,
+      });
+
+      setIsSubmitting(false);
+      setEditorEmail("");
+    } catch (error) {
+      console.log(error);
+      setIsSubmitting(false);
+    }
+  };
+
+  const addEditors = () => {
+    const editors = documentOutput?.editors || [];
+    const newEditors = [...editors, editorEmail];
+    updateEditors(newEditors, "Add");
+  };
+
+  const handleRemoveEditor = (editor: string) => {
+    if (!documentOutput) return;
+    const newEditors = documentOutput.editors.filter((e) => e !== editor);
+    updateEditors(newEditors, "Remove");
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -119,6 +170,45 @@ function Publish({
                   <Copy className="h-4 w-4" />
                 )}
               </Button>
+            </div>
+
+            <div className="mt-4">
+              <p className="text-sm font-medium">Permissions</p>
+              <div className="mt-2 flex items-center">
+                <input
+                  value={editorEmail}
+                  onChange={(e) => setEditorEmail(e.target.value)}
+                  type="email"
+                  placeholder="Enter email"
+                  className="h-8 flex-1 rounded-l-md border bg-muted px-2 text-xs"
+                />
+                <Button onClick={addEditors} className="h-8 rounded-l-none">
+                  Add
+                </Button>
+              </div>
+              <div className="mt-2">
+                <p className="text-xs text-muted-foreground">
+                  Manage who can edit this document
+                </p>
+              </div>
+              <div className="mt-2 space-y-2">
+                {documentOutput?.editors?.map((editor, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between rounded-md bg-gray-100 p-2 dark:bg-[#262626]"
+                  >
+                    <span className="text-xs font-medium text-gray-700 dark:text-white">
+                      {editor}
+                    </span>
+                    <button
+                      className="duration-300hover:bg-red-100 transition-all"
+                      onClick={() => handleRemoveEditor(editor)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-400 hover:text-red-500" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <Button

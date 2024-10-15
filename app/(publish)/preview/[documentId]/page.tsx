@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { AlertTriangle, Loader } from "lucide-react"; // Optional icon for error states
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import PreviewDocumentInfo from "../../_components/PreviewDocumentInfo";
 import { WorkspaceDocData } from "@/types/type";
 import { PartialBlock } from "@blocknote/core";
+import { useUser } from "@clerk/nextjs";
 
 // Dynamically import the editor
 function DocumentPreviewPage({
@@ -26,38 +27,51 @@ function DocumentPreviewPage({
       }),
     [],
   );
-  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([]);
+  const { user } = useUser();
 
+  const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([]);
+  const [editors, setEditors] = useState<string[]>([]);
   const [emojiIcon, setEmojiIcon] = useState("");
+  const [selectedCover, setSelectedCover] = useState("");
+  const [loading, setLoading] = useState(true);
   const [documentInfo, setDocumentInfo] = useState<
     WorkspaceDocData | undefined
   >();
-  const [selectedCover, setSelectedCover] = useState("");
-  const [loading, setLoading] = useState(true); // Add a loading state
+
+  const isEditor = editors.some(
+    (editor) => editor === user?.primaryEmailAddress?.emailAddress,
+  );
 
   useEffect(() => {
     if (params.documentId) {
-      getDocumentInfo();
+      const unsubscribe = getDocumentInfo();
+      return () => unsubscribe();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.documentId]);
 
-  const getDocumentInfo = async () => {
-    try {
-      const docRef = doc(db, "WorkSpaceDocuments", params.documentId);
-      const docSnap = await getDoc(docRef);
+  const getDocumentInfo = () => {
+    const docRef = doc(db, "WorkSpaceDocuments", params.documentId);
+    const unsubscribe = onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setDocumentInfo(docSnap.data() as WorkspaceDocData);
+          setEmojiIcon(docSnap.data()?.emoji);
+          docSnap.data()?.coverImage &&
+            setSelectedCover(docSnap.data()?.coverImage);
+        } else {
+          setDocumentInfo(undefined);
+        }
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching document:", error);
+        setLoading(false);
+      },
+    );
 
-      if (docSnap.exists()) {
-        setDocumentInfo(docSnap.data() as WorkspaceDocData);
-        setEmojiIcon(docSnap.data()?.emoji);
-        docSnap.data()?.coverImage &&
-          setSelectedCover(docSnap.data()?.coverImage);
-      }
-    } catch (error) {
-      console.error("Error fetching document:", error);
-    } finally {
-      setLoading(false); // Stop loading once data is fetched
-    }
+    return unsubscribe;
   };
 
   // Show a loading state while fetching data
@@ -115,7 +129,8 @@ function DocumentPreviewPage({
               documentOutput={documentOutput}
               setDocumentOutput={setDocumentOutput}
               params={params}
-              editable={false}
+              editable={(user?.id && isEditor) || false}
+              setEditors={setEditors}
             />
           </div>
         </ScrollArea>

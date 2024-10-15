@@ -5,7 +5,10 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { z } from "zod";
 
 export type DocumentOutput = {
-  // Assuming the structure of documentOutput if needed. If unknown, leave it as an empty array.
+  id: string;
+  output: [];
+  workspaceId: string;
+  editors: [];
 };
 
 export type WorkspaceDocData = {
@@ -18,7 +21,6 @@ export type WorkspaceDocData = {
   projectType: string;
   isPublished: boolean;
   teamProject: boolean;
-
 };
 
 export type CreateProject = z.infer<typeof CreateProjectSchema>;
@@ -96,9 +98,6 @@ export interface PriorityType {
   color: string;
   priority: string;
 }
-
-
-
 
 export interface CommentType {
   id: string;
