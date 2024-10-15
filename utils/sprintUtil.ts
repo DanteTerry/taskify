@@ -1,5 +1,6 @@
 import { IssueData } from "@/app/(main)/_components/IssueDetails";
 import { db } from "@/config/firebaseConfig";
+import { Collaborator } from "@/lib/redux/sprintSlice";
 import { issueDataType, issueType } from "@/types/type";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import moment from "moment";
@@ -51,7 +52,7 @@ export const handleIssuePropertyChange = async (
   const docRef = doc(db, "SprintDocumentOutput", sprintId as string);
 
   try {
-    const docSnap = await getDoc(docRef); // Get the document data once
+    const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
       console.log("No such document!");
       return;
@@ -320,6 +321,25 @@ export const updateJoinCode = async (
   try {
     // Update the joinCode in Firestore
     await updateDoc(docRef, { join: newJoinCode });
+  } catch (error) {
+    console.error("Error updating join code:", error);
+  }
+};
+
+export const updateCollaborators = async (
+  sprintId: string,
+  collaborators: Collaborator[],
+) => {
+  if (!sprintId) {
+    console.error("Invalid sprintId or joinCode");
+    return;
+  }
+
+  const docRef = doc(db, "SprintDocumentOutput", sprintId);
+
+  try {
+    // Update the joinCode in Firestore
+    await updateDoc(docRef, { collaborators });
   } catch (error) {
     console.error("Error updating join code:", error);
   }

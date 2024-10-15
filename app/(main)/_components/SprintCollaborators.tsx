@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { useOrigin } from "@/hooks/use-origin";
 import { RootState } from "@/lib/redux/store";
-import { updateJoinCode } from "@/utils/sprintUtil";
+import { updateCollaborators, updateJoinCode } from "@/utils/sprintUtil";
 import { Check, Copy, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -90,6 +90,14 @@ function SprintCollaborators({
     }, 1000);
   };
 
+  const deleteCollaborator = (id: string) => {
+    const updatedCollaborators = collaborators.filter(
+      (collaborator) => collaborator.id !== id,
+    );
+
+    updateCollaborators(sprintId as string, updatedCollaborators);
+  };
+
   return (
     <Dialog open={openCollaborators} onOpenChange={setOpenCollaborators}>
       <DialogContent className="flex h-full flex-col justify-center overflow-y-auto rounded-none border border-gray-200 shadow-lg dark:border-gray-700 md:h-max md:max-h-[90vh] md:rounded-lg">
@@ -134,6 +142,7 @@ function SprintCollaborators({
                 </div>
                 {collaborators.length > 1 && (
                   <Button
+                    onClick={() => deleteCollaborator(collaborator.id)}
                     size={"icon"}
                     variant={"ghost"}
                     className="ml-0 rounded text-red-500 hover:text-red-600 sm:ml-4"
@@ -148,7 +157,7 @@ function SprintCollaborators({
         {!join.joinCode && (
           <button
             onClick={handleAddCollaborator}
-            className="mt-2 flex w-full justify-start rounded-lg bg-[#283D3B] px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-[#213432] focus:outline-none"
+            className="mt-2 w-full rounded-lg bg-[#283D3B] px-4 py-2 text-center font-semibold text-white shadow-md transition-colors duration-200 hover:bg-[#213432] focus:outline-none"
           >
             Add Collaborator
           </button>

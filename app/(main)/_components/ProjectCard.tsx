@@ -120,7 +120,7 @@ function ProjectCard({
         });
       }
 
-      toast("Document created successfully");
+      toast(`${projectType} project created successfully`);
       router.replace(
         `/workspace/${params?.workspaceId}/${projectType}/${documentId}`,
       );

@@ -11,12 +11,14 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { IssueData } from "./IssueDetails";
 import { Progress } from "@/components/ui/progress";
 import { handleIssueMultiplePropertyChange } from "@/utils/sprintUtil";
+import { issueDataType } from "@/types/type";
 
 function EstimatedTimeSetter({
   showEstimatedTime,
   setShowEstimatedTime,
   sprintId,
   issueData,
+  item,
   setIssueData,
 }: {
   showEstimatedTime: boolean;
@@ -24,16 +26,22 @@ function EstimatedTimeSetter({
   issueData: IssueData;
   setIssueData: Dispatch<SetStateAction<IssueData>>;
   sprintId: string;
+  item: issueDataType;
 }) {
   // Update remainingTime when both loggedTime and remainingTime are 0
   useEffect(() => {
     if (issueData.loggedTime === 0) {
       setIssueData((prev) => ({
         ...prev,
-        remainingTime: prev.estimatedTime,
+        remainingTime: item.estimatedTime,
       }));
     }
-  }, [issueData.loggedTime, issueData.remainingTime, setIssueData]);
+  }, [
+    issueData.loggedTime,
+    item.estimatedTime,
+    issueData.remainingTime,
+    setIssueData,
+  ]);
 
   const handleLoggedTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const loggedTime = parseInt(e.target.value) || 0;

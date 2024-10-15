@@ -6,7 +6,6 @@ import {
   getPriorityColor,
   handleIssuePropertyChange,
 } from "@/utils/sprintUtil";
-import { useParams } from "next/navigation";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { issueDataType, issueType } from "@/types/type";
@@ -39,24 +38,34 @@ function CustomSelect({
   console.log(sprintId);
 
   // todo make a function that close all the show state when click outside
-  // useEffect(() => {
-  //   const handleClickOutside = (e: MouseEvent) => {
-  //     if (e.target instanceof Element) {
-  //       if (!e.target.closest(".relative")) {
-  //         setShow((prevShow) => ({
-  //           ...prevShow,
-  //           [type]: false,
-  //         }));
-  //       }
-  //     }
-  //   };
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (e.target instanceof Element) {
+        const selectElement = document.querySelector(".relative");
+        const buttonElements = document.querySelectorAll("button");
+        const isButtonClick = Array.from(buttonElements).some((button) =>
+          button.contains(e.target as Node),
+        );
 
-  //   document.addEventListener("click", handleClickOutside);
+        if (
+          selectElement &&
+          !selectElement.contains(e.target) &&
+          !isButtonClick
+        ) {
+          setShow((prevShow) => ({
+            ...prevShow,
+            [type]: false,
+          }));
+        }
+      }
+    };
 
-  //   return () => {
-  //     document.removeEventListener("click", handleClickOutside);
-  //   };
-  // }, [setShow, type]);
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [setShow, type]);
 
   const handleStatusChange = async (status: string) => {
     if (!sprintId) throw new Error("Invalid sprintId");
@@ -196,17 +205,20 @@ function CustomSelect({
                   return (
                     <Button
                       onClick={() => {
+                        const updatedAssignees = issueData.assignees.some(
+                          (assignee: any) => assignee.id === item.id,
+                        )
+                          ? issueData.assignees
+                          : [...issueData.assignees, item];
+
                         setIssueData({
                           ...issueData,
-                          assignees: issueData.assignees.some(
-                            (assignee: any) => assignee.id === item.id,
-                          )
-                            ? issueData.assignees
-                            : [...issueData.assignees, item],
+                          assignees: updatedAssignees,
                         });
+
                         handleIssuePropertyChange(
                           "assignees",
-                          [...issueData.assignees, item],
+                          updatedAssignees,
                           sprintId as string,
                           issueData,
                         );

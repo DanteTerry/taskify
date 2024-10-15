@@ -35,12 +35,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
-import { useParams } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 import SprintComment from "./SprintComment";
 import { typeIssue } from "@/constants";
 import { useUser } from "@clerk/nextjs";
-import { current } from "@reduxjs/toolkit";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -423,12 +421,23 @@ function IssueDetails({
                                   ) {
                                     return;
                                   }
+
+                                  const updatedAssignees =
+                                    issueData.assignees.filter(
+                                      (_, i) => i !== index,
+                                    );
+
                                   setIssueData((prevIssueData) => ({
                                     ...prevIssueData,
-                                    assignees: prevIssueData.assignees.filter(
-                                      (_, i) => i !== index,
-                                    ),
+                                    assignees: updatedAssignees,
                                   }));
+
+                                  handleIssuePropertyChange(
+                                    "assignees",
+                                    updatedAssignees,
+                                    sprintId as string,
+                                    issueData,
+                                  );
                                 }}
                               >
                                 <Trash2 size={14} />
@@ -672,6 +681,7 @@ function IssueDetails({
         showEstimatedTime={showEstimatedTime}
         setShowEstimatedTime={setShowEstimatedTime}
         issueData={issueData}
+        item={item}
         setIssueData={setIssueData}
         sprintId={sprintId}
       />
