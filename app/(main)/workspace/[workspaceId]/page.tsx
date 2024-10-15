@@ -20,7 +20,6 @@ import DocumentTemplate from "../../_components/DocumentTemplate";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { SkeletonCard } from "@/components/UIComponents/SkeletonCard";
-import DarkModeToggleBtn from "@/app/(marketing)/_components/DarkModeToggleBtn";
 
 function WorkSpacePage({ params }: { params: any }) {
   const [documents, setDocuments] = useState<WorkspaceDocData[]>();

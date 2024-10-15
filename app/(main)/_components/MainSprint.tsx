@@ -11,6 +11,7 @@ import { fetchSprintDocumentOutput } from "@/lib/redux/sprintSlice";
 import SprintCollaborators from "./SprintCollaborators";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
+import SprintSetting from "./EditProject";
 
 function MainSprint({
   openCreateIssue,
@@ -18,6 +19,7 @@ function MainSprint({
   openCollaborators,
   setOpenCollaborators,
   sprintId,
+
   isTeamProject,
   isOpen,
 }: {

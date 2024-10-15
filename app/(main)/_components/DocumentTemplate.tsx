@@ -15,9 +15,13 @@ import { Button } from "@/components/ui/button";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { toast } from "sonner";
+import { useState } from "react";
+import EditProject from "./EditProject";
 
 function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
   const router = useRouter();
+  const [editProject, setEditProject] = useState(false);
+
   const onDelete = async () => {
     const documentId = document?.id;
 
@@ -30,7 +34,10 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
         await deleteDoc(doc(db, "PageDocumentOutput", documentId));
       } else if (document.projectType === "board") {
         await deleteDoc(doc(db, "BoardDocumentOutput", documentId));
+      } else if (document.projectType === "sprint") {
+        await deleteDoc(doc(db, "SprintDocumentOutput", documentId));
       }
+
       toast("Document deleted successfully");
     } catch (error: any) {
       toast(error.message || "Error deleting document");
@@ -76,34 +83,52 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
         <h2 className="text-xl font-semibold text-black dark:text-white">
           {document?.documentName}
         </h2>
-        <Popover>
-          <PopoverTrigger
-            className="z-50"
-            onClick={(e) => e.stopPropagation()} // Stop event propagation here
-          >
-            <Ellipsis size={20} />
-          </PopoverTrigger>
-          <PopoverContent
-            className="flex w-max flex-col p-1"
-            onClick={(e) => e.stopPropagation()} // Stop event propagation here
-          >
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(); // Call the delete function
-              }}
-              className="rounded-sm"
-              variant={"ghost"}
-              size={"sm"}
+        {!document.teamProject && (
+          <Popover>
+            <PopoverTrigger
+              className="z-50"
+              onClick={(e) => e.stopPropagation()}
             >
-              Delete
-            </Button>
-          </PopoverContent>
-        </Popover>
+              <Ellipsis size={20} />
+            </PopoverTrigger>
+            <PopoverContent
+              className="flex w-max flex-col p-1"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Button
+                className="rounded-sm"
+                variant={"ghost"}
+                size={"sm"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditProject(true);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
+                className="rounded-sm"
+                variant={"ghost"}
+                size={"sm"}
+              >
+                Delete
+              </Button>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
       <span className="absolute bottom-[60px] left-4 text-4xl">
         {document?.emoji}
       </span>
+      <EditProject
+        openSetting={editProject}
+        setOpenSetting={setEditProject}
+        document={document}
+      />
     </div>
   );
 }

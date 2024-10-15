@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { issueDataType } from "@/types/type";
 import Image from "next/image";
 import { useState } from "react";
@@ -10,7 +9,6 @@ import {
 } from "react-icons/fa";
 import { IoSparklesSharp } from "react-icons/io5";
 import IssueDetails from "./IssueDetails";
-import { SprintOutput } from "@/lib/redux/sprintSlice";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -35,6 +33,7 @@ function SprintDragItem({
   sprintId: string;
 }) {
   const [open, setOpen] = useState(false);
+
   return (
     <div
       onClick={() => setOpen(true)}

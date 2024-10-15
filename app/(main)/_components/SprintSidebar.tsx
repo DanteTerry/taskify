@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Collaborator } from "@/lib/redux/sprintSlice";
 import { RootState } from "@/lib/redux/store";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
@@ -25,7 +26,9 @@ function SprintSidebar({
 
   useEffect(() => {
     setIsCollaborator(
-      collaborators.some((collaborator) => collaborator.id === user?.id),
+      collaborators.some(
+        (collaborator: Collaborator) => collaborator.id === user?.id,
+      ),
     );
   }, [collaborators, user]);
 
@@ -58,10 +61,6 @@ function SprintSidebar({
             >
               <Component size={15} /> {"Collaborators"}
             </Button>
-
-            <Button className="flex w-full gap-2" variant={"secondary"}>
-              <Settings size={15} /> {"Project setting"}
-            </Button>
           </>
         )}
 
@@ -81,13 +80,6 @@ function SprintSidebar({
               variant={"secondary"}
             >
               <Component size={15} />
-            </Button>
-
-            <Button
-              className="flex items-center justify-center"
-              variant={"secondary"}
-            >
-              <Settings size={15} />
             </Button>
           </>
         )}

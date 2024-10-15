@@ -13,7 +13,7 @@ import { CreateProject } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProjectSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { Loader, Plus } from "lucide-react";
+import { Loader } from "lucide-react";
 
 const emojiIcons: string[] = getRandomEmoji();
 const images = CoverImages.sort(() => Math.random() - 0.5).slice(0, 12);

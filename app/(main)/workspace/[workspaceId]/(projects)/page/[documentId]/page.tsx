@@ -26,7 +26,6 @@ function DocumentPage({
   );
 
   const [documentOutput, setDocumentOutput] = useState<PartialBlock[]>([]);
-  console.log(documentOutput);
   return (
     <section className="flex h-full w-full flex-col md:pt-0">
       <div className="flex w-full flex-grow flex-col">

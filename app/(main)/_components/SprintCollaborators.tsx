@@ -37,7 +37,6 @@ function SprintCollaborators({
     (state: RootState) => state.sprint.collaborators,
   );
   const join = useSelector((state: RootState) => state.sprint.join);
-  console.log(join);
   const [searchTerm, setSearchTerm] = useState("");
   const [copied, setCopied] = useState(false);
   const filteredCollaborators = collaborators.filter((collaborator) =>
