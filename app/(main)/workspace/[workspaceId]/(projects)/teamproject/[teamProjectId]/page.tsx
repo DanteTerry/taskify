@@ -28,11 +28,15 @@ function TeamProject() {
   // Fetch the project data
   useEffect(() => {
     if (teamProjectId) {
+      console.log("Fetching project data for:", teamProjectId);
       dispatch(fetchSprintDocumentOutput(teamProjectId))
-        .then(() => setLoading(false)) // Stop loading after project data is fetched
+        .then(() => {
+          console.log("Project data fetched successfully");
+          setLoading(false);
+        })
         .catch((error) => {
           console.error("Error fetching project:", error);
-          setLoading(false); // Stop loading even if there's an error
+          setLoading(false);
         });
     }
   }, [dispatch, teamProjectId]);
@@ -40,16 +44,15 @@ function TeamProject() {
   // Check if the user is a collaborator
   useEffect(() => {
     if (isLoaded && user && collaborators.length > 0) {
-      // Wait until user and collaborator data is available
       const isUserCollaborator = collaborators.some(
         (collaborator) => collaborator.id === user?.id,
       );
+      console.log("Is user a collaborator?", isUserCollaborator);
       setIsCollaborator(isUserCollaborator);
-      setCollaboratorCheckComplete(true); // Mark the collaborator check as complete
+      setCollaboratorCheckComplete(true);
     }
   }, [collaborators, user, isLoaded]);
 
-  // Wait until both the project loading and collaborator check are complete before rendering anything
   if (loading || !collaboratorCheckComplete || !isLoaded) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-gray-100 dark:bg-[#1F1F1F]">

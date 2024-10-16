@@ -3,8 +3,8 @@ import { Collaborator } from "@/lib/redux/sprintSlice";
 import { RootState } from "@/lib/redux/store";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
-import { Component, Settings, SquarePlus } from "lucide-react";
-import { Dispatch, SetStateAction, use, useEffect, useState } from "react";
+import { Component, SquarePlus } from "lucide-react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function SprintSidebar({
@@ -25,11 +25,13 @@ function SprintSidebar({
   );
 
   useEffect(() => {
-    setIsCollaborator(
-      collaborators.some(
-        (collaborator: Collaborator) => collaborator.id === user?.id,
-      ),
-    );
+    if (user) {
+      setIsCollaborator(
+        collaborators.some(
+          (collaborator: Collaborator) => collaborator.id === user.id,
+        ),
+      );
+    }
   }, [collaborators, user]);
 
   return (
@@ -38,7 +40,6 @@ function SprintSidebar({
       onMouseLeave={() => setIsOpen(false)}
       className={cn(
         `transition-width fixed z-50 h-full bg-[#283D3B] px-4 pt-5 duration-300 dark:bg-[#121212]`,
-        isCollaborator ? "block" : "hidden",
         isOpen ? "w-60" : "w-16",
       )}
     >
