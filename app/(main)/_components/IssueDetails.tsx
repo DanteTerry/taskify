@@ -635,15 +635,15 @@ function IssueDetails({
 
                     <div className="flex w-full flex-col gap-1">
                       <Progress
-                        value={issueData.loggedTime}
-                        max={issueData.estimatedTime}
+                        value={item.loggedTime}
+                        max={item.estimatedTime}
                       />
                       <div className="flex justify-between">
                         <p className="text-xs dark:text-gray-100">
-                          {issueData.loggedTime}h logged
+                          {item.loggedTime}h logged
                         </p>{" "}
                         <p className="text-xs dark:text-gray-100">
-                          {issueData.remainingTime}h remaining
+                          {item.remainingTime}h remaining
                         </p>
                       </div>
                     </div>
