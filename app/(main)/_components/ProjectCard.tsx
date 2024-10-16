@@ -86,7 +86,10 @@ function ProjectCard({
         await setDoc(doc(db, "SprintDocumentOutput", documentId.toString()), {
           docId: documentId,
           workspaceId: params?.workspaceId,
-          joinCode: "",
+          join: {
+            joinCode: "",
+            role: "owner",
+          },
           output: [
             {
               id: uuidv4().slice(0, 8),

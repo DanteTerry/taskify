@@ -142,9 +142,9 @@ function IssueDetails({
     });
   };
 
-  const currentUserCollaborator = collaborators.find(
-    (collaborator) => collaborator.id === user?.id,
-  );
+  const currentUserCollaborator = user
+    ? collaborators.find((collaborator) => collaborator.id === user?.id)
+    : null;
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -635,15 +635,15 @@ function IssueDetails({
 
                     <div className="flex w-full flex-col gap-1">
                       <Progress
-                        value={item.loggedTime}
-                        max={item.estimatedTime}
+                        value={issueData?.loggedTime}
+                        max={issueData?.estimatedTime}
                       />
                       <div className="flex justify-between">
                         <p className="text-xs dark:text-gray-100">
-                          {item.loggedTime}h logged
+                          {issueData?.loggedTime}h logged
                         </p>{" "}
                         <p className="text-xs dark:text-gray-100">
-                          {item.remainingTime}h remaining
+                          {issueData?.remainingTime}h remaining
                         </p>
                       </div>
                     </div>

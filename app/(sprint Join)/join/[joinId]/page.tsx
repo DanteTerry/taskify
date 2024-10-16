@@ -146,7 +146,7 @@ function JoinPage() {
     );
   }
 
-  if (join.joinCode === "rejected") {
+  if (join?.joinCode === "rejected") {
     return (
       <div
         style={{
@@ -178,7 +178,7 @@ function JoinPage() {
 
   if (
     !join.joinCode ||
-    join.joinCode.split("-")[0] !== documentId.split("-")[0]
+    join?.joinCode.split("-")[0] !== documentId.split("-")[0]
   ) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center bg-gray-100">

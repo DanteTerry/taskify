@@ -124,7 +124,7 @@ function SprintCollaborators({
             placeholder="Search collaborators..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mb-4 w-full rounded-lg border border-gray-300 bg-gray-50 p-2 transition-colors duration-200 focus:border-[#283D3B]/40 focus:outline-none focus:ring-2 focus:ring-[#283D3B]/40"
+            className="mb-4 w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-black transition-colors duration-200 focus:border-[#283D3B]/40 focus:outline-none focus:ring-2 focus:ring-[#283D3B]/40"
           />
           <ScrollArea className="h-max w-full rounded-md border p-2 px-4">
             {filteredCollaborators.map((collaborator) => (

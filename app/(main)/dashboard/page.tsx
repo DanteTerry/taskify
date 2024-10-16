@@ -95,6 +95,7 @@ function Dashboard() {
         deleteDocumentsByWorkspaceId(workspaceId, "WorkSpaceDocuments"),
         deleteDocumentsByWorkspaceId(workspaceId, "PageDocumentOutput"),
         deleteDocumentsByWorkspaceId(workspaceId, "BoardDocumentOutput"),
+        deleteDocumentsByWorkspaceId(workspaceId, "SprintDocumentOutput"),
       ]);
 
       // Finally, delete the workspace itself
@@ -214,7 +215,7 @@ function Dashboard() {
                               e.stopPropagation();
 
                               setSelectedWorkspace(workSpace);
-                              setIsDeleteDialogOpen(true); // Open delete confirmation dialog
+                              setIsDeleteDialogOpen(true);
                             }}
                           >
                             Delete
@@ -250,11 +251,11 @@ function Dashboard() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="max-w-md rounded-lg p-6 text-white shadow-xl dark:bg-[#0a0a0a]">
+        <DialogContent className="max-w-md rounded-lg bg-white p-6 text-black shadow-xl dark:bg-[#0a0a0a] dark:text-white">
           <div className="flex items-center">
             <h2 className="text-lg font-semibold">Confirm Deletion</h2>
           </div>
-          <p className="mt-2 text-gray-400">
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
             Are you sure you want to delete this workspace? This will delete all
             documents within it.
           </p>
@@ -262,7 +263,7 @@ function Dashboard() {
             <Button
               variant="ghost"
               onClick={() => setIsDeleteDialogOpen(false)}
-              className="rounded-md border border-gray-700 px-4 py-2 transition-colors hover:bg-gray-700"
+              className="rounded-md border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700"
             >
               Cancel
             </Button>
