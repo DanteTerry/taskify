@@ -49,7 +49,7 @@ export default function HeroSec() {
 
       <div className="mt-14 w-full rounded-xl md:mt-10 md:w-3/4">
         <Image
-          src={"/appImages/header_product.jpg"}
+          src={"/appImages/taskify.png"}
           alt="taskify image"
           width={0}
           height={0}
