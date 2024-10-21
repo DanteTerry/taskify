@@ -38,7 +38,7 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
         await deleteDoc(doc(db, "SprintDocumentOutput", documentId));
       }
 
-      toast("Document deleted successfully");
+      toast(`${document.documentName} deleted successfully`);
     } catch (error: any) {
       toast(error.message || "Error deleting document");
     }

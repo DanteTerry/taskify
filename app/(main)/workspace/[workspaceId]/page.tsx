@@ -53,7 +53,7 @@ function WorkSpacePage({ params }: { params: any }) {
   return (
     <div
       className={cn(
-        `relative flex h-max w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] md:px-2 md:pt-16 lg:h-screen lg:px-0`,
+        `relative flex h-max w-full flex-col justify-between bg-[#f6f6f7] px-4 py-2 dark:bg-[#1f1f1f] sm:h-screen md:px-2 md:pt-16 lg:h-screen lg:px-0`,
         documents && documents?.length < 2 && "h-screen",
       )}
     >
