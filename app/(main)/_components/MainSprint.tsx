@@ -11,7 +11,6 @@ import { fetchSprintDocumentOutput } from "@/lib/redux/sprintSlice";
 import SprintCollaborators from "./SprintCollaborators";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
-import SprintSetting from "./EditProject";
 
 function MainSprint({
   openCreateIssue,
@@ -70,10 +69,6 @@ function MainSprint({
         isTeamProject ? "ml-0" : "",
       )}
     >
-      <div className="text-lg font-medium sm:text-xl">
-        <h2>Kanban Board</h2>
-      </div>
-
       <div className="flex flex-col gap-3 sm:flex-row md:items-center md:gap-5">
         {/* input for search */}
         <div className="relative flex w-full items-center justify-between sm:w-auto">
