@@ -64,7 +64,7 @@ function SingleComment({
             <p className="text-sm font-bold capitalize text-[#172B4D] dark:text-[#538be0]">
               {comment.user.fullName}
             </p>
-            <p className="text-xs text-[#6B778C]">2 days ago</p>
+            {/* <p className="text-xs text-[#6B778C]">2 days ago</p> */}
           </div>
           {isEditing ? (
             <div className="flex w-full flex-col gap-1">
