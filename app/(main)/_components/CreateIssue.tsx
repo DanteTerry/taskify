@@ -289,7 +289,7 @@ function CreateIssue({
                 <Select
                   onValueChange={(value) => {
                     const selectedReporter = collaborators?.find(
-                      (collaborator) => collaborator.fullName === value,
+                      (collaborator) => collaborator.email === value,
                     );
                     if (selectedReporter) {
                       setIssueData({
@@ -311,7 +311,7 @@ function CreateIssue({
                         .map((collaborator) => (
                           <SelectItem
                             key={collaborator.id}
-                            value={collaborator?.fullName}
+                            value={collaborator?.email}
                           >
                             <div className="flex items-center gap-2">
                               <Image
@@ -340,7 +340,7 @@ function CreateIssue({
                 <Select
                   onValueChange={(value) => {
                     const selectedAssignee = collaborators?.find(
-                      (collaborator) => collaborator.fullName === value,
+                      (collaborator) => collaborator.email === value,
                     );
                     if (selectedAssignee) {
                       setIssueData((prevState) => ({
@@ -362,7 +362,7 @@ function CreateIssue({
                         .map((collaborator) => (
                           <SelectItem
                             key={collaborator.id}
-                            value={collaborator?.fullName}
+                            value={collaborator?.email}
                           >
                             <div className="flex items-center gap-2">
                               <Image

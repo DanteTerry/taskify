@@ -39,6 +39,7 @@ import { Timestamp } from "firebase/firestore";
 import SprintComment from "./SprintComment";
 import { typeIssue } from "@/constants";
 import { useUser } from "@clerk/nextjs";
+import { Collaborator } from "@/lib/redux/sprintSlice";
 
 const issueTypeIcons: { [key: string]: JSX.Element } = {
   task: <FaCheckCircle className="text-[#4FADE6]" />,
@@ -143,8 +144,14 @@ function IssueDetails({
   };
 
   const currentUserCollaborator = user
-    ? collaborators.find((collaborator) => collaborator.id === user?.id)
+    ? collaborators.find(
+        (collaborator: Collaborator) => collaborator.id === user?.id,
+      )
     : null;
+
+  const isUserAssigneesOrReporter =
+    item?.assignees.some((assignee) => assignee.id === user?.id) ||
+    item.reporter.id === user?.id;
 
   return (
     <Dialog open={open} onOpenChange={() => setOpen(false)}>
@@ -169,7 +176,10 @@ function IssueDetails({
                   <div className="mt-2 flex flex-col items-start gap-1 pb-2">
                     {typeIssue.map((option, index) => (
                       <Button
-                        disabled={currentUserCollaborator?.role === "viewer"}
+                        disabled={
+                          currentUserCollaborator?.role === "viewer" ||
+                          !isUserAssigneesOrReporter
+                        }
                         onClick={() => {
                           handleIssuePropertyChange(
                             "issueType",
@@ -232,7 +242,10 @@ function IssueDetails({
             <div className="flex flex-col gap-10 lg:flex-row">
               <div className="flex w-full flex-col gap-3 sm:w-[550px]">
                 <textarea
-                  disabled={currentUserCollaborator?.role === "viewer"}
+                  disabled={
+                    currentUserCollaborator?.role === "viewer" ||
+                    !isUserAssigneesOrReporter
+                  }
                   value={item.shortSummary || ""}
                   onChange={(e) =>
                     handleIssuePropertyChange(
@@ -283,7 +296,10 @@ function IssueDetails({
                       <div
                         className="cursor-pointer rounded-md bg-white p-2 pl-0 text-sm font-medium text-[#172B4D] dark:border-none dark:bg-[#1f1f1f] dark:bg-transparent dark:text-white"
                         onClick={() => {
-                          if (currentUserCollaborator?.role === "viewer") {
+                          if (
+                            currentUserCollaborator?.role === "viewer" ||
+                            !isUserAssigneesOrReporter
+                          ) {
                             return;
                           }
                           setIsEditing(true);
@@ -350,7 +366,10 @@ function IssueDetails({
                   {" "}
                   <Button
                     onClick={() => {
-                      if (currentUserCollaborator?.role === "viewer") {
+                      if (
+                        currentUserCollaborator?.role === "viewer" ||
+                        !isUserAssigneesOrReporter
+                      ) {
                         return;
                       }
                       handleToggle("status");
@@ -378,7 +397,10 @@ function IssueDetails({
                     {issueData?.assignees?.length === 0 && (
                       <Button
                         onClick={() => {
-                          if (currentUserCollaborator?.role === "viewer") {
+                          if (
+                            currentUserCollaborator?.role === "viewer" ||
+                            !isUserAssigneesOrReporter
+                          ) {
                             return;
                           }
                           handleToggle("assignees");
@@ -514,7 +536,10 @@ function IssueDetails({
                   {" "}
                   <Button
                     onClick={() => {
-                      if (currentUserCollaborator?.role === "viewer") {
+                      if (
+                        currentUserCollaborator?.role === "viewer" ||
+                        !isUserAssigneesOrReporter
+                      ) {
                         return;
                       }
                       handleToggle("priority");
@@ -592,7 +617,10 @@ function IssueDetails({
                     original estimated (hours)
                   </p>
                   <input
-                    disabled={currentUserCollaborator?.role === "viewer"}
+                    disabled={
+                      currentUserCollaborator?.role === "viewer" ||
+                      !isUserAssigneesOrReporter
+                    }
                     value={issueData.estimatedTime}
                     type="number"
                     onChange={(e) => {
@@ -624,7 +652,10 @@ function IssueDetails({
 
                   <div
                     onClick={() => {
-                      if (currentUserCollaborator?.role === "viewer") {
+                      if (
+                        currentUserCollaborator?.role === "viewer" ||
+                        !isUserAssigneesOrReporter
+                      ) {
                         return;
                       }
                       setShowEstimatedTime(true);

@@ -1,6 +1,7 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { issueDataType } from "@/types/type";
 import SprintDragItem from "./SprintDragItem";
+import { useUser } from "@clerk/nextjs";
 
 function SprintDraggableItem({
   item,
@@ -11,8 +12,19 @@ function SprintDraggableItem({
   index: number;
   sprintId: string;
 }) {
+  const { user } = useUser();
+
+  const isUserAssigneesOrReporter =
+    item?.assignees.some((assignee) => assignee.id === user?.id) ||
+    item.reporter.id === user?.id;
+
   return (
-    <Draggable key={item.id} draggableId={item.id} index={index}>
+    <Draggable
+      key={item.id}
+      isDragDisabled={!isUserAssigneesOrReporter}
+      draggableId={item.id}
+      index={index}
+    >
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}

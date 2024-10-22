@@ -83,43 +83,38 @@ function DocumentTemplate({ document }: { document: WorkspaceDocData }) {
         <h2 className="text-xl font-semibold text-black dark:text-white">
           {document?.documentName}
         </h2>
-        {!document.teamProject && (
-          <Popover>
-            <PopoverTrigger
-              className="z-50"
-              onClick={(e) => e.stopPropagation()}
+        <Popover>
+          <PopoverTrigger className="z-50" onClick={(e) => e.stopPropagation()}>
+            <Ellipsis size={20} />
+          </PopoverTrigger>
+          <PopoverContent
+            className="flex w-max flex-col p-1"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Button
+              className="rounded-sm"
+              variant={"ghost"}
+              size={"sm"}
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditProject(true);
+              }}
             >
-              <Ellipsis size={20} />
-            </PopoverTrigger>
-            <PopoverContent
-              className="flex w-max flex-col p-1"
-              onClick={(e) => e.stopPropagation()}
+              Edit
+            </Button>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+              className="rounded-sm"
+              variant={"ghost"}
+              size={"sm"}
             >
-              <Button
-                className="rounded-sm"
-                variant={"ghost"}
-                size={"sm"}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setEditProject(true);
-                }}
-              >
-                Edit
-              </Button>
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete();
-                }}
-                className="rounded-sm"
-                variant={"ghost"}
-                size={"sm"}
-              >
-                Delete
-              </Button>
-            </PopoverContent>
-          </Popover>
-        )}
+              Delete
+            </Button>
+          </PopoverContent>
+        </Popover>
       </div>
       <span className="absolute bottom-[60px] left-4 text-4xl">
         {document?.emoji}
