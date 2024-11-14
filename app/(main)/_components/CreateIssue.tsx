@@ -58,7 +58,6 @@ function CreateIssue({
   openCreateIssue: boolean;
   setOpenCreateIssue: Dispatch<SetStateAction<boolean>>;
 }) {
-  // todo fix estimated Time bug when updating in issue detail when estimated time is 0
   const { sprintId } = useParams();
   const [issueData, setIssueData] = useState<issueDataType>({
     id: uuidv4().slice(0, 8),
